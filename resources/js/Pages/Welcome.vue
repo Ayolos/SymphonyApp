@@ -1,19 +1,36 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3';
 import SymphonyLayout from "@/Layouts/SymphonyLayout.vue";
+import {onMounted} from "vue";
 
 defineProps({
     canLogin: Boolean,
     canRegister: Boolean,
     laravelVersion: String,
     phpVersion: String,
+    posts: Array,
+});
+
+onMounted(() => {
+    console.log('Component mounted.');
 });
 </script>
 
 <template>
     <Head title="Welcome" />
     <SymphonyLayout :isLogin="canLogin">
-
+        <div v-for="post in posts" class="flex flex-col p-5">
+            <div class="flex flex-row items-center pb-4 gap-4">
+                <img :src="post.user.profile_photo_url" class="w-12 h-12 rounded">
+                <div class="flex-col flex">
+                    <h1 class="text-gray-400 truncate text-nowrap">{{ post.user.name }}</h1>
+                    <span class="text-gray-500 text-sm">@{{ post.user.email }}</span>
+                </div>
+            </div>
+            <div>
+                <p>{{ post.content }}</p>
+            </div>
+        </div>
     </SymphonyLayout>
 </template>
 
