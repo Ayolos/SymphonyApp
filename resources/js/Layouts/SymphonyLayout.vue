@@ -8,11 +8,10 @@ import {router, useForm} from "@inertiajs/vue3";
 
 const formPost = useForm({
     content: '',
-    title: 'Test'
 })
 
 const submitPost = async () => {
-    await formPost.post(route('posts.store'), {
+    await formPost.post(route('Post.store'), {
         onSuccess: () => {
             formPost.reset('content');
         }
