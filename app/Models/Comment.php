@@ -4,8 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Validation\Rules\In;
+use Inertia\Inertia;
 
-class Post extends Model
+class Comment extends Model
 {
     use HasFactory;
 
@@ -13,13 +15,8 @@ class Post extends Model
         'content',
     ];
 
-    public function user()
+    public function post()
     {
-        return $this->belongsTo(User::class);
-    }
-
-    public function comments()
-    {
-        return $this->hasMany(Comment::class);
+        return $this->belongsTo(Post::class);
     }
 }

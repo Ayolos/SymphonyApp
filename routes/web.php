@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -35,4 +36,5 @@ Route::middleware([
     })->name('dashboard');
     Route::get('/', [PostController::class, 'index']);
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+    Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
 });

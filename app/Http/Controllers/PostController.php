@@ -12,8 +12,11 @@ class PostController extends Controller
     //
     public function index()
     {
-        $posts = Post::with('user')->orderBy('created_at', 'desc')->get(); // Fetch all posts from the database
-        return Inertia::render('Welcome', ['posts' => $posts]); // Pass the posts to the view
+        $posts = Post::with('comments') // Load the comments relationship
+            ->with('user') // Load the user relationship
+            ->orderBy('created_at', 'desc')
+            ->get();
+        return Inertia::render('Welcome', ['posts' => $posts]);
     }
 
 

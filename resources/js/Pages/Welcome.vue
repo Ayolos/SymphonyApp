@@ -1,23 +1,10 @@
-<script setup>
-import { Head, Link } from '@inertiajs/vue3';
-import SymphonyLayout from "@/Layouts/SymphonyLayout.vue";
-import {onMounted} from "vue";
-
-defineProps({
-    canLogin: Boolean,
-    canRegister: Boolean,
-    laravelVersion: String,
-    phpVersion: String,
-    posts: Array,
-});
-
-</script>
-
 <template>
     <Head title="Welcome" />
     <SymphonyLayout :isLogin="canLogin">
-        <div v-for="post in posts" class="flex flex-col p-5">
+        <div v-for="post in posts" :key="post.id" class="flex flex-col p-5">
+            <!-- Contenu du post -->
             <div class="flex flex-row items-center pb-4 gap-4">
+                <!-- Informations sur l'utilisateur -->
                 <img :src="post.user.profile_photo_url" class="w-12 h-12 rounded">
                 <div class="flex-col flex">
                     <h1 class="text-gray-400 truncate text-nowrap">{{ post.user.name }}</h1>
@@ -27,17 +14,81 @@ defineProps({
             <div>
                 <p>{{ post.content }}</p>
             </div>
+            <!-- Afficher les commentaires -->
+            <h1>Commentaire</h1>
+            <div v-for="comment in post.comments" :key="comment.id">
+                <p class="text-gray-500">{{ comment.content }}</p>
+            </div>
+            <!-- Bouton pour ouvrir le modal -->
+            <div class="flex-row flex gap-4">
+                <Icon icon="akar-icons:heart" class="text-red-500 w-6 h-6" />
+                <button @click="openModal(post)" class="">
+                    <Icon icon="akar-icons:comment" class="text-gray-500 w-6 h-6" />
+                </button>
+            </div>
         </div>
+
+        <!-- Modal -->
+        <Modal v-if="isModalOpen" @close="closeModal" :post="selectedPost">
+            <template #content>
+                <form @submit.prevent="submitComment">
+                    <div class="my-5">
+                        <textarea v-model="commentForm.content" class="w-full rounded-lg"></textarea>
+                    </div>
+                    <div class="flex justify-end">
+                        <button class="bg-secondary-500 text-white rounded-lg px-4 py-2">Envoyer</button>
+                    </div>
+                </form>
+            </template>
+        </Modal>
     </SymphonyLayout>
 </template>
 
+<script setup>
+import {Head, useForm} from '@inertiajs/vue3';
+import SymphonyLayout from "@/Layouts/SymphonyLayout.vue";
+import {onMounted, reactive, ref} from "vue";
+import { Icon } from "@iconify/vue";
+import Modal from "@/Components/Symphony/Modal.vue";
+
+defineProps({
+    canLogin: Boolean,
+    canRegister: Boolean,
+    laravelVersion: String,
+    phpVersion: String,
+    posts: Array,
+});
+
+const commentForm = useForm({
+    content: "",
+    post_id: null,
+});
+
+const isModalOpen = ref(false);
+const selectedPost = ref(null);
+
+const openModal = (post) => {
+    selectedPost.value = post;
+    isModalOpen.value = true;
+    commentForm.post_id = post.id;
+};
+
+const closeModal = () => {
+    isModalOpen.value = false;
+};
+
+const submitComment = () => {
+    console.log(commentForm);
+    console.log(commentForm.post_id);
+    commentForm.post(route('comments.store'), {
+        onSuccess: () => {
+            commentForm.reset('content');
+        }
+    });
+};
+
+</script>
+
 <style>
-.bg-dots-darker {
-    background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.22676 0C1.91374 0 2.45351 0.539773 2.45351 1.22676C2.45351 1.91374 1.91374 2.45351 1.22676 2.45351C0.539773 2.45351 0 1.91374 0 1.22676C0 0.539773 0.539773 0 1.22676 0Z' fill='rgba(0,0,0,0.07)'/%3E%3C/svg%3E");
-}
-@media (prefers-color-scheme: dark) {
-    .dark\:bg-dots-lighter {
-        background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.22676 0C1.91374 0 2.45351 0.539773 2.45351 1.22676C2.45351 1.91374 1.91374 2.45351 1.22676 2.45351C0.539773 2.45351 0 1.91374 0 1.22676C0 0.539773 0.539773 0 1.22676 0Z' fill='rgba(255,255,255,0.07)'/%3E%3C/svg%3E");
-    }
-}
+/* Styles pour votre modal */
 </style>
