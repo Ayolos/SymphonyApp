@@ -69,7 +69,7 @@ const submitPost = async () => {
                                         <img :src="$page.props.auth.user.profile_photo_url" class="w-12 h-12 rounded">
                                         <div class="flex-col flex">
                                             <h1 class="text-gray-400 truncate text-nowrap">{{ $page.props.auth.user.name }}</h1>
-                                            <span class="text-gray-500 text-sm">@antoineandre</span>
+                                            <span class="text-gray-500 text-sm">@{{ $page.props.auth.user.username }}</span>
                                         </div>
                                     </div>
                                     <div class="pl-4 pr-20 flex flex-row justify-between items-end gap-8">
@@ -85,7 +85,6 @@ const submitPost = async () => {
                         </div>
                     </form>
                     <div class="w-full bg-white rounded">
-                        <h1>Post</h1>
                         <slot></slot>
                     </div>
                 </div>
