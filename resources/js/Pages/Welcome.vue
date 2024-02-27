@@ -13,6 +13,7 @@ defineProps({
 
 onMounted(() => {
     console.log('Component mounted.');
+    console.log(posts);
 });
 </script>
 
