@@ -22,14 +22,6 @@
     </div>
 </template>
 
-<script>
-export default {
-    props: {
-        post: Object,
-    },
-};
-</script>
-
 <style scoped>
 .modal-overlay {
     z-index: 10;

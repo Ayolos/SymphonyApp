@@ -15,14 +15,18 @@ class PostController extends Controller
     {
         $posts = Post::orderBy('created_at', 'desc')->get();
         $posts->each(function ($post) {
-            $post->load(['comments' => function ($query) {
+            $post->load(['comments.user' => function ($query) {
                 $query->take(3);
-            }])->with('comments');
-            $post->load('user')->with('user');
+            }]);
+            $post->load('user');
             $post->linkedByUser = $post->likedBy(auth()->user());
+            $post->nbComments = $post->comments->count();
+            $post->nbLikes = $post->likes->count();
         });
 
-        return Inertia::render('Welcome', ['posts' => $posts]);
+        return Inertia::render('Welcome', [
+            'posts' => $posts,
+        ]);
     }
 
 

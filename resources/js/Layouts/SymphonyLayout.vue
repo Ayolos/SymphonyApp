@@ -10,7 +10,7 @@ import {router, useForm} from "@inertiajs/vue3";
 </script>
 
 <template>
-    <div class="max-h-screen min-h-screen bg-symph-500">
+    <div class="max-h-screen h-screen min-h-screen bg-symph-500">
         <Header class="mb-5"></Header>
         <div class="flex flex-row pr-10">
             <div class="w-[30vw] inl h-full px-10">
@@ -53,7 +53,7 @@ import {router, useForm} from "@inertiajs/vue3";
                     <slot name="postForm">
 
                     </slot>
-                    <div class="w-full bg-white rounded">
+                    <div class="w-full rounded overflow-y-scroll h-full h-[60vh]">
                         <slot></slot>
                     </div>
                 </div>

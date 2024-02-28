@@ -15,7 +15,7 @@
                             </div>
                             <div class="pl-4 pr-20 flex flex-row justify-between items-end gap-8">
                                 <!-- Définir la taille du textarea -->
-                                <textarea v-model="formPost.content" class="w-full h-20 focus:ring-0 resize-none border-0 p-0 rounded-lg bg-symph-100" placeholder="Exprimez-vous..."></textarea>
+                                <textarea required v-model="formPost.content" class="w-full h-20 focus:ring-0 resize-none border-0 p-0 rounded-lg bg-symph-100" placeholder="Exprimez-vous..."></textarea>
                                 <div>
                                     <button class="bg-symph-500 text-white rounded-lg px-4 py-2">Publier</button>
                                 </div>
@@ -26,40 +26,60 @@
                 </div>
             </form>
         </template>
-        <div class="p-10" v-for="post in posts" :key="post.id" >
-            <a :href="route('posts.show', { id: post.id })" class="flex flex-col">
-                <!-- Contenu du post -->
-                <PostInfo :src="post.user.profile_photo_url">
-                    <template #name>
-                        {{ post.user.name }}
-                    </template>
-                    <template #at>
-                        {{ post.user.username }}
-                    </template>
-                </PostInfo>
-                <div>
-                    <p>{{ post.content }}</p>
+        <div v-for="post in posts" :key="post.id" class="pb-10">
+            <Post :href="route('posts.show', {id: post.id})"
+                :src="post.user.profile_photo_url">
+                <template #name>
+                    {{ post.user.name }}
+                </template>
+                <template #at>
+                    @{{ post.user.username }}
+                </template>
+                <template #content>
+                    {{ post.content }}
+                </template>
+                <template #likeButton>
+                    <div class="flex flex-row gap-2 items-center">
+                        <Link as="button" method="post" :href="post.linkedByUser ? route('posts.unlike', { post: post.id }) : route('posts.like', { post: post.id })" preserve-scroll>
+                            <Icon icon="iconamoon:heart-duotone" class="w-6 h-6" :class="[ post.linkedByUser ? 'text-secondary-500' : 'text-gray-300']" />
+                        </Link>
+                        <h1 class="text-md text-symph-200 font-bold">{{ post.nbLikes }}</h1>
+                    </div>
+                    <div class="flex flex-row gap-2 items-center">
+                        <button @click="openModal(post)" class="text-gray-300">
+                            <Icon icon="iconamoon:comment-duotone" class="w-5 h-5" />
+                        </button>
+                        <h1 class="text-md text-symph-200 font-bold">{{ post.nbComments }}</h1>
+                    </div>
+                </template>
+            </Post>
+                <div v-for="(comment, index) in post.comments" :key="comment.id" class="px-10 flex w-full items-center relative">
+                    <div class="flex-shrink-0 mr-4">
+                        <div class="h-full w-0.5 bg-symph-300 absolute top-0 left-11"></div> <!-- Vertical Line -->
+                        <div class="h-2.5 w-2.5 bg-symph-300 rounded-full"></div> <!-- Circle -->
+                    </div>
+                    <div class="bg-symph-100 rounded-lg my-3 w-full">
+                        <Post :src="comment.user.profile_photo_url">
+                            <template #name>
+                                {{ comment.user.name }}
+                            </template>
+                            <template #at>
+                                @{{ comment.user.username }}
+                            </template>
+                            <template #content>
+                                {{ comment.content }}
+                            </template>
+                        </Post>
+                    </div> <!-- Comment Content -->
                 </div>
-                <!-- Afficher les commentaires -->
-                <h1>Commentaire</h1>
-                <div v-for="comment in post.comments" :key="comment.id">
-                    <p class="text-gray-500">{{ comment.content }}</p>
-                </div>
-            </a>
-            <!-- Bouton pour ouvrir le modal -->
-            <div class="flex-row flex gap-4">
-                <Link as="button" method="post" :href="post.linkedByUser ? route('posts.unlike', { post: post.id }) : route('posts.like', { post: post.id })" :class="[ post.linkedByUser ? 'bg-secondary-500' : '']" preserve-scroll>
-                    <Icon icon="akar-icons:heart" class="w-6 h-6" />
-                </Link>
-            </div>
         </div>
 
         <!-- Modal -->
-        <Modal v-if="isModalOpen" @close="closeModal" :post="selectedPost">
+        <Modal v-if="isModalOpen" @close="closeModal">
             <template #content>
                 <form @submit.prevent="submitComment">
                     <div class="my-5">
-                        <textarea v-model="commentForm.content" class="w-full rounded-lg"></textarea>
+                        <textarea required v-model="formComment.content" class="w-full rounded-lg"></textarea>
                     </div>
                     <div class="flex justify-end">
                         <button class="bg-secondary-500 text-white rounded-lg px-4 py-2">Envoyer</button>
@@ -77,6 +97,7 @@ import {computed, onMounted, reactive, ref} from "vue";
 import { Icon } from "@iconify/vue";
 import Modal from "@/Components/Symphony/Modal.vue";
 import PostInfo from "@/Components/Symphony/PostInfo.vue";
+import Post from "@/Components/Symphony/Post/Post.vue";
 
 defineProps({
     canLogin: Boolean,
@@ -117,7 +138,6 @@ const submitPost = () => {
         }
     });
 };
-
 const submitComment = () => {
     closeModal();
     formComment.post(route('comments.store'), {
@@ -126,21 +146,6 @@ const submitComment = () => {
             formComment.reset('content');
         }
     });
-};
-
-const toogleLike = (post) => {
-    if (post.linkedByUser) {
-        router.post(route('posts.unlike', { post: post.id }), {
-            preserveState: true,
-            preserveScroll: true,
-        });
-    } else {
-        router.post(route('posts.like', { post: post.id }), {
-            preserveState: true,
-            preserveScroll: true,
-        });
-    }
-
 };
 
 
