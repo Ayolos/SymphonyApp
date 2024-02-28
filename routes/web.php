@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -34,7 +35,15 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
-    Route::get('/', [PostController::class, 'index']);
+
+    Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+    Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
+    Route::post('/posts/{post}/like', [LikeController::class, 'likePost'])->name('posts.like');
+    Route::post('/posts/{post}/unlike', [LikeController::class, 'unlikePost'])->name('posts.unlike');
+
     Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::post('/comments/{comment}/like', [LikeController::class, 'likeComment'])->name('comments.like');
+    Route::post('/comments/{comment}/unlike', [LikeController::class, 'unlikeComment'])->name('comments.unlike');
+
 });

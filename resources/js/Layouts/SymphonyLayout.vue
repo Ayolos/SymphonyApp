@@ -6,17 +6,6 @@ import {Icon} from "@iconify/vue";
 import {reactive} from "vue";
 import {router, useForm} from "@inertiajs/vue3";
 
-const formPost = useForm({
-    content: '',
-})
-
-const submitPost = async () => {
-    await formPost.post(route('posts.store'), {
-        onSuccess: () => {
-            formPost.reset('content');
-        }
-    });
-};
 
 </script>
 
@@ -61,29 +50,9 @@ const submitPost = async () => {
                 </div>
             </div>
                 <div class="w-full flex flex-col gap-10" v-if="$page.props.auth.user">
-                    <form @submit.prevent="submitPost" class="w-full">
-                        <div class="bg-symph-100 rounded-lg">
-                            <div class="flex flex-row justify-between items-start h-48">
-                                <div class="flex-col items-center gap-4 p-4 w-full h-full">
-                                    <div class="flex flex-row items-center gap-4 p-4">
-                                        <img :src="$page.props.auth.user.profile_photo_url" class="w-12 h-12 rounded">
-                                        <div class="flex-col flex">
-                                            <h1 class="text-gray-400 truncate text-nowrap">{{ $page.props.auth.user.name }}</h1>
-                                            <span class="text-gray-500 text-sm">@{{ $page.props.auth.user.username }}</span>
-                                        </div>
-                                    </div>
-                                    <div class="pl-4 pr-20 flex flex-row justify-between items-end gap-8">
-                                        <!-- Définir la taille du textarea -->
-                                        <textarea v-model="formPost.content" class="w-full h-20 focus:ring-0 resize-none border-0 p-0 rounded-lg bg-symph-100" placeholder="Exprimez-vous..."></textarea>
-                                        <div>
-                                            <button class="bg-symph-500 text-white rounded-lg px-4 py-2">Publier</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <img src="https://fakeimg.pl/300/" class="h-48 w-max object-cover rounded-e-lg">
-                            </div>
-                        </div>
-                    </form>
+                    <slot name="postForm">
+
+                    </slot>
                     <div class="w-full bg-white rounded">
                         <slot></slot>
                     </div>

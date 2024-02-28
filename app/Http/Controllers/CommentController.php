@@ -10,6 +10,16 @@ use Inertia\Inertia;
 class CommentController extends Controller
 {
     //
+    public function index()
+    {
+        $comments = Comment::orderBy('created_at', 'desc')->get();
+        $comments->each(function ($comment) {
+            $comment->load('post');
+            $comment->load('user');
+        });
+
+        return Inertia::render('Welcome', ['comments' => $comments]);
+    }
     public function store(Request $request)
     {
         $comment = new Comment;
