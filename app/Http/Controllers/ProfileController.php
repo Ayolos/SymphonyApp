@@ -31,6 +31,7 @@ class ProfileController extends Controller
                 ->load('comments.user')
                 ->load('likes')
                 ->load('user'),
+            'nbPosts' => $userPost->count(),
         ]);
 
     }

@@ -10,6 +10,7 @@ import {onMounted, ref} from "vue";
 
 defineProps({
     posts: Object,
+    nbPosts: Number,
 });
 
 const formComment = useForm({
@@ -51,6 +52,7 @@ const closeModal = () => {
                     <h1 class="text-gray-500">Profile</h1>
                     <p>{{ $page.props.auth.user.name }}</p>
                     <p>@{{ $page.props.auth.user.username }}</p>
+                    <p>nbPost {{ nbPosts }}</p>
                 </div>
             </div>
 
