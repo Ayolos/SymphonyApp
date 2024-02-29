@@ -25,7 +25,7 @@ class LikeController extends Controller
             $like->likeable_type = Post::class;
             $like->save();
         }
-        return to_route('posts.index');
+        return redirect()->back();
     }
 
     public function unlikePost(Request $request, $id)
@@ -35,7 +35,8 @@ class LikeController extends Controller
             ->where('likeable_type', Post::class)
             ->first();
         $like->delete();
-        return to_route('posts.index');
+
+        return redirect()->back();
     }
 
     public function likeComment(Request $request)

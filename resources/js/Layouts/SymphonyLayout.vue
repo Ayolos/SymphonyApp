@@ -51,11 +51,10 @@ import {router, useForm, Link} from "@inertiajs/vue3";
                     </div>
                 </div>
             </div>
-                <div class="w-full flex flex-col gap-10" v-if="$page.props.auth.user">
+                <div class="w-full flex flex-col gap-10 h-[85vh]" v-if="$page.props.auth.user">
                     <slot name="postForm">
-
                     </slot>
-                    <div class="w-full rounded overflow-y-scroll h-full h-[60vh]">
+                    <div class="w-full rounded overflow-y-scroll">
                         <slot></slot>
                     </div>
                 </div>
