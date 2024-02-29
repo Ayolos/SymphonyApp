@@ -24,7 +24,7 @@ class PostController extends Controller
             $post->nbLikes = $post->likes->count();
         });
 
-        return Inertia::render('Welcome', [
+        return Inertia::render('Feed', [
             'posts' => $posts,
         ]);
     }

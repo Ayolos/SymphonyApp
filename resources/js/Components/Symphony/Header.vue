@@ -1,5 +1,5 @@
 <script setup>
-import Logo from "/public/Logo_Symphony.png";
+import Logo from "/public/Logo.png";
 import NavLink from "@/Components/NavLink.vue";
 import {onMounted, ref} from "vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
