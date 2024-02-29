@@ -95,7 +95,7 @@ import {Head, router, useForm, Link} from '@inertiajs/vue3';
 import SymphonyLayout from "@/Layouts/SymphonyLayout.vue";
 import {computed, onMounted, reactive, ref} from "vue";
 import { Icon } from "@iconify/vue";
-import Modal from "@/Components/Symphony/Modal.vue";
+import Modal from "@/Components/Symphony/Modal/Modal.vue";
 import PostInfo from "@/Components/Symphony/PostInfo.vue";
 import Post from "@/Components/Symphony/Post/Post.vue";
 

@@ -4,7 +4,7 @@ import SymphonyLayout from "@/Layouts/SymphonyLayout.vue";
 import Logo from "/public/Logo.png";
 import {Link, useForm} from "@inertiajs/vue3";
 import {Icon} from "@iconify/vue";
-import Modal from "@/Components/Symphony/Modal.vue";
+import Modal from "@/Components/Symphony/Modal/Modal.vue";
 import Post from "@/Components/Symphony/Post/Post.vue";
 import {onMounted, ref} from "vue";
 
@@ -24,6 +24,16 @@ const openModal = (post) => {
     selectedPost.value = post;
     isModalOpen.value = true;
     formComment.post_id = post.id;
+};
+
+const submitComment = () => {
+    closeModal();
+    formComment.post(route('comments.store'), {
+        preserveScroll: true,
+        onSuccess: () => {
+            formComment.reset('content');
+        }
+    });
 };
 
 const closeModal = () => {
