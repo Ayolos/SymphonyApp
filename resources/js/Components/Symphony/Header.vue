@@ -4,7 +4,7 @@ import NavLink from "@/Components/NavLink.vue";
 import {onMounted, ref} from "vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import Dropdown from "@/Components/Dropdown.vue";
-import {router} from "@inertiajs/vue3";
+import {router, Link} from "@inertiajs/vue3";
 import { Icon } from '@iconify/vue';
 
 defineProps({
@@ -31,8 +31,10 @@ const logout = () => {
     <nav class="h-24">
         <div class="flex justify-between items-center h-full px-10">
             <div class="flex flex-row items-center gap-4">
-                <img :src="Logo" alt="img" class="h-12 rounded-lg">
-                <h1 class="text-3xl font-bold text-white">SYMPHONY</h1>
+                <Link :href="route('posts.index')" class="flex flex-row items-center gap-2">
+                    <img :src="Logo" alt="img" class="h-12 rounded-lg">
+                    <h1 class="text-3xl font-bold text-white">SYMPHONY</h1>
+                </Link>
             </div>
             <div v-if="!$page.props.auth.user" class="border-secondary-500 hover:border-secondary-400 hover:bg-gray-900 border-2 rounded-lg py-1.5 px-2">
                 <a :href="route('login')" class="h-max flex flex-row items-center gap-4">

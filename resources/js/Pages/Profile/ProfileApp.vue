@@ -2,7 +2,7 @@
 
 import SymphonyLayout from "@/Layouts/SymphonyLayout.vue";
 import Logo from "/public/Logo.png";
-import {Link} from "@inertiajs/vue3";
+import {Link, useForm} from "@inertiajs/vue3";
 import {Icon} from "@iconify/vue";
 import Modal from "@/Components/Symphony/Modal.vue";
 import Post from "@/Components/Symphony/Post/Post.vue";
@@ -10,6 +10,11 @@ import {onMounted, ref} from "vue";
 
 defineProps({
     posts: Object,
+});
+
+const formComment = useForm({
+    content: "",
+    post_id: null,
 });
 
 const isModalOpen = ref(false);
