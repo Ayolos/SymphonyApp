@@ -5,7 +5,7 @@
             <h1 class="text-white font-bold text-xl pb-5">Vous aimeriez aussi...</h1>
             <div v-for="trendingUser in trendingUsers" class="flex flex-row gap-4 justify-between">
                 <div class="flex flex-row items-center pb-4 gap-4">
-                    <img src={{trendingUsers.profile_photo_path}} class="w-12 h-12 rounded">
+                    <img :src=trendingUsers.profile_photo_url class="w-12 h-12 rounded">
                     <div class="flex-col flex">
                         <span class="text-gray-400 truncate text-nowrap">{{trendingUser.name}}</span>
                         <span class="text-gray-500 text-sm">@{{trendingUser.username}}</span>
@@ -24,7 +24,7 @@
                     <div class="flex flex-row justify-between items-start h-48">
                         <div class="flex-col items-center gap-4 p-4 w-full h-full">
                             <div class="flex flex-row items-center gap-4 p-4">
-                                <img :src="$page.props.auth.user.profile_photo_path" class="w-12 h-12 rounded">
+                                <img :src="$page.props.auth.user.profile_photo_url" class="w-12 h-12 rounded">
                                 <div class="flex-col flex">
                                     <h1 class="text-gray-400 truncate text-nowrap">{{ $page.props.auth.user.name }}</h1>
                                     <span class="text-gray-500 text-sm">@{{ $page.props.auth.user.username }}</span>
