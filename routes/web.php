@@ -40,6 +40,7 @@ Route::middleware([
     Route::post('/posts/{post}/unlike', [LikeController::class, 'unlikePost'])->name('posts.unlike');
 
     Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::post('/comments/reply', [CommentController::class, 'reply'])->name('comments.reply');
     Route::post('/comments/{comment}/like', [LikeController::class, 'likeComment'])->name('comments.like');
     Route::post('/comments/{comment}/unlike', [LikeController::class, 'unlikeComment'])->name('comments.unlike');
 

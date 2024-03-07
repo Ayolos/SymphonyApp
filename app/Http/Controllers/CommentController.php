@@ -17,8 +17,8 @@ class CommentController extends Controller
             $comment->load('post');
             $comment->load('user');
         });
-
-        return Inertia::render('Welcome', ['comments' => $comments]);
+        dd($comments);
+        return Inertia::render('Feed', ['comments' => $comments]);
     }
     public function store(Request $request)
     {
@@ -26,6 +26,16 @@ class CommentController extends Controller
         $comment->content = $request->content;
         $comment->user_id = auth()->id();
         $comment->post_id = $request->post_id;
+        $comment->save();
+    }
+
+    public function reply(Request $request)
+    {
+        $comment = new Comment;
+        $comment->content = $request->content;
+        $comment->user_id = auth()->id();
+        $comment->post_id = $request->post_id;
+        $comment->parent_id = $request->parent_id;
         $comment->save();
     }
 }

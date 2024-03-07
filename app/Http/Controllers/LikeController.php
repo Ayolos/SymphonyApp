@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\Like;
 use App\Models\Post;
 use Illuminate\Http\Request;
@@ -39,23 +40,32 @@ class LikeController extends Controller
         return redirect()->back();
     }
 
-    public function likeComment(Request $request)
+    public function likeComment(Request $request, $id)
     {
-        $like = new Like();
-        $like->user_id = $request->user_id;
-        $like->likeable_id = $request->likeable_id;
-        $like->likeable_type = $request->likeable_type;
-        $like->save();
-        return to_route('posts.index');
+        //check if the user has already liked the post
+        $like = Like::where('user_id', auth()->user()->id)
+            ->where('likeable_id', $id)
+            ->where('likeable_type', Comment::class)
+            ->first();
+
+        if (!$like) {
+            $like = new Like();
+            $like->user_id = auth()->user()->id;
+            $like->likeable_id = $id;
+            $like->likeable_type = Comment::class;
+            $like->save();
+        }
+        return redirect()->back();
     }
 
-    public function unlikeComment(Request $request)
+    public function unlikeComment(Request $request, $id)
     {
-        $like = Like::where('user_id', $request->user_id)
-            ->where('likeable_id', $request->likeable_id)
-            ->where('likeable_type', $request->likeable_type)
+        $like = Like::where('user_id', auth()->user()->id)
+            ->where('likeable_id', $id)
+            ->where('likeable_type', Comment::class)
             ->first();
         $like->delete();
-        return to_route('posts.index');
+
+        return redirect()->back();
     }
 }
