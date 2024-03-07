@@ -4,6 +4,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -45,4 +46,5 @@ Route::middleware([
     Route::post('/comments/{comment}/unlike', [LikeController::class, 'unlikeComment'])->name('comments.unlike');
 
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::post('/follower', [UserController::class, 'following'])->name('user.follow');
 });

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\In;
 use Inertia\Inertia;
@@ -37,8 +38,13 @@ class PostController extends Controller
             });
         });
 
+        //$trendingUsers = User::withCount('followers')->orderByDesc('followers_count')->get();
+        $trendingUsers = User::all();
+        //dd($trendingUsers);
+
         return Inertia::render('Feed', [
             'posts' => $posts,
+            'trendingUsers' => $trendingUsers
         ]);
     }
 

@@ -13,6 +13,6 @@ class FollowerController extends Controller
         $follower->follower_user_id= $request->follower_user_id;
         $follower->user_id = auth()->id();
         $follower->save();
-
     }
+
 }

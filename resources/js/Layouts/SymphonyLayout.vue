@@ -35,19 +35,7 @@ import {router, useForm, Link} from "@inertiajs/vue3";
                         </div>
                     </div>
                     <div class="bg-symph-800 rounded-lg px-4 py-5 w-full">
-                        <h1 class="text-white font-bold text-xl pb-5">Vous aimeriez aussi...</h1>
-                        <div v-for="i in 7" class="flex flex-row gap-4 justify-between">
-                            <div class="flex flex-row items-center pb-4 gap-4">
-                                <img src="https://fakeimg.pl/300/" class="w-12 h-12 rounded">
-                                <div class="flex-col flex">
-                                    <h1 class="text-gray-400 truncate text-nowrap">Antoine ANDRE</h1>
-                                    <span class="text-gray-500 text-sm">@antoineandre</span>
-                                </div>
-                            </div>
-                            <div class="flex flex-row items-center gap-4 pr-4">
-                                <Icon icon="gridicons:add" class="text-symph-200 text-3xl"></Icon>
-                            </div>
-                        </div>
+                        <slot name="trendingUsers"/>
                     </div>
                 </div>
             </div>
