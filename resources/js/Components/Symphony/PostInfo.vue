@@ -6,7 +6,8 @@ const props = defineProps({
 </script>
 
 <template>
-    <div class="flex flex-row items-center bg-gray-900 rounded-t-lg p-4 shadow pb-4 gap-4">
+    <div class="relative flex flex-row items-center bg-gray-900 rounded-t-lg p-4 shadow pb-4 gap-4">
+        <div class="absolute -left-5 -top-3 w-5 h-full border-b-2 border-symph-400 rounded-bl-xl border-l-2"></div>
         <!-- Informations sur l'utilisateur -->
         <img :src="props.src" class="w-12 h-12 rounded">
         <div class="flex-col flex">

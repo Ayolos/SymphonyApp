@@ -14,6 +14,9 @@ defineProps({
         <a :href="href" class="flex flex-col gap-2">
             <!-- Contenu du post -->
             <PostInfo :src="src">
+                <template #connectLine>
+                    <slot name="connectLine"></slot>
+                </template>
                 <template #name>
                     <slot name="name"></slot>
                 </template>

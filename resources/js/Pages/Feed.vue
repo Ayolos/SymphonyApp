@@ -70,13 +70,13 @@
                     </div>
                 </template>
             </Post>
-            <div v-for="(comment, index) in post.comments" :key="comment.id" class="px-10 flex flex-col w-full items-center relative">
-                <div class="flex-shrink-0 mr-4">
-                    <div class="h-full w-0.5 bg-symph-300 absolute top-0 left-5"></div> <!-- Vertical Line -->
-                    <div class="h-2.5 w-2.5 absolute top-[50%] left-4 bg-symph-300 rounded-full"></div> <!-- Circle -->
-                </div>
-                <div class="bg-symph-100 rounded-lg my-3 w-full">
+            <div v-for="(comment, index) in post.comments" :key="comment.id" class="pl-10 pt-3 flex flex-col w-full items-center relative">
+                <div class="bg-symph-100 rounded-lg w-full">
+                    <div v-if="index !== post.comments.length - 1" class="absolute w-0.5 h-full top-0 bg-symph-400 left-5"></div>
                     <Post :src="comment.user.profile_photo_url">
+                        <template #connectLine>
+                            <div class="absolute border-b-2 border-l-2 border-symph-300 rounded-bl-xl h-full w-5 left-5"></div>
+                        </template>
                         <template #name>
                             {{ comment.user.name }}
                         </template>
@@ -101,13 +101,10 @@
                             </div>
                         </template>
                     </Post>
-                </div> <!-- Comment Content -->
-                <div v-for="(reply, index) in comment.reply" :key="reply.id" class="px-10 flex w-full items-center relative">
-                    <div class="flex-shrink-0 mr-4">
-                        <div class="h-full w-0.5 bg-symph-300 absolute top-0 left-11"></div> <!-- Vertical Line -->
-                        <div class="h-2.5 w-2.5 bg-symph-300 rounded-full"></div> <!-- Circle -->
-                    </div>
+                </div>
+                <div v-for="(reply, index) in comment.reply" :key="reply.id" class="px-10 flex flex-col w-full items-center relative">
                     <div class="bg-symph-100 rounded-lg my-3 w-full">
+                        <div v-if="index !== comment.reply.length - 1" class="absolute w-0.5 h-full top-0 bg-symph-400 left-5"></div>
                         <Post :src="reply.user.profile_photo_url">
                             <template #name>
                                 {{ reply.user.name }}
