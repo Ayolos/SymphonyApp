@@ -16,21 +16,9 @@ class ProfileController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        $userPost->each(function ($post) {
-            $post->load(['comments.user' => function ($query) {
-                $query->take(3);
-            }]);
-            $post->load('user');
-            $post->linkedByUser = $post->likedBy(auth()->user());
-            $post->nbComments = $post->comments->count();
-            $post->nbLikes = $post->likes->count();
-        });
 
         return Inertia::render('Profile/ProfileApp', [
-            'posts' => $userPost
-                ->load('comments.user')
-                ->load('likes')
-                ->load('user'),
+            'posts' => $userPost,
             'nbPosts' => $userPost->count(),
         ]);
 

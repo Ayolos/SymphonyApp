@@ -15,6 +15,25 @@ class Comment extends Model
         'content',
     ];
 
+    protected $with = ['user', 'reply'];
+
+    protected $appends = ['nbLikes', 'isLiked', 'nbReplies'];
+
+    public function getIsLikedAttribute()
+    {
+        return $this->likes->contains('user_id', auth()->id());
+    }
+
+    public function getNbLikesAttribute()
+    {
+        return $this->likes->count();
+    }
+
+    public function getNbRepliesAttribute()
+    {
+        return $this->reply->count();
+    }
+
     public function post()
     {
         return $this->belongsTo(Post::class);
@@ -35,13 +54,4 @@ class Comment extends Model
         return $this->morphMany(Like::class, 'likeable');
     }
 
-    public function likedBy(User $user)
-    {
-        return $this->likes->contains('user_id', $user->id);
-    }
-
-//    public function trendingUsers()
-//    {
-//        return $this->belongsTo()
-//    }
 }

@@ -13,6 +13,29 @@ class Post extends Model
         'content',
     ];
 
+    protected $with = ['user', 'comments'];
+
+    protected $appends = ['nbLikes', 'nbComments', 'isLiked'];
+
+    public function getIsLikedAttribute()
+    {
+        return $this->likes->contains('user_id', auth()->id());
+    }
+
+    public function getNbLikesAttribute()
+    {
+        return $this->likes->count();
+    }
+
+    public function getNbCommentsAttribute()
+    {
+        return $this->comments()->count();
+    }
+
+    public function song()
+    {
+        return $this->hasOne(Song::class);
+    }
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -26,16 +49,6 @@ class Post extends Model
     public function likes()
     {
         return $this->morphMany(Like::class, 'likeable');
-    }
-
-    public function likedBy(User $user)
-    {
-        return $this->likes->contains('user_id', $user->id);
-    }
-
-    public function commentCount()
-    {
-        return $this->comments->count();
     }
 
 }

@@ -38,7 +38,16 @@
                                 </div>
                             </div>
                         </div>
-                        <img src="https://fakeimg.pl/300/" class="h-48 w-max object-cover rounded-e-lg">
+                        <img @click="openSongModal" src="https://img.icons8.com/ios/452/music--v1.png" class="w-max h-full aspect-square rounded-lg">
+                        <div>
+                            <h1>title: {{ submitFormSong.title }}</h1>
+                            <h1>artist: {{ submitFormSong.artist }}</h1>
+                            <h1>genre: {{ submitFormSong.genre }}</h1>
+                            <h1>album: {{ submitFormSong.album }}</h1>
+                            <h1>release date: {{ submitFormSong.release_date }}</h1>
+                            <h1>duration: {{ submitFormSong.duration }}</h1>
+                            <h1>file: {{ submitFormSong.file }}</h1>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -57,8 +66,8 @@
                 </template>
                 <template #likeButton>
                     <div class="flex flex-row gap-2 items-center">
-                        <Link as="button" method="post" :href="post.linkedByUser ? route('posts.unlike', { post: post.id }) : route('posts.like', { post: post.id })" >
-                            <Icon icon="iconamoon:heart-duotone" class="w-6 h-6" :class="[ post.linkedByUser ? 'text-secondary-500' : 'text-gray-300']" />
+                        <Link as="button" method="post" :href="post.isLiked ? route('posts.unlike', { post: post.id }) : route('posts.like', { post: post.id })" >
+                            <Icon icon="iconamoon:heart-duotone" class="w-6 h-6" :class="[ post.isLiked ? 'text-secondary-500' : 'text-gray-300']" />
                         </Link>
                         <h1 class="text-md text-symph-200 font-bold">{{ post.nbLikes }}</h1>
                     </div>
@@ -88,8 +97,8 @@
                         </template>
                         <template #likeButton>
                             <div class="flex flex-row gap-2 items-center">
-                                <Link as="button" method="post" :href="comment.linkedByUser ? route('comments.unlike', { comment: comment.id }) : route('comments.like', { comment: comment.id })" >
-                                    <Icon icon="iconamoon:heart-duotone" class="w-6 h-6" :class="[ comment.linkedByUser ? 'text-secondary-500' : 'text-gray-300']" />
+                                <Link as="button" method="post" :href="comment.isLiked ? route('comments.unlike', { comment: comment.id }) : route('comments.like', { comment: comment.id })" >
+                                    <Icon icon="iconamoon:heart-duotone" class="w-6 h-6" :class="[ comment.isLiked ? 'text-secondary-500' : 'text-gray-300']" />
                                 </Link>
                                 <h1 class="text-md text-symph-200 font-bold">{{ comment.nbLikes }}</h1>
                             </div>
@@ -117,8 +126,8 @@
                             </template>
                             <template #likeButton>
                                 <div class="flex flex-row gap-2 items-center">
-                                    <Link as="button" method="post" :href="reply.linkedByUser ? route('comments.unlike', { comment: reply.id }) : route('comments.like', { comment: reply.id })" >
-                                        <Icon icon="iconamoon:heart-duotone" class="w-6 h-6" :class="[ reply.linkedByUser ? 'text-secondary-500' : 'text-gray-300']" />
+                                    <Link as="button" method="post" :href="reply.isLiked ? route('comments.unlike', { comment: reply.id }) : route('comments.like', { comment: reply.id })" >
+                                        <Icon icon="iconamoon:heart-duotone" class="w-6 h-6" :class="[ reply.isLiked ? 'text-secondary-500' : 'text-gray-300']" />
                                     </Link>
                                     <h1 class="text-md text-symph-200 font-bold">{{ reply.nbLikes }}</h1>
                                 </div>
@@ -133,6 +142,23 @@
                 </div>
             </div>
         </div>
+
+        <Modal v-if="isSongModalOpen" @close="closeModalSong">
+            <template #content>
+                <form @submit.prevent="submitSong" enctype="multipart/form-data">
+                    <h1>Hello</h1>
+                    <input type="text" placeholder="title" v-model="formPost.title">
+                    <input type="text" placeholder="artist" v-model="formPost.artist">
+                    <input type="text" placeholder="genre" v-model="formPost.genre">
+                    <input type="text" placeholder="album name" v-model="formPost.album">
+                    <input type="text" placeholder="release date" v-model="formPost.release_date">
+                    <input type="text" placeholder="duration" v-model="formPost.duration">
+                    <input type="file" placeholder="file" @change="onFileChange">
+                    <audio controls :src="audioPreview"></audio>
+                    <button>Submit</button>
+                </form>
+            </template>
+        </Modal>
 
         <Modal v-if="isReplyModalOpen" @close="closeModalReply">
             <template #content>
@@ -199,6 +225,13 @@ const like = ref(false);
 
 const formPost = useForm({
     content: '',
+        title: '',
+        artist: '',
+        genre: '',
+        album: '',
+        release_date: '',
+        duration: '',
+        file: '',
 });
 
 const formComment = useForm({
@@ -213,12 +246,46 @@ const formReply = useForm({
     post_id: null,
 });
 
+const submitFormSong = ref({
+    title: '',
+    artist: '',
+    genre: '',
+    album: '',
+    release_date: '',
+    duration: '',
+    file: '',
+    post_id: null,
+});
+
 const isModalOpen = ref(false);
 const selectedPost = ref(null);
 
 const selectedComment = ref(null);
 const isReplyModalOpen = ref(false);
 const isCommentModalOpen = ref(false);
+
+const isSongModalOpen = ref(false);
+
+const songSubmit = ref(false);
+
+const audioPreview = ref('');
+
+const onFileChange = (e) => {
+    formPost.file = e.target.files[0];
+    if (formPost.file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            audioPreview.value = event.target.result;
+        };
+        reader.readAsDataURL(formPost.file);
+    } else {
+        audioPreview.value = '';
+    }
+};
+const openSongModal = () => {
+    //songSubmit.value = false;
+    isSongModalOpen.value = true;
+};
 
 
 const openModal = (post) => {
@@ -245,6 +312,10 @@ const closeModal = () => {
     isModalOpen.value = false;
 };
 
+const closeModalSong = () => {
+    isSongModalOpen.value = false;
+};
+
 const closeModalReply = () => {
     isReplyModalOpen.value = false;
 };
@@ -254,13 +325,30 @@ const closeModalComment = () => {
 };
 
 const submitPost = () => {
+    console.log(formPost.file);
     formPost.post(route('posts.store'), {
+        forceFormData: true,
         onSuccess: () => {
             formPost.reset('content');
         }
     });
 };
 
+const submitSong = () => {
+    submitFormSong.value.title = formPost.title;
+    submitFormSong.value.artist = formPost.artist;
+    submitFormSong.value.genre = formPost.genre;
+    submitFormSong.value.album = formPost.album;
+    submitFormSong.value.release_date = formPost.release_date;
+    submitFormSong.value.duration = formPost.duration;
+    submitFormSong.value.file = formPost.file;
+    closeModalSong()
+    /*formSong.post(route('song.store'), {
+        onSuccess: () => {
+            formSong.reset('title', 'artist', 'genre', 'album', 'release_date', 'duration', 'file');
+        }
+    });*/
+};
 const submitReply = () => {
     closeModalReply();
     formReply.post(route('comments.reply'), {

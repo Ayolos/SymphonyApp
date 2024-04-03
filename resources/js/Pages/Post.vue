@@ -130,8 +130,8 @@ const copyLink = () => {
                 </template>
                 <template #likeButton>
                     <div class="flex flex-row gap-2 items-center">
-                        <Link as="button" method="post" :href="post.linkedByUser ? route('posts.unlike', { post: post.id }) : route('posts.like', { post: post.id })" >
-                            <Icon icon="iconamoon:heart-duotone" class="w-6 h-6" :class="[ post.linkedByUser ? 'text-secondary-500' : 'text-gray-300']" />
+                        <Link as="button" method="post" :href="post.isLiked ? route('posts.unlike', { post: post.id }) : route('posts.like', { post: post.id })" >
+                            <Icon icon="iconamoon:heart-duotone" class="w-6 h-6" :class="[ post.isLiked ? 'text-secondary-500' : 'text-gray-300']" />
                         </Link>
                         <h1 class="text-md text-symph-200 font-bold">{{ post.nbLikes }}</h1>
                     </div>
@@ -166,8 +166,8 @@ const copyLink = () => {
                         </template>
                         <template #likeButton>
                             <div class="flex flex-row gap-2 items-center">
-                                <Link as="button" method="post" :href="comment.linkedByUser ? route('comments.unlike', { comment: comment.id }) : route('comments.like', { comment: comment.id })" >
-                                    <Icon icon="iconamoon:heart-duotone" class="w-6 h-6" :class="[ comment.linkedByUser ? 'text-secondary-500' : 'text-gray-300']" />
+                                <Link as="button" method="post" :href="comment.isLiked ? route('comments.unlike', { comment: comment.id }) : route('comments.like', { comment: comment.id })" >
+                                    <Icon icon="iconamoon:heart-duotone" class="w-6 h-6" :class="[ comment.isLiked ? 'text-secondary-500' : 'text-gray-300']" />
                                 </Link>
                                 <h1 class="text-md text-symph-200 font-bold">{{ comment.nbLikes }}</h1>
                             </div>
@@ -198,8 +198,8 @@ const copyLink = () => {
                             </template>
                             <template #likeButton>
                                 <div class="flex flex-row gap-2 items-center">
-                                    <Link as="button" method="post" :href="reply.linkedByUser ? route('comments.unlike', { comment: reply.id }) : route('comments.like', { comment: reply.id })" >
-                                        <Icon icon="iconamoon:heart-duotone" class="w-6 h-6" :class="[ reply.linkedByUser ? 'text-secondary-500' : 'text-gray-300']" />
+                                    <Link as="button" method="post" :href="reply.isLiked ? route('comments.unlike', { comment: reply.id }) : route('comments.like', { comment: reply.id })" >
+                                        <Icon icon="iconamoon:heart-duotone" class="w-6 h-6" :class="[ reply.isLiked ? 'text-secondary-500' : 'text-gray-300']" />
                                     </Link>
                                     <h1 class="text-md text-symph-200 font-bold">{{ reply.nbLikes }}</h1>
                                 </div>

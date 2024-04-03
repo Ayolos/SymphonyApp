@@ -12,13 +12,7 @@ class CommentController extends Controller
     //
     public function index()
     {
-        $comments = Comment::orderBy('created_at', 'desc')->get();
-        $comments->each(function ($comment) {
-            $comment->load('post');
-            $comment->load('user');
-        });
-        dd($comments);
-        return Inertia::render('Feed', ['comments' => $comments]);
+
     }
     public function store(Request $request)
     {
