@@ -64,6 +64,11 @@
                 <template #content>
                     {{ post.content }}
                 </template>
+                <template #media>
+                    <audio controls v-if="post.song">
+                        <source :src="'/storage/' + post.song.path">
+                    </audio>
+                </template>
                 <template #likeButton>
                     <div class="flex flex-row gap-2 items-center">
                         <Link as="button" method="post" :href="post.isLiked ? route('posts.unlike', { post: post.id }) : route('posts.like', { post: post.id })" >

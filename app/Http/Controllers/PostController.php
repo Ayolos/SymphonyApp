@@ -31,7 +31,7 @@ class PostController extends Controller
     {
         if ($request->file('file')->isValid()) {
             $file = $request->file('file');
-            $path = $file->store('public/songs');
+            $path = $file->store('songs');
 
             if (!$path) {
                 // Handle error if file storage fails

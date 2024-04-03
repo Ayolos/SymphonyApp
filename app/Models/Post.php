@@ -13,7 +13,7 @@ class Post extends Model
         'content',
     ];
 
-    protected $with = ['user', 'comments'];
+    protected $with = ['user', 'comments', 'song'];
 
     protected $appends = ['nbLikes', 'nbComments', 'isLiked'];
 

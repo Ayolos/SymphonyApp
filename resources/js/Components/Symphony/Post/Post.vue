@@ -24,10 +24,11 @@ defineProps({
                     <slot name="at"></slot>
                 </template>
             </PostInfo>
-            <div class="py-10 px-10">
+            <div class="py-10 px-10 flex flex-row justify-between items-center">
                 <p class="text-md text-gray-500">
                     <slot name="content"></slot>
                 </p>
+                <slot name="media"></slot>
             </div>
         </a>
         <div class="flex-row flex gap-8 px-6 pt-5 pb-10">
