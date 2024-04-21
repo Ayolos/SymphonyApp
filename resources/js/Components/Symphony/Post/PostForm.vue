@@ -16,12 +16,12 @@ const formPost = useForm({
 });
 const submitPost = () => {
   console.log(formPost.file);
-  /*formPost.post(route('posts.store'), {
+  formPost.post(route('posts.store'), {
     forceFormData: true,
     onSuccess: () => {
       formPost.reset('content');
     }
-  });*/
+  });
 };
 
 const audioPreview = ref('');
@@ -86,7 +86,7 @@ const togglePlayPause = () => {
         </div>
         <div class="flex flex-col gap-3 justify-center items-center aspect-square p-5 h-full bg-symph-700 rounded-r-md">
           <div class="relative bg-secondary p-4 rounded-lg hover:scale-110 hover:transition">
-            <input id="fileInput" class="absolute inset-0 opacity-0 z-10" type="file" @change="onFileChange" required>
+            <input id="fileInput" class="absolute inset-0 opacity-0 z-10" type="file" accept=".mp3" @change="onFileChange" required>
             <Icon class="text-white" icon="uil:music" width="50"></Icon>
           </div>
           <div class="">
