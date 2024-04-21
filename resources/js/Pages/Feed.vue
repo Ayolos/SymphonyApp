@@ -19,41 +19,11 @@
             </div>
         </template>
         <template #postForm>
-            <form @submit.prevent="submitPost" class="w-full">
-                <div class="bg-symph-100 rounded-lg">
-                    <div class="flex flex-row justify-between items-start h-48">
-                        <div class="flex-col items-center gap-4 p-4 w-full h-full">
-                            <div class="flex flex-row items-center gap-4 p-4">
-                                <img :src="$page.props.auth.user.profile_photo_url" class="w-12 h-12 rounded">
-                                <div class="flex-col flex">
-                                    <h1 class="text-gray-400 truncate text-nowrap">{{ $page.props.auth.user.name }}</h1>
-                                    <span class="text-gray-500 text-sm">@{{ $page.props.auth.user.username }}</span>
-                                </div>
-                            </div>
-                            <div class="pl-4 pr-20 flex flex-row justify-between items-end gap-8">
-                                <!-- Définir la taille du textarea -->
-                                <textarea required v-model="formPost.content" class="w-full h-20 focus:ring-0 resize-none border-0 p-0 rounded-lg bg-symph-100" placeholder="Exprimez-vous..."></textarea>
-                                <div>
-                                    <button class="bg-symph-500 text-white rounded-lg px-4 py-2">Publier</button>
-                                </div>
-                            </div>
-                        </div>
-                        <img @click="openSongModal" src="https://img.icons8.com/ios/452/music--v1.png" class="w-max h-full aspect-square rounded-lg">
-                        <div>
-                            <h1>title: {{ submitFormSong.title }}</h1>
-                            <h1>artist: {{ submitFormSong.artist }}</h1>
-                            <h1>genre: {{ submitFormSong.genre }}</h1>
-                            <h1>album: {{ submitFormSong.album }}</h1>
-                            <h1>release date: {{ submitFormSong.release_date }}</h1>
-                            <h1>duration: {{ submitFormSong.duration }}</h1>
-                            <h1>file: {{ submitFormSong.file }}</h1>
-                        </div>
-                    </div>
-                </div>
-            </form>
+            <PostForm></PostForm>
         </template>
         <div v-for="post in posts" :key="post.id" class="pb-10">
-            <Post :href="route('posts.show', {id: post.id})"
+          <!--:href="route('posts.show', {id: post.id})"-->
+            <Post
                   :src="post.user.profile_photo_url">
                 <template #name>
                     {{ post.user.name }}
@@ -65,9 +35,7 @@
                     {{ post.content }}
                 </template>
                 <template #media>
-                    <audio controls v-if="post.song">
-                        <source :src="'/storage/' + post.song.path">
-                    </audio>
+                  <PlayerAudio :song="post.song"></PlayerAudio>
                 </template>
                 <template #likeButton>
                     <div class="flex flex-row gap-2 items-center">
@@ -77,9 +45,20 @@
                         <h1 class="text-md text-symph-200 font-bold">{{ post.nbLikes }}</h1>
                     </div>
                     <div class="flex flex-row gap-2 items-center">
-                        <button @click="openModal(post)" class="text-gray-300">
-                            <Icon icon="iconamoon:comment-duotone" class="w-5 h-5" />
-                        </button>
+                        <MainModal @submit="submitComment(post.id)">
+                            <template #button>
+                                <Icon icon="iconamoon:comment-duotone" class="w-5 h-5 text-gray-300" />
+                            </template>
+                            <template #modalTitle>
+                                Ajouter un commentaire
+                            </template>
+                            <template #content>
+                                <div class="flex flex-col gap-3 px-4 justify-end">
+                                    <textarea required v-model="formComment.content" class="w-full rounded-lg"></textarea>
+                                    <button class="bg-secondary-500 text-white rounded-lg px-4 py-2">Envoyer</button>
+                                </div>
+                            </template>
+                        </MainModal>
                         <h1 class="text-md text-symph-200 font-bold">{{ post.nbComments }}</h1>
                     </div>
                 </template>
@@ -108,9 +87,20 @@
                                 <h1 class="text-md text-symph-200 font-bold">{{ comment.nbLikes }}</h1>
                             </div>
                             <div class="flex flex-row gap-2 items-center">
-                                <button @click="openCommentModal(comment, post)" class="text-gray-300">
-                                    <Icon icon="iconamoon:comment-duotone" class="w-5 h-5" />
-                                </button>
+                                <MainModal @submit="submitCommentReply(comment.id, post.id)">
+                                    <template #button>
+                                        <Icon icon="iconamoon:comment-duotone" class="w-5 h-5 text-gray-300" />
+                                    </template>
+                                    <template #modalTitle>
+                                        Ajouter un commentaire
+                                    </template>
+                                    <template #content>
+                                        <div class="flex flex-col gap-3 px-4 justify-end">
+                                            <textarea required v-model="formReply.content" class="w-full rounded-lg"></textarea>
+                                            <button class="bg-secondary-500 text-white rounded-lg px-4 py-2">Envoyer</button>
+                                        </div>
+                                    </template>
+                                </MainModal>
                                 <h1 class="text-md text-symph-200 font-bold">{{ comment.nbReplies }}</h1>
                             </div>
                         </template>
@@ -137,74 +127,27 @@
                                     <h1 class="text-md text-symph-200 font-bold">{{ reply.nbLikes }}</h1>
                                 </div>
                                 <div class="flex flex-row gap-2 items-center">
-                                    <button @click="openReplyModal(comment, post)" class="text-gray-300">
-                                        <Icon icon="iconamoon:comment-duotone" class="w-5 h-5" />
-                                    </button>
+                                    <MainModal @submit="submitCommentReply(comment.id, post.id)">
+                                        <template #button>
+                                            <Icon icon="iconamoon:comment-duotone" class="w-5 h-5 text-gray-300" />
+                                        </template>
+                                        <template #modalTitle>
+                                            Ajouter un commentaire
+                                        </template>
+                                        <template #content>
+                                            <div class="flex flex-col gap-3 px-4 justify-end">
+                                                <textarea required v-model="formReply.content" class="w-full rounded-lg"></textarea>
+                                                <button class="bg-secondary-500 text-white rounded-lg px-4 py-2">Envoyer</button>
+                                            </div>
+                                        </template>
+                                    </MainModal>
                                 </div>
                             </template>
                         </Post>
-                    </div> <!-- Comment Content -->
+                    </div>
                 </div>
             </div>
         </div>
-
-        <Modal v-if="isSongModalOpen" @close="closeModalSong">
-            <template #content>
-                <form @submit.prevent="submitSong" enctype="multipart/form-data">
-                    <h1>Hello</h1>
-                    <input type="text" placeholder="title" v-model="formPost.title">
-                    <input type="text" placeholder="artist" v-model="formPost.artist">
-                    <input type="text" placeholder="genre" v-model="formPost.genre">
-                    <input type="text" placeholder="album name" v-model="formPost.album">
-                    <input type="text" placeholder="release date" v-model="formPost.release_date">
-                    <input type="text" placeholder="duration" v-model="formPost.duration">
-                    <input type="file" placeholder="file" @change="onFileChange">
-                    <audio controls :src="audioPreview"></audio>
-                    <button>Submit</button>
-                </form>
-            </template>
-        </Modal>
-
-        <Modal v-if="isReplyModalOpen" @close="closeModalReply">
-            <template #content>
-                <form @submit.prevent="submitReply">
-                    <h1>envoyer un reply</h1>
-                    <div class="my-5">
-                        <textarea required v-model="formReply.content" class="w-full rounded-lg"></textarea>
-                    </div>
-                    <div class="flex justify-end">
-                        <button class="bg-secondary-500 text-white rounded-lg px-4 py-2">Envoyer</button>
-                    </div>
-                </form>
-            </template>
-        </Modal>
-
-        <Modal v-if="isCommentModalOpen" @close="closeModalComment">
-            <template #content>
-                <form @submit.prevent="submitComment">
-                    <div class="my-5">
-                        <textarea required v-model="formComment.content" class="w-full rounded-lg"></textarea>
-                    </div>
-                    <div class="flex justify-end">
-                        <button class="bg-secondary-500 text-white rounded-lg px-4 py-2">Envoyer</button>
-                    </div>
-                </form>
-            </template>
-        </Modal>
-
-        <!-- Modal -->
-        <Modal v-if="isModalOpen" @close="closeModal">
-            <template #content>
-                <form @submit.prevent="submitComment">
-                    <div class="my-5">
-                        <textarea required v-model="formComment.content" class="w-full rounded-lg"></textarea>
-                    </div>
-                    <div class="flex justify-end">
-                        <button class="bg-secondary-500 text-white rounded-lg px-4 py-2">Envoyer</button>
-                    </div>
-                </form>
-            </template>
-        </Modal>
     </SymphonyLayout>
 </template>
 
@@ -216,6 +159,10 @@ import { Icon } from "@iconify/vue";
 import Modal from "@/Components/Symphony/Modal/Modal.vue";
 import PostInfo from "@/Components/Symphony/PostInfo.vue";
 import Post from "@/Components/Symphony/Post/Post.vue";
+import MainModal from "@/Components/Symphony/Modal/MainModal.vue";
+import InputLabel from "@/Components/Symphony/Input/InputLabel.vue";
+import PostForm from "@/Components/Symphony/Post/PostForm.vue";
+import PlayerAudio from "@/Components/Symphony/PlayerAudio.vue";
 
 defineProps({
     canLogin: Boolean,
@@ -228,21 +175,9 @@ defineProps({
 
 const like = ref(false);
 
-const formPost = useForm({
-    content: '',
-        title: '',
-        artist: '',
-        genre: '',
-        album: '',
-        release_date: '',
-        duration: '',
-        file: '',
-});
-
 const formComment = useForm({
     content: "",
     post_id: null,
-    parent_id: null,
 });
 
 const formReply = useForm({
@@ -250,112 +185,9 @@ const formReply = useForm({
     parent_id: null,
     post_id: null,
 });
-
-const submitFormSong = ref({
-    title: '',
-    artist: '',
-    genre: '',
-    album: '',
-    release_date: '',
-    duration: '',
-    file: '',
-    post_id: null,
-});
-
-const isModalOpen = ref(false);
-const selectedPost = ref(null);
-
-const selectedComment = ref(null);
-const isReplyModalOpen = ref(false);
-const isCommentModalOpen = ref(false);
-
-const isSongModalOpen = ref(false);
-
-const songSubmit = ref(false);
-
-const audioPreview = ref('');
-
-const onFileChange = (e) => {
-    formPost.file = e.target.files[0];
-    if (formPost.file) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            audioPreview.value = event.target.result;
-        };
-        reader.readAsDataURL(formPost.file);
-    } else {
-        audioPreview.value = '';
-    }
-};
-const openSongModal = () => {
-    //songSubmit.value = false;
-    isSongModalOpen.value = true;
-};
-
-
-const openModal = (post) => {
-    selectedPost.value = post;
-    isModalOpen.value = true;
-    formComment.post_id = post.id;
-};
-
-const openCommentModal = (comment, post) => {
-    selectedComment.value = comment;
-    isCommentModalOpen.value = true;
-    formComment.parent_id = comment.id;
-    formComment.post_id = post.id;
-};
-
-const openReplyModal = (comment, post) => {
-    selectedComment.value = comment;
-    isReplyModalOpen.value = true;
-    formReply.content = '@' + comment.user.username + ' '
-    formReply.parent_id = comment.id;
-    formReply.post_id = post.id;
-};
-const closeModal = () => {
-    isModalOpen.value = false;
-};
-
-const closeModalSong = () => {
-    isSongModalOpen.value = false;
-};
-
-const closeModalReply = () => {
-    isReplyModalOpen.value = false;
-};
-
-const closeModalComment = () => {
-    isCommentModalOpen.value = false;
-};
-
-const submitPost = () => {
-    console.log(formPost.file);
-    formPost.post(route('posts.store'), {
-        forceFormData: true,
-        onSuccess: () => {
-            formPost.reset('content');
-        }
-    });
-};
-
-const submitSong = () => {
-    submitFormSong.value.title = formPost.title;
-    submitFormSong.value.artist = formPost.artist;
-    submitFormSong.value.genre = formPost.genre;
-    submitFormSong.value.album = formPost.album;
-    submitFormSong.value.release_date = formPost.release_date;
-    submitFormSong.value.duration = formPost.duration;
-    submitFormSong.value.file = formPost.file;
-    closeModalSong()
-    /*formSong.post(route('song.store'), {
-        onSuccess: () => {
-            formSong.reset('title', 'artist', 'genre', 'album', 'release_date', 'duration', 'file');
-        }
-    });*/
-};
-const submitReply = () => {
-    closeModalReply();
+const submitCommentReply = (commentId, postId) => {
+    formReply.parent_id = commentId;
+    formReply.post_id = postId;
     formReply.post(route('comments.reply'), {
         preserveScroll: true,
         onSuccess: () => {
@@ -363,9 +195,9 @@ const submitReply = () => {
         }
     });
 };
-const submitComment = () => {
-    closeModalComment();
-    formComment.post(route('comments.reply'), {
+const submitComment = (postId) => {
+    formComment.post_id = postId;
+    formComment.post(route('comments.store'), {
         preserveScroll: true,
         onSuccess: () => {
             formComment.reset('content');
@@ -388,4 +220,11 @@ const follow = (user) => {
 
 <style>
 /* Styles pour votre modal */
+.progress-bar {
+  @apply w-full h-2 bg-gray-300;
+}
+
+.progress {
+  @apply h-full bg-green-500;
+}
 </style>

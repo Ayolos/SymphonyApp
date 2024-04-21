@@ -3,14 +3,14 @@
 import PostInfo from "@/Components/Symphony/PostInfo.vue";
 
 defineProps({
-    href: String,
+    href: {String},
     src: String,
 });
 
 </script>
 
 <template>
-    <div class="bg-symph-900 rounded-lg">
+    <div class="bg-symph-900 rounded-lg z-0">
         <a :href="href" class="flex flex-col gap-2">
             <!-- Contenu du post -->
             <PostInfo :src="src">
@@ -28,7 +28,10 @@ defineProps({
                 <p class="text-md text-gray-500">
                     <slot name="content"></slot>
                 </p>
-                <slot name="media"></slot>
+                <div class="z-50">
+
+                  <slot name="media"></slot>
+                </div>
             </div>
         </a>
         <div class="flex-row flex gap-8 px-6 pt-5 pb-10">

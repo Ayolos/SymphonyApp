@@ -22,6 +22,11 @@
     </div>
 </template>
 
+<script setup>
+
+</script>
+
+
 <style scoped>
 .modal-overlay {
     z-index: 10;

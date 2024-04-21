@@ -1,0 +1,55 @@
+<script setup>
+
+import {ref} from "vue";
+
+const showModal = ref(false)
+
+const emit = defineEmits(['submit'])
+const openModal = () => {
+    showModal.value = true
+}
+const closeModal = () => {
+    showModal.value = false
+}
+
+const handleSubmit = () => {
+    emit('submit')
+    closeModal()
+}
+
+</script>
+
+<template>
+    <div class="relative">
+        <div class="flex items-center justify-center">
+            <button type="button" @click="openModal">
+                <slot name="button"></slot>
+            </button>
+        </div>
+        <div v-if="showModal" class="fixed flex justify-center items-center inset-0 bg-black/50 z-50">
+            <div class="bg-symph-900 w-1/2 h-max rounded-lg">
+                <div class="flex flex-row justify-between px-8 py-6 bg-symph-700 rounded-t-lg text-symph-400 shadow-lg">
+                    <div>
+                        <h1 class="font-semibold text-lg">
+                            <slot name="modalTitle"></slot>
+                        </h1>
+                    </div>
+                    <button @click="closeModal">
+                        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                    <div class="py-4">
+                        <form @submit.prevent="handleSubmit">
+                            <slot name="content"></slot>
+                        </form>
+                    </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<style scoped>
+
+</style>
