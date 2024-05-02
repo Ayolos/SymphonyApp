@@ -24,6 +24,7 @@
         <div v-for="post in posts" :key="post.id" class="pb-10">
           <!--:href="route('posts.show', {id: post.id})"-->
             <Post
+                  :user-id="post.user.id"
                   :src="post.user.profile_photo_url">
                 <template #name>
                     {{ post.user.name }}

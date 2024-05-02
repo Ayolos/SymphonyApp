@@ -47,6 +47,7 @@ Route::middleware([
     Route::post('/comments/{comment}/unlike', [LikeController::class, 'unlikeComment'])->name('comments.unlike');
 
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profileUser.show');
     Route::post('/follower', [UserController::class, 'following'])->name('user.follow');
 
     Route::get('/song', [SongController::class, 'store'])->name('song.store');

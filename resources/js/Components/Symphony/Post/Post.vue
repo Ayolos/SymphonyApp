@@ -1,19 +1,22 @@
 <script setup>
 
 import PostInfo from "@/Components/Symphony/PostInfo.vue";
+import {router, useForm, Link} from "@inertiajs/vue3";
 
 defineProps({
-    href: {String},
     src: String,
+    userId: {
+        type: Number,
+        required: false
+    }
 });
 
 </script>
 
 <template>
     <div class="bg-symph-900 rounded-lg z-0">
-        <a :href="href" class="flex flex-col gap-2">
             <!-- Contenu du post -->
-            <PostInfo :src="src">
+            <PostInfo :src="src" :userId="userId">
                 <template #connectLine>
                     <slot name="connectLine"></slot>
                 </template>
@@ -33,7 +36,6 @@ defineProps({
                   <slot name="media"></slot>
                 </div>
             </div>
-        </a>
         <div class="flex-row flex gap-8 px-6 pt-5 pb-10">
             <slot name="likeButton"></slot>
         </div>

@@ -23,4 +23,17 @@ class ProfileController extends Controller
         ]);
 
     }
+
+    public function show($id)
+    {
+        $userPost = Post::query()
+            ->where('user_id', $id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return Inertia::render('Profile/ProfileApp', [
+            'posts' => $userPost,
+            'nbPosts' => $userPost->count(),
+        ]);
+    }
 }

@@ -16,7 +16,15 @@ class PostController extends Controller
     //
     public function index()
     {
-        $posts = Post::orderBy('created_at', 'desc')->get();
+        $posts = Post::orderBy('created_at', 'desc')
+            ->get();
+
+        $posts->each(function ($post) {
+            $post->setRelation('comments', $post->comments->take(3));
+            $post->comments->each(function ($comment) {
+                $comment->setRelation('reply', $comment->reply->take(1));
+            });
+        });
 
         $trendingUsers = User::all();
 
