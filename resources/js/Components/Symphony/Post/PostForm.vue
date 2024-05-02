@@ -15,7 +15,6 @@ const formPost = useForm({
   file: null,
 });
 const submitPost = () => {
-  console.log(formPost.file);
   formPost.post(route('posts.store'), {
     forceFormData: true,
     onSuccess: () => {

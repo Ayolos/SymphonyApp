@@ -28,26 +28,24 @@
             cx="80"
             cy="80"
             fill="transparent"
-            stroke="#60e6a8"
+            stroke="#FFA000"
             stroke-width="12px"
+            stroke-linecap="round"
             :stroke-dasharray="circumference"
             :stroke-dashoffset="circumference * ((100 - percent) / 100) + 'px'"
         ></circle>
       </svg>
     </div>
     <button class="play-pause-button" @click="togglePlayback">
-      <svg v-if="!isPlaying" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-        <path d="M8 5v14l11-7z" />
-      </svg>
-      <svg v-else xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-        <path d="M6 6h4v12H6zm8 0h4v12h-4z" />
-      </svg>
+      <Icon v-if="!isPlaying" icon="carbon:play-filled" class="w-8 h-8 text-secondary" />
+      <Icon v-else icon="carbon:pause-filled" class="w-8 h-8" />
     </button>
   </div>
 </template>
 
 <script setup>
 import { defineProps, ref } from 'vue';
+import {Icon} from "@iconify/vue";
 
 const props = defineProps({
   song: Object,
@@ -140,6 +138,6 @@ const seek = (event) => {
   cursor: pointer;
   outline: none;
   font-size: 24px;
-  color: #00bcd4; /* Change color as needed */
+  color: #FFA000; /* Change color as needed */
 }
 </style>

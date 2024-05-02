@@ -106,7 +106,7 @@
                         </template>
                     </Post>
                 </div>
-                <div v-for="(reply, index) in comment.reply" :key="reply.id" class="px-10 flex flex-col w-full items-center relative">
+                <div v-for="(reply, index) in comment.reply" :key="reply.id" class="pl-10 flex flex-col w-full items-center relative">
                     <div class="bg-symph-100 rounded-lg my-3 w-full">
                         <div v-if="index !== comment.reply.length - 1" class="absolute w-0.5 h-full top-0 bg-symph-400 left-5"></div>
                         <Post :src="reply.user.profile_photo_url">
