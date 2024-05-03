@@ -54,7 +54,7 @@ const dateFormater = (date) => {
 <template>
     <SymphonyLayout>
         <template #postForm>
-            <div class="w-full flex flex-row bg-symph-900 rounded-lg h-full">
+            <div class="w-full flex flex-row bg-symph-900 rounded-lg h-max">
                 <img :src="$page.props.auth.user.profile_photo_url" class="h-full aspect-square rounded-l">
                 <div class="w-full flex flex-col text-gray-500 p-8">
                   <div class="flex flex-row gap-5">
@@ -73,7 +73,7 @@ const dateFormater = (date) => {
                     </div>
                     <div class="flex flex-row gap-2 items-center">
                       <Icon icon="iconoir:calendar" class="w-5 h-5" />
-                      <p class="text-sm font-light text-gray-700">A rejoint <span class="font-bold text-secondary">Symphony</span> le {{ dateFormater(posts[0].created_at) }}</p>
+                      <p class="text-sm font-light text-gray-700">A rejoint <span class="font-bold text-secondary">Symphony</span> le {{ dateFormater(posts.created_at) }}</p>
                     </div>
                   </div>
                 </div>

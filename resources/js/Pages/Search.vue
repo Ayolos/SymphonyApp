@@ -3,8 +3,8 @@
 import SymphonyLayout from "@/Layouts/SymphonyLayout.vue";
 
 import {ref, watch} from "vue";
-import {router} from "@inertiajs/vue3";
-
+import {router, Link} from "@inertiajs/vue3";
+import PostInfo from "@/Components/Symphony/PostInfo.vue";
 
 defineProps({
   searchResults: Object,
@@ -24,15 +24,25 @@ watch(search, (value) => {
 
 <template>
   <SymphonyLayout>
-    <div class="flex flex-col items-center">
-      <h1 class="text-4xl font-bold mt-10">Search</h1>
-      <div class="flex flex-col items-center mt-10">
-        <input type="text" class="border-2 border-secondary-500 rounded-lg p-2 w-96" v-model="search" placeholder="Search for posts">
-        <div v-for="search in searchResults" class="pt-2">
-          <div class="flex flex-row gap-2">
-            <p>{{search.name}}</p>
-            <p>@{{search.username}}</p>
+    <div class="flex flex-col w-full">
+      <h1 class="text-3xl flex text-symph-100">Rechercher un utilisateur</h1>
+      <div class="flex flex-col items-center mt-5">
+        <input type="search" class="bg-symph-800 text-gray-500 p-3 shadow border-0 rounded-lg w-full" v-model="search" placeholder="Rechercher un utilisateur">
+        <div v-if="searchResults !== null" class="bg-symph-100 shadow w-full rounded-xl mt-3 max-h-[70vh] h-max overflow-y-scroll">
+          <div v-for="search in searchResults" class="hover:bg-gray-300 py-3 px-8">
+            <Link :href="route('profileUser.show', {id: search.id})">
+              <div class="flex flex-row gap-4 items-center">
+                <img :src="search.profile_photo_url" class="aspect-square rounded h-10">
+                <div class="flex flex-col">
+                  <h1 class="text-gray-600 truncate text-nowrap">{{ search.name }}</h1>
+                  <p class="text-gray-500 text-sm">{{ search.username }}</p>
+                </div>
+              </div>
+            </Link>
           </div>
+        </div>
+        <div v-else class=" pt-4">
+            <h1 class="text-gray-600 text-2xl truncate text-nowrap">Aucun résultat</h1>
         </div>
       </div>
     </div>

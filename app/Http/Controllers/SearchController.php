@@ -13,11 +13,18 @@ class SearchController extends Controller
     {
         $search = $request->input('search');
         // Recherche les utilisateurs par leur nom d'utilisateur ou leur nom
-        $searchResults = User::query()
-            ->where('username', 'LIKE', "%{$search}%")
-            ->orWhere('name', 'LIKE', "%{$search}%")
-            ->get();
 
+        if (empty($search)) {
+            $searchResults = null;
+        }else{
+            $searchResults = User::query()
+                ->where('username', 'LIKE', "%{$search}%")
+                ->orWhere('name', 'LIKE', "%{$search}%")
+                ->get();
+            if ($searchResults->isEmpty()) {
+                $searchResults = null;
+            }
+        }
         // Passe les résultats de la recherche à la vue
         return Inertia::render('Search', [
             'searchResults' => $searchResults
