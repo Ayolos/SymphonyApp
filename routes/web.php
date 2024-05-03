@@ -4,6 +4,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SongController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
@@ -49,6 +50,8 @@ Route::middleware([
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profileUser.show');
     Route::post('/follower', [UserController::class, 'following'])->name('user.follow');
+
+    Route::get('/search', [SearchController::class, 'index'])->name('search.index');
 
     Route::get('/song', [SongController::class, 'store'])->name('song.store');
 });

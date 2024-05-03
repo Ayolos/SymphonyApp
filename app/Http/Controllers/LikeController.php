@@ -64,7 +64,7 @@ class LikeController extends Controller
             ->where('likeable_id', $id)
             ->where('likeable_type', Comment::class)
             ->first();
-        dd($like);
+        //dd($like);
         $like->delete();
 
         return redirect()->back();
