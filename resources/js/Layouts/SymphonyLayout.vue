@@ -16,7 +16,7 @@ import {router, useForm, Link} from "@inertiajs/vue3";
             <div class="w-[30vw] inl h-full px-10">
                 <div class="w-full h-full flex flex-col gap-4">
                     <div v-if="$page.props.auth.user" class="flex flex-col items-center bg-symph-800 rounded-lg justify-center">
-                        <Link :href="route('profile')" class="hover:bg-symph-600 w-full rounded-t-lg pt-8">
+                        <Link :href="route('profileUser.show', {id: $page.props.auth.user.id })" class="hover:bg-symph-600 w-full rounded-t-lg pt-8">
                             <img :src="$page.props.auth.user.profile_photo_url" alt="img" class="h-24 mb-2 mx-auto rounded-lg">
                             <div class="flex flex-col justify-center items-center pb-8">
                                 <h1 class="md:text-xl text-sm font-bold text-symph-300">{{ $page.props.auth.user.name }}</h1>

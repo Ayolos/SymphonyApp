@@ -11,15 +11,21 @@ defineProps({
 });
 
 const search = ref("");
+const isLoading = ref(false); // Loading state
 
-watch(search, (value) => {
-  console.log(value);
-  router.get(route('search.index'), {
-    search: search.value,
-  }, {
-    preserveState: true,
-  });
+watch(search, async (value) => {
+  isLoading.value = true; // Set loading state to true when fetching starts
+  try {
+    await router.get(route('search.index'), {
+      search: search.value,
+    }, {
+      preserveState: true,
+    });
+  } finally {
+    isLoading.value = false; // Set loading state to false when fetching ends
+  }
 });
+
 </script>
 
 <template>

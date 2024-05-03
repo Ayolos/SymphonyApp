@@ -22,7 +22,7 @@
             <PostForm></PostForm>
         </template>
         <div v-for="post in posts" :key="post.id" class="pb-10">
-          <!--:href="route('posts.show', {id: post.id})"-->
+          <Link :href="route('posts.show', {id: post.id})">
             <Post
                   :user-id="post.user.id"
                   :src="post.user.profile_photo_url">
@@ -64,6 +64,7 @@
                     </div>
                 </template>
             </Post>
+            </Link>
             <div v-for="(comment, index) in post.comments" :key="comment.id" class="pl-10 pt-3 flex flex-col w-full items-center relative">
                 <div class="bg-symph-100 rounded-lg w-full">
                     <div v-if="index !== post.comments.length - 1" class="absolute w-0.5 h-full top-0 bg-symph-400 left-5"></div>

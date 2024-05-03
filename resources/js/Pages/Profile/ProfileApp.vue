@@ -10,6 +10,7 @@ import {onMounted, ref} from "vue";
 
 defineProps({
     posts: Object,
+    user: Object,
     nbPosts: Number,
 });
 
@@ -55,12 +56,12 @@ const dateFormater = (date) => {
     <SymphonyLayout>
         <template #postForm>
             <div class="w-full flex flex-row bg-symph-900 rounded-lg h-max">
-                <img :src="$page.props.auth.user.profile_photo_url" class="h-full aspect-square rounded-l">
+                <img :src="user.profile_photo_url" class="h-full aspect-square rounded-l">
                 <div class="w-full flex flex-col text-gray-500 p-8">
                   <div class="flex flex-row gap-5">
                     <div class="">
-                      <p class="font-bold text-lg">{{ $page.props.auth.user.name }}</p>
-                      <p class="text-sm">@{{ $page.props.auth.user.username }}</p>
+                      <p class="font-bold text-lg">{{ user.name }}</p>
+                      <p class="text-sm">@{{ user.username }}</p>
                     </div>
                   </div>
                     <div class="pt-6">
@@ -73,7 +74,7 @@ const dateFormater = (date) => {
                     </div>
                     <div class="flex flex-row gap-2 items-center">
                       <Icon icon="iconoir:calendar" class="w-5 h-5" />
-                      <p class="text-sm font-light text-gray-700">A rejoint <span class="font-bold text-secondary">Symphony</span> le {{ dateFormater(posts.created_at) }}</p>
+                      <p class="text-sm font-light text-gray-700">A rejoint <span class="font-bold text-secondary">Symphony</span> le {{ dateFormater(user.created_at) }}</p>
                     </div>
                   </div>
                 </div>

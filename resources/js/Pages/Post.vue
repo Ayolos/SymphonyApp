@@ -6,6 +6,7 @@ import Post from "@/Components/Symphony/Post/Post.vue";
 import {Icon} from "@iconify/vue";
 import {ref} from "vue";
 import Modal from "@/Components/Symphony/Modal/Modal.vue";
+import PlayerAudio from "@/Components/Symphony/PlayerAudio.vue";
 
 defineProps({
     post: Object,
@@ -117,8 +118,8 @@ const copyLink = () => {
 
 <template>
     <SymphonyLayout>
-        <div class="p-10">
-            <Post :src="post.user.profile_photo_url">
+        <div class="">
+            <Post :src="post.user.profile_photo_url" :connectLine="false">
                 <template #name>
                     {{ post.user.name }}
                 </template>
@@ -128,6 +129,9 @@ const copyLink = () => {
                 <template #content>
                     {{ post.content }}
                 </template>
+              <template #media>
+                <PlayerAudio :song="post.song"></PlayerAudio>
+              </template>
                 <template #likeButton>
                     <div class="flex flex-row gap-2 items-center">
                         <Link as="button" method="post" :href="post.isLiked ? route('posts.unlike', { post: post.id }) : route('posts.like', { post: post.id })" >
@@ -148,12 +152,9 @@ const copyLink = () => {
                     </div>
                 </template>
             </Post>
-            <div v-for="(comment, index) in post.comments" :key="comment.id" class="px-10 flex flex-col w-full items-center relative">
-                <div class="flex-shrink-0 mr-4">
-                    <div class="h-full w-0.5 bg-symph-300 absolute top-0 left-5"></div> <!-- Vertical Line -->
-                    <div class="h-2.5 w-2.5 absolute top-[50%] left-4 bg-symph-300 rounded-full"></div> <!-- Circle -->
-                </div>
-                <div class="bg-symph-100 rounded-lg my-3 w-full">
+            <div v-for="(comment, index) in post.comments" :key="comment.id" class="pl-10 mt-3 flex flex-col w-full items-center relative">
+              <div v-if="index !== post.comments.length - 1" class="absolute w-0.5 h-full top-0 bg-symph-400 left-5"></div>
+              <div class="bg-symph-100 rounded-lg w-full">
                     <Post :src="comment.user.profile_photo_url">
                         <template #name>
                             {{ comment.user.name }}
@@ -180,12 +181,9 @@ const copyLink = () => {
                         </template>
                     </Post>
                 </div> <!-- Comment Content -->
-                <div v-for="(reply, index) in comment.reply" :key="reply.id" class="px-10 flex w-full items-center relative">
-                    <div class="flex-shrink-0 mr-4">
-                        <div class="h-full w-0.5 bg-symph-300 absolute top-0 left-11"></div> <!-- Vertical Line -->
-                        <div class="h-2.5 w-2.5 bg-symph-300 rounded-full"></div> <!-- Circle -->
-                    </div>
-                    <div class="bg-symph-100 rounded-lg my-3 w-full">
+                <div v-for="(reply, index) in comment.reply" :key="reply.id" class="pl-10 flex w-full items-center relative">
+                  <div v-if="index !== comment.reply.length - 1" class="absolute w-0.5 h-full top-0 bg-symph-400 left-5"></div>
+                  <div class="bg-symph-100 rounded-lg my-3 w-full">
                         <Post :src="reply.user.profile_photo_url">
                             <template #name>
                                 {{ reply.user.name }}

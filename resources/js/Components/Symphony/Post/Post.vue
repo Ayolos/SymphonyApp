@@ -4,6 +4,11 @@ import PostInfo from "@/Components/Symphony/PostInfo.vue";
 import {router, useForm, Link} from "@inertiajs/vue3";
 
 defineProps({
+    connectLine: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
     src: String,
     userId: {
         type: Number,
@@ -14,12 +19,9 @@ defineProps({
 </script>
 
 <template>
-    <div class="bg-symph-900 rounded-lg z-0">
+    <div class="bg-symph-900 rounded-lg z-0 h-full">
             <!-- Contenu du post -->
-            <PostInfo :src="src" :userId="userId">
-                <template #connectLine>
-                    <slot name="connectLine"></slot>
-                </template>
+            <PostInfo :src="src" :userId="userId" :connect-line="connectLine">
                 <template #name>
                     <slot name="name"></slot>
                 </template>
@@ -31,8 +33,7 @@ defineProps({
                 <p class="text-md text-gray-500">
                     <slot name="content"></slot>
                 </p>
-                <div class="z-50">
-
+                <div class="z-50 pr-10">
                   <slot name="media"></slot>
                 </div>
             </div>

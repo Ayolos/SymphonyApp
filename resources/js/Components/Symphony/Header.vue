@@ -33,12 +33,12 @@ const logout = () => {
       <div class="flex flex-row items-center gap-4">
         <Link :href="route('posts.index')" class="flex flex-row items-center gap-2">
           <img :src="Logo" alt="img" class="h-12 rounded-lg">
-          <h1 class="text-3xl font-bold text-white">SYMPHONY</h1>
+          <h1 class="text-3xl font-bold text-white hover:text-symph-100">SYMPHONY</h1>
         </Link>
       </div>
       <div class="flex flex-row items-center">
         <Link :href="route('search.index')">
-          <Icon class="text-2xl text-secondary-200" icon="akar-icons:search"></Icon>
+          <Icon class="text-2xl text-gray-500 hover:text-gray-400" icon="iconamoon:search-duotone"></Icon>
         </Link>
         <div v-if="!$page.props.auth.user"
              class="border-secondary-500 hover:border-secondary-400 hover:bg-gray-900 border-2 rounded-lg py-1.5 px-2">
