@@ -38,7 +38,7 @@ const logout = () => {
       </div>
       <div class="flex flex-row items-center">
         <Link :href="route('search.index')">
-          <Icon class="text-2xl text-gray-500 hover:text-gray-400" icon="iconamoon:search-duotone"></Icon>
+          <Icon class="text-2xl text-gray-500 hover:text-gray-400 hover:transition hover:scale-110 ease-in-out" icon="iconamoon:search-duotone"></Icon>
         </Link>
         <div v-if="!$page.props.auth.user"
              class="border-secondary-500 hover:border-secondary-400 hover:bg-gray-900 border-2 rounded-lg py-1.5 px-2">
