@@ -3,6 +3,7 @@
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\FollowerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SongController;
@@ -49,7 +50,15 @@ Route::middleware([
 
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profileUser.show');
-    Route::post('/follower', [UserController::class, 'following'])->name('user.follow');
+
+    //Route::post('/follower', [UserController::class, 'following'])->name('user.follow');
+    Route::post('/user/follow', [FollowerController::class, 'follow'])->name('user.follow');
+    Route::post('/user/unfollow', [FollowerController::class, 'unfollow'])->name('user.unfollow');
+    // Route pour vérifier si un utilisateur suit un autre utilisateur
+    Route::get('/user/is-following/{id}', [FollowerController::class, 'isFollowing'])->name('user.isFollowing');
+
+
+
 
     Route::get('/search', [SearchController::class, 'index'])->name('search.index');
 

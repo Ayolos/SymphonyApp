@@ -76,12 +76,16 @@ class User extends Authenticatable
     }
 
     // users that are followed by this user
-    public function following() {
-        return $this->belongsToMany(User::class, 'followers', 'follower_id', 'following_id');
+    public function isFollowing() {
+        return $this->belongsToMany(Follower::class, 'followers', 'follower_id', 'following_id');
     }
 
     // users that follow this user
-    public function followers() {
-        return $this->belongsToMany(User::class, 'followers', 'following_id', 'follower_id');
+    public function isFollowed() {
+        return $this->belongsToMany(Follower::class, 'followers', 'following_id', 'follower_id');
     }
+
+    //public function countFollowers() {
+      //  return $this->count(Follower::class, 'followers', 'following_id', ) > 0;
+    //}
 }
