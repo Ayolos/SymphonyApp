@@ -55,8 +55,8 @@ const dateFormater = (date) => {
 <template>
     <SymphonyLayout>
         <template #postForm>
-            <div class="w-full flex flex-row bg-symph-900 rounded-lg h-max">
-                <img :src="user.profile_photo_url" class="h-full aspect-square rounded-l">
+            <div class="w-full flex flex-row bg-symph-900 rounded-lg h-[25vh]">
+                <img :src="user.profile_photo_url" class="aspect-square h-full rounded-l">
                 <div class="w-full flex flex-col text-gray-500 p-8">
                   <div class="flex flex-row gap-5">
                     <div class="">
@@ -64,8 +64,8 @@ const dateFormater = (date) => {
                       <p class="text-sm">@{{ user.username }}</p>
                     </div>
                   </div>
-                    <div class="pt-6">
-                      <p class="text-sm">Lorem ipsumzeff zefzfz fzfzfz fffeferfegre egerergergerger egergerge</p>
+                    <div class="pt-6 w-full">
+                      <p class="text-sm text-ellipsis overflow-hidden w-80">Lorem ipsumzeff zefzfdfvdfvdfvvdfvdfvdfvdfvdfvdfvdfvdfvdfvfdvdfvdfvdfvdfvdfefzfdfvdfvdfvvdfvdfvdfvdfvdfvdfvdfvdfvdfvfdvdfvdfvdfvdfvdfefzfdfvdfvdfvvdfvdfvdfvdfvdfvdfvdfvdfvdfvfdvdfvdfvdfvdfvdfefzfdfvdfvdfvvdfvdfvdfvdfvdfvdfvdfvdfvdfvfdvdfvdfvdfvdfvdfefzfdfvdfvdfvvdfvdfvdfvdfvdfvdfvdfvdfvdfvfdvdfvdfvdfvdfvdfefzfdfvdfvdfvvdfvdfvdfvdfvdfvdfvdfvdfvdfvfdvdfvdfvdfvdfvdfvfdvdvdvz fzfzfz fffeferfegre egerergergerger egergerge</p>
                     </div>
                   <div class="flex flex-row gap-10 items-center-5 pt-6">
                     <div class="flex flex-row items-center gap-2">

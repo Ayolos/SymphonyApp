@@ -22,6 +22,7 @@ class CommentController extends Controller
         $comment->user_id = auth()->id();
         $comment->post_id = $request->post_id;
         $comment->save();
+        return redirect()->back();
     }
 
     public function reply(Request $request)
@@ -32,5 +33,6 @@ class CommentController extends Controller
         $comment->post_id = $request->post_id;
         $comment->parent_id = $request->parent_id;
         $comment->save();
+        return redirect()->back();
     }
 }

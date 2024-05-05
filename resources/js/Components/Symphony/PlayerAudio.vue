@@ -5,8 +5,8 @@
     </audio>
     <div>
       <svg
-          width="100"
-          height="100"
+          width="140"
+          height="140"
           viewBox="0 0 160 160"
           style="transform: rotate(-90deg);cursor: pointer;"
           @mousedown="startDrag"
@@ -61,6 +61,15 @@ let offsetX = 0;
 let offsetY = 0;
 
 const togglePlayback = () => {
+  // Vérifier si une autre piste est en cours de lecture
+  const otherAudioPlayers = document.querySelectorAll('audio');
+  otherAudioPlayers.forEach(player => {
+    if (player !== audioPlayer.value && !player.paused) {
+      player.pause(); // Mettre en pause toute autre piste en cours de lecture
+      isPlaying.value = false;
+    }
+  });
+
   if (audioPlayer.value.paused) {
     audioPlayer.value.play();
     isPlaying.value = true;

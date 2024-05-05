@@ -19,7 +19,7 @@ defineProps({
 </script>
 
 <template>
-    <div class="bg-symph-900 rounded-lg z-0 h-full">
+    <div class="bg-symph-900 rounded-lg z-0 h-full shadow-xl">
             <!-- Contenu du post -->
             <PostInfo :src="src" :userId="userId" :connect-line="connectLine">
                 <template #name>
@@ -29,7 +29,7 @@ defineProps({
                     <slot name="at"></slot>
                 </template>
             </PostInfo>
-            <div class="py-10 px-10 flex flex-row justify-between items-center">
+            <div class="py-5 px-10 flex flex-row justify-between items-center">
                 <p class="text-md text-gray-500">
                     <slot name="content"></slot>
                 </p>

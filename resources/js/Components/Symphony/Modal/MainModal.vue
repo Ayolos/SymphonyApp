@@ -4,8 +4,9 @@ import {ref} from "vue";
 
 const showModal = ref(false)
 
-const emit = defineEmits(['submit'])
+const emit = defineEmits(['submit', 'open'])
 const openModal = () => {
+    emit('open')
     showModal.value = true
 }
 const closeModal = () => {
@@ -49,7 +50,7 @@ const handleSubmit = () => {
                     </button>
                 </div>
                     <div class="py-4">
-                        <form @submit="handleSubmit">
+                        <form @submit.prevent="handleSubmit">
                             <slot name="content"></slot>
                         </form>
                     </div>

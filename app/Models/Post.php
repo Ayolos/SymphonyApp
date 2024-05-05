@@ -29,7 +29,13 @@ class Post extends Model
 
     public function getNbCommentsAttribute()
     {
-        return $this->comments()->count();
+        return Comment::where('post_id', $this->id)
+            ->whereNull('parent_id')
+            ->orWhere(function ($query) {
+                $query->where('post_id', $this->id)
+                    ->whereNotNull('parent_id');
+            })
+            ->count();
     }
 
     public function song()
@@ -43,7 +49,7 @@ class Post extends Model
 
     public function comments()
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class, 'post_id')->whereNull('parent_id');
     }
 
     public function likes()

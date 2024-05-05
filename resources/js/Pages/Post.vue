@@ -7,34 +7,23 @@ import {Icon} from "@iconify/vue";
 import {ref} from "vue";
 import Modal from "@/Components/Symphony/Modal/Modal.vue";
 import PlayerAudio from "@/Components/Symphony/PlayerAudio.vue";
+import MainModal from "@/Components/Symphony/Modal/MainModal.vue";
+import { useClipboard } from '@vueuse/core'
 
 defineProps({
     post: Object,
 });
 
 const like = ref(false);
-const postLink = ref(window.location.href);
 
-const formPost = useForm({
-    content: '',
-});
+const source = ref('')
+const { text, copy, copied, isSupported } = useClipboard({ source })
+
 
 const formComment = useForm({
     content: "",
     post_id: null,
 });
-
-const isModalOpen = ref(false);
-const isShareModalOpen = ref(false);
-const selectedPost = ref(null);
-
-const openShareModal = () => {
-    isShareModalOpen.value = true;
-};
-
-const closeShareModal = () => {
-    isShareModalOpen.value = false;
-};
 
 const formReply = useForm({
     content: "",
@@ -42,78 +31,27 @@ const formReply = useForm({
     post_id: null,
 });
 
-const selectedComment = ref(null);
-const isReplyModalOpen = ref(false);
-const isCommentModalOpen = ref(false);
-
-
-const openModal = (post) => {
-    selectedPost.value = post;
-    isModalOpen.value = true;
-    formComment.post_id = post.id;
+const submitCommentReply = (commentId, postId) => {
+  formReply.parent_id = commentId;
+  formReply.post_id = postId;
+  formReply.post(route('comments.reply'), {
+    preserveScroll: true,
+    onSuccess: () => {
+      formReply.reset('content');
+    }
+  });
 };
 
-const openCommentModal = (comment, post) => {
-    selectedComment.value = comment;
-    isCommentModalOpen.value = true;
-    formComment.parent_id = comment.id;
-    formComment.post_id = post.id;
+const submitComment = (postId) => {
+  console.log("response");
+  formComment.post_id = postId;
+  formComment.post(route('comments.store'), {
+    preserveScroll: true,
+    onSuccess: () => {
+      formComment.reset('content');
+    }
+  });
 };
-
-const openReplyModal = (comment, post) => {
-    selectedComment.value = comment;
-    isReplyModalOpen.value = true;
-    formReply.content = '@' + comment.user.username + ' '
-    formReply.parent_id = comment.id;
-    formReply.post_id = post.id;
-};
-const closeModal = () => {
-    isModalOpen.value = false;
-};
-
-const closeModalReply = () => {
-    isReplyModalOpen.value = false;
-};
-
-const closeModalComment = () => {
-    isCommentModalOpen.value = false;
-};
-
-const submitPost = () => {
-    formPost.post(route('posts.store'), {
-        onSuccess: () => {
-            formPost.reset('content');
-        }
-    });
-};
-
-const submitReply = () => {
-    closeModalReply();
-    formReply.post(route('comments.reply'), {
-        preserveScroll: true,
-        onSuccess: () => {
-            formReply.reset('content');
-        }
-    });
-};
-const submitComment = () => {
-    closeModalComment();
-    formComment.post(route('comments.reply'), {
-        preserveScroll: true,
-        onSuccess: () => {
-            formComment.reset('content');
-        }
-    });
-};
-
-const copyLink = () => {
-    navigator.clipboard.writeText(postLink.value).then(() => {
-        alert('Link copied to clipboard')
-    }).catch((error) => {
-        console.error('Error copying text: ', error);
-    });
-}
-
 </script>
 
 <template>
@@ -135,20 +73,40 @@ const copyLink = () => {
                 <template #likeButton>
                     <div class="flex flex-row gap-2 items-center">
                         <Link as="button" method="post" :href="post.isLiked ? route('posts.unlike', { post: post.id }) : route('posts.like', { post: post.id })" >
-                            <Icon icon="iconamoon:heart-duotone" class="w-6 h-6" :class="[ post.isLiked ? 'text-secondary-500' : 'text-gray-300']" />
+                            <Icon icon="iconamoon:heart-duotone" class="w-6 h-6 transition hover:scale-110 hover:rotate-6 ease-in-out" :class="[ post.isLiked ? 'text-secondary-500' : 'text-gray-300']" />
                         </Link>
                         <h1 class="text-md text-symph-200 font-bold">{{ post.nbLikes }}</h1>
                     </div>
                     <div class="flex flex-row gap-2 items-center">
-                        <button @click="openCommentModal(post)" class="text-gray-300">
-                            <Icon icon="iconamoon:comment-duotone" class="w-5 h-5" />
-                        </button>
-                        <h1 class="text-md text-symph-200 font-bold">{{ post.nbComments }}</h1>
+                      <MainModal @submit="submitComment(post.id)">
+                        <template #button>
+                          <Icon icon="iconamoon:comment-duotone" class="w-5 h-5 transition hover:scale-110 ease-in-out text-gray-300" />
+                        </template>
+                        <template #modalTitle>
+                          Ajouter un commentaire
+                        </template>
+                        <template #content>
+                          <div class="flex flex-col gap-3 px-4 justify-end">
+                            <textarea required v-model="formComment.content" placeholder="Ecrit ton commentaire" class="w-full text-symph-200 h-48 rounded-lg bg-symph-800 border-symph-500 resize-none"></textarea>
+                            <button class="bg-secondary-500 text-white rounded-lg px-4 py-2">Envoyer</button>
+                          </div>
+                        </template>
+                      </MainModal>
+                      <h1 class="text-md text-symph-200 font-bold">{{ post.nbComments }}</h1>
                     </div>
                     <div class="flex flex-row gap-2 items-center">
-                        <button @click="openShareModal(post)" class="text-gray-300">
-                            <Icon icon="solar:share-line-duotone" class="w-6 h-6" />
-                        </button>
+                      <button @click="copy(route('posts.show', {id: post.id}))" class="text-gray-300">
+                        <div v-if="copied"  class="absolute shadow top-20 right-2 flex items-center p-4 mb-4 text-sm text-symph-100 border border-symph-400 rounded-lg bg-symph-600" role="alert">
+                          <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                          </svg>
+                          <span class="sr-only">Info</span>
+                          <div>
+                            <span class="font-medium">Eh oh !</span> Le lien est copié dans le presse-papier
+                          </div>
+                        </div>
+                        <Icon icon="solar:share-line-duotone" class="w-6 h-6" />
+                      </button>
                     </div>
                 </template>
             </Post>
@@ -168,15 +126,26 @@ const copyLink = () => {
                         <template #likeButton>
                             <div class="flex flex-row gap-2 items-center">
                                 <Link as="button" method="post" :href="comment.isLiked ? route('comments.unlike', { comment: comment.id }) : route('comments.like', { comment: comment.id })" >
-                                    <Icon icon="iconamoon:heart-duotone" class="w-6 h-6" :class="[ comment.isLiked ? 'text-secondary-500' : 'text-gray-300']" />
+                                    <Icon icon="iconamoon:heart-duotone" class="w-6 h-6 transition hover:scale-110 hover:rotate-6 ease-in-out" :class="[ comment.isLiked ? 'text-secondary-500' : 'text-gray-300']" />
                                 </Link>
                                 <h1 class="text-md text-symph-200 font-bold">{{ comment.nbLikes }}</h1>
                             </div>
                             <div class="flex flex-row gap-2 items-center">
-                                <button @click="openCommentModal(comment, post)" class="text-gray-300">
-                                    <Icon icon="iconamoon:comment-duotone" class="w-5 h-5" />
-                                </button>
-                                <h1 class="text-md text-symph-200 font-bold">{{ comment.nbReplies }}</h1>
+                              <MainModal @submit="submitCommentReply(comment.id, post.id)" @open="formReply.content = '@' + comment.user.username + ' '">
+                                <template #button>
+                                  <Icon icon="iconamoon:comment-duotone" class="w-5 h-5 transition hover:scale-110 ease-in-out text-gray-300" />
+                                </template>
+                                <template #modalTitle>
+                                  Ajouter un commentaire
+                                </template>
+                                <template #content>
+                                  <div class="flex flex-col gap-3 px-4 justify-end">
+                                    <textarea required v-model="formReply.content" placeholder="Ecrit ton commentaire" class="w-full text-symph-200 h-48 rounded-lg bg-symph-800 border-symph-500 resize-none"></textarea>
+                                    <button class="bg-secondary-500 text-white rounded-lg px-4 py-2">Envoyer</button>
+                                  </div>
+                                </template>
+                              </MainModal>
+                              <h1 class="text-md text-symph-200 font-bold">{{ comment.nbReplies }}</h1>
                             </div>
                         </template>
                     </Post>
@@ -197,61 +166,31 @@ const copyLink = () => {
                             <template #likeButton>
                                 <div class="flex flex-row gap-2 items-center">
                                     <Link as="button" method="post" :href="reply.isLiked ? route('comments.unlike', { comment: reply.id }) : route('comments.like', { comment: reply.id })" >
-                                        <Icon icon="iconamoon:heart-duotone" class="w-6 h-6" :class="[ reply.isLiked ? 'text-secondary-500' : 'text-gray-300']" />
+                                        <Icon icon="iconamoon:heart-duotone" class="w-6 h-6 transition hover:scale-110 hover:rotate-6 ease-in-out" :class="[ reply.isLiked ? 'text-secondary-500' : 'text-gray-300']" />
                                     </Link>
                                     <h1 class="text-md text-symph-200 font-bold">{{ reply.nbLikes }}</h1>
                                 </div>
-                                <div class="flex flex-row gap-2 items-center">
-                                    <button @click="openReplyModal(comment, post)" class="text-gray-300">
-                                        <Icon icon="iconamoon:comment-duotone" class="w-5 h-5" />
-                                    </button>
-                                </div>
+                              <div class="flex flex-row gap-2 items-center">
+                                <MainModal @submit="submitCommentReply(comment.id, post.id)" @open="formReply.content = '@' + reply.user.username + ' '">
+                                  <template #button>
+                                    <Icon icon="iconamoon:comment-duotone" class="w-5 h-5 transition hover:scale-110 ease-in-out text-gray-300" />
+                                  </template>
+                                  <template #modalTitle>
+                                    Ajouter un commentaire
+                                  </template>
+                                  <template #content>
+                                    <div class="flex flex-col gap-3 px-4 justify-end">
+                                      <textarea required v-model="formReply.content" placeholder="Ecrit ton commentaire" class="w-full text-symph-200 h-48 rounded-lg bg-symph-800 border-symph-500 resize-none"></textarea>
+                                      <button class="bg-secondary-500 text-white rounded-lg px-4 py-2">Envoyer</button>
+                                    </div>
+                                  </template>
+                                </MainModal>
+                              </div>
                             </template>
                         </Post>
                     </div> <!-- Comment Content -->
                 </div>
             </div>
         </div>
-
-        <Modal v-if="isReplyModalOpen" @close="closeModalReply">
-            <template #content>
-                <form @submit.prevent="submitReply">
-                    <h1>envoyer un reply</h1>
-                    <div class="my-5">
-                        <textarea required v-model="formReply.content" class="w-full rounded-lg"></textarea>
-                    </div>
-                    <div class="flex justify-end">
-                        <button class="bg-secondary-500 text-white rounded-lg px-4 py-2">Envoyer</button>
-                    </div>
-                </form>
-            </template>
-        </Modal>
-
-        <Modal v-if="isCommentModalOpen" @close="closeModalComment">
-            <template #content>
-                <form @submit.prevent="submitComment">
-                    <div class="my-5">
-                        <textarea required v-model="formComment.content" class="w-full rounded-lg"></textarea>
-                    </div>
-                    <div class="flex justify-end">
-                        <button class="bg-secondary-500 text-white rounded-lg px-4 py-2">Envoyer</button>
-                    </div>
-                </form>
-            </template>
-        </Modal>
-
-        <!-- Modal -->
-        <Modal v-if="isModalOpen" @close="closeModal">
-            <template #content>
-                <form @submit.prevent="submitComment">
-                    <div class="my-5">
-                        <textarea required v-model="formComment.content" class="w-full rounded-lg"></textarea>
-                    </div>
-                    <div class="flex justify-end">
-                        <button class="bg-secondary-500 text-white rounded-lg px-4 py-2">Envoyer</button>
-                    </div>
-                </form>
-            </template>
-        </Modal>
     </SymphonyLayout>
 </template>
