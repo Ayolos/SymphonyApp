@@ -1,8 +1,9 @@
 <script setup>
 import {useForm} from "@inertiajs/vue3";
-import {ref} from "vue";
+import {ref, watch} from "vue";
 import MainModal from "@/Components/Symphony/Modal/MainModal.vue";
 import {Icon} from "@iconify/vue";
+import gsap from 'gsap';
 
 const formPost = useForm({
   content: '',
@@ -14,6 +15,9 @@ const formPost = useForm({
   duration: '',
   file: null,
 });
+
+const nbrCharacters = ref(0);
+
 const submitPost = () => {
   formPost.post(route('posts.store'), {
     forceFormData: true,
@@ -25,6 +29,10 @@ const submitPost = () => {
 
 const audioPreview = ref('');
 
+watch(() => formPost.content, () => {
+  nbrCharacters.value = formPost.content.length;
+
+});
 const onFileChange = (e) => {
   audioSubmit.value = true
   formPost.file = e.target.files[0];
@@ -64,8 +72,8 @@ const togglePlayPause = () => {
 <template>
   <form class="w-full" @submit.prevent="submitPost">
     <div class="bg-symph-100 rounded-lg">
-      <div class="flex flex-row justify-between items-start h-48">
-        <div class=" basis-2/3 flex-col items-center gap-4 p-4 w-full h-full">
+      <div class="flex flex-row justify-between items-start h-56">
+        <div class="basis-2/3 flex-col items-center gap-4 p-4 w-full h-full">
           <div class="flex flex-row items-center gap-4 p-4">
             <img :src="$page.props.auth.user.profile_photo_url" class="w-12 h-12 rounded">
             <div class="flex-col flex">
@@ -73,20 +81,22 @@ const togglePlayPause = () => {
               <span class="text-gray-500 text-sm">@{{ $page.props.auth.user.username }}</span>
             </div>
           </div>
-          <div class="pl-4 flex flex-row justify-between items-end gap-8">
+          <div class="pl-4 flex h-28 flex-row justify-between items-end gap-8">
             <textarea v-model="formPost.content"
-                      class="w-full h-20 focus:ring-0 resize-none border-0 p-0 rounded-lg bg-symph-100"
+                      class="w-full h-full focus:ring-0 resize-none border-0 p-0 rounded-lg bg-symph-100"
                       placeholder="Exprimez-vous..."
+                      maxlength="120"
                       required></textarea>
-            <div>
+            <div class="flex flex-row gap-4 items-center">
+              <p class="w-max text-sm text-symph-900">{{nbrCharacters}} / 120</p>
               <button type="submit" class="bg-symph-500 text-white rounded-lg px-4 py-2">Publier</button>
             </div>
           </div>
         </div>
         <div class="flex flex-col gap-3 justify-center items-center aspect-square p-5 h-full bg-symph-700 rounded-r-md">
-          <div class="relative bg-secondary p-4 rounded-lg hover:scale-110 hover:transition">
+          <div class="relative bg-secondary p-4 rounded-lg hover:scale-110 shadow-secondary shadow-2xl hover:transition">
             <input id="fileInput" class="absolute inset-0 opacity-0 z-10" type="file" accept=".mp3" @change="onFileChange" required>
-            <Icon class="text-white" icon="uil:music" width="50"></Icon>
+            <Icon class="text-white" icon="mingcute:music-3-line" width="50"></Icon>
           </div>
           <div class="">
             <div class="flex flex-row items-center gap-4">

@@ -60,8 +60,8 @@ const formatDateString = (date) => {
                     <slot name="at"></slot>
                 </template>
             </PostInfo>
-            <div class="py-5 px-10 flex flex-row justify-between items-center">
-                <p class="text-md text-gray-500">
+            <div class="pt-5 px-10 flex flex-row justify-between items-start">
+                <p class="text-md text-gray-500 pt-8">
                     <slot name="content"></slot>
                 </p>
                 <div class="z-50 pr-10">

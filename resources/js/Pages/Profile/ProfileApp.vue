@@ -87,7 +87,7 @@ const dateFormater = (date) => {
             </div>
 
         </template>
-      <div v-for="post in posts" :key="post.id" class="pb-5">
+      <div v-if="nbPosts !== 0" v-for="post in posts" :key="post.id" class="pb-5">
         <Post
             :createdAt="post.created_at"
             :user-id="post.user.id"
@@ -151,6 +151,12 @@ const dateFormater = (date) => {
             </div>
           </template>
         </Post>
+      </div>
+      <div v-else>
+        <div class="flex flex-col text-symph-300 items-center justify-center pt-20">
+          <Icon icon="line-md:cancel-twotone" class="w-48 h-48" />
+          <h1 class="text-3xl font-bold">Aucun post pour le moment</h1>
+        </div>
       </div>
     </SymphonyLayout>
 
