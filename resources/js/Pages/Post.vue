@@ -57,7 +57,7 @@ const submitComment = (postId) => {
 <template>
     <SymphonyLayout>
         <div class="">
-            <Post :src="post.user.profile_photo_url" :connectLine="false">
+            <Post :src="post.user.profile_photo_url" :connectLine="false" :createdAt="post.created_at">
                 <template #name>
                     {{ post.user.name }}
                 </template>
@@ -113,7 +113,7 @@ const submitComment = (postId) => {
             <div v-for="(comment, index) in post.comments" :key="comment.id" class="pl-10 mt-3 flex flex-col w-full items-center relative">
               <div v-if="index !== post.comments.length - 1" class="absolute w-0.5 h-full top-0 bg-symph-400 left-5"></div>
               <div class="bg-symph-100 rounded-lg w-full">
-                    <Post :src="comment.user.profile_photo_url">
+                    <Post :src="comment.user.profile_photo_url" :created-at="comment.created_at">
                         <template #name>
                             {{ comment.user.name }}
                         </template>
@@ -153,7 +153,7 @@ const submitComment = (postId) => {
                 <div v-for="(reply, index) in comment.reply" :key="reply.id" class="pl-10 flex w-full items-center relative">
                   <div v-if="index !== comment.reply.length - 1" class="absolute w-0.5 h-full top-0 bg-symph-400 left-5"></div>
                   <div class="bg-symph-100 rounded-lg my-3 w-full">
-                        <Post :src="reply.user.profile_photo_url">
+                        <Post :src="reply.user.profile_photo_url" :created-at="reply.created_at">
                             <template #name>
                                 {{ reply.user.name }}
                             </template>

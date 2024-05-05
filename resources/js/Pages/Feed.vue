@@ -23,6 +23,7 @@
         </template>
         <div v-for="post in posts" :key="post.id" class="pb-5">
             <Post
+                  :createdAt="post.created_at"
                   :user-id="post.user.id"
                   :src="post.user.profile_photo_url">
                 <template #name>

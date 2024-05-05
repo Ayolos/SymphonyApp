@@ -8,6 +8,7 @@ const props = defineProps({
       default: true
     },
     src: String,
+    date: String,
     userId: {
         type: Number,
         required: false
@@ -31,6 +32,10 @@ const props = defineProps({
                   <slot name="at"></slot>
               </span>
             </Link>
+        </div>
+        <div class="text-symph-400 text-sm flex flex-row gap-2">
+            <span>⸱</span>
+            <span>{{ date }}</span>
         </div>
     </div>
 </template>
