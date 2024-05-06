@@ -85,6 +85,12 @@ class User extends Authenticatable
         return $this->belongsToMany(Follower::class, 'followers', 'following_id', 'follower_id');
     }
 
+    public function likedPosts()
+    {
+        return $this->hasManyThrough(Post::class, Like::class, 'user_id', 'id', 'id', 'likeable_id')
+            ->where('likeable_type', Post::class)->orderBy('created_at', 'desc');
+    }
+
     //public function countFollowers() {
       //  return $this->count(Follower::class, 'followers', 'following_id', ) > 0;
     //}

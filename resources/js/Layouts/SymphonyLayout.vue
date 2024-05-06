@@ -39,9 +39,9 @@ import {Link} from "@inertiajs/vue3";
           </div>
         </div>
       </div>
-      <div v-if="$page.props.auth.user" class="w-full flex flex-col gap-10 h-[85vh]">
-        <slot name="postForm">
-        </slot>
+      <div v-if="$page.props.auth.user" class="w-full flex flex-col gap-5 h-[85vh]">
+        <slot name="postForm"></slot>
+        <slot name="profileButtons"></slot>
         <div class="w-full rounded overflow-y-scroll">
           <slot></slot>
         </div>

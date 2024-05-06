@@ -38,6 +38,7 @@ class ProfileController extends Controller
             'user' => $user,
             'posts' => $userPost,
             'nbPosts' => $userPost->count(),
+            'likedPosts' => $user->likedPosts,
         ]);
     }
 }

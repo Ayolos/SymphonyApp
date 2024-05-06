@@ -1,6 +1,6 @@
 <template>
   <div class="relative">
-    <audio ref="audioPlayer" id="stream" @timeupdate="updateProgress">
+    <audio ref="audioPlayer" id="stream" @timeupdate="updateProgress" preload>
       <source :src="'/storage/' + song.path">
     </audio>
     <div>

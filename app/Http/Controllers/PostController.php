@@ -19,13 +19,6 @@ class PostController extends Controller
         $posts = Post::orderBy('created_at', 'desc')
             ->get();
 
-        $posts->each(function ($post) {
-            $post->setRelation('comments', $post->comments->take(3));
-            $post->comments->each(function ($comment) {
-                $comment->setRelation('reply', $comment->reply->take(1));
-            });
-        });
-
         $trendingUsers = User::all();
 
         return Inertia::render('Feed', [
@@ -53,17 +46,8 @@ class PostController extends Controller
 
             $song = new Song;
             $song->post_id = $post->id;
-            $song->title = $request->title;
-            $song->artist = $request->artist;
-            $song->album = $request->album;
-            $song->year = $request->release_date;
-            $song->genre = $request->genre;
-            $song->duration = $request->duration;
             $song->path = $path;
             $song->save();
-
-            // Optionally, you may want to delete the file if the song saving fails
-            // unlink(storage_path('app/' . $path));
 
             return redirect()->back()->with('success', 'File uploaded successfully.');
         } else {
@@ -75,7 +59,9 @@ class PostController extends Controller
     public function show($id)
     {
         $post = Post::find($id);
-        return Inertia::render('Post', ['post' => $post]);
+        return Inertia::render('Post', [
+            'post' => $post
+        ]);
     }
 
 
