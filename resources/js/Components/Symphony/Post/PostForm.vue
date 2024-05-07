@@ -4,6 +4,8 @@ import {ref, watch} from "vue";
 import MainModal from "@/Components/Symphony/Modal/MainModal.vue";
 import {Icon} from "@iconify/vue";
 import gsap from 'gsap';
+import CounterMessage from "@/Components/Symphony/CounterMessage.vue";
+import Alerts from "@/Components/Symphony/Alerts.vue";
 
 const formPost = useForm({
   content: '',
@@ -18,11 +20,16 @@ const formPost = useForm({
 
 const nbrCharacters = ref(0);
 const error = ref(null);
+const isPosting = ref(false);
 
 const submitPost = () => {
   formPost.post(route('posts.store'), {
     forceFormData: true,
     onSuccess: () => {
+      isPosting.value = true;
+      setTimeout(() => {
+        isPosting.value = false;
+      }, 2000);
       formPost.reset('content');
       resetSong();
     },
@@ -42,7 +49,6 @@ watch(() => formPost.content, () => {
 
 });
 const onFileChange = (e) => {
-  audioSubmit.value = true
   formPost.file = e.target.files[0];
   if (formPost.file) {
     const reader = new FileReader();
@@ -55,11 +61,10 @@ const onFileChange = (e) => {
   }
 };
 
-const audioSubmit = ref(false)
 const resetSong = () => {
   formPost.file = null;
-  audioPreview.value = '';
-  audioSubmit.value = false;
+  audioPreview.value = null;
+  document.getElementById('fileInput').value = null;
 };
 
 const audioPlayer = ref(null);
@@ -96,19 +101,12 @@ const togglePlayPause = () => {
                       maxlength="120"
                       required></textarea>
             <div class="flex flex-row gap-4 items-center">
-              <p class="w-max text-sm text-symph-900">{{nbrCharacters}} / 120</p>
+              <CounterMessage class="text-symph-900" :message="formPost.content" :maxCharacters="120"></CounterMessage>
               <button type="submit" class="bg-symph-500 text-white rounded-lg px-4 py-2">Publier</button>
+              <Alerts type="info" :show="isPosting">Super ! Publication effectué</Alerts>
             </div>
           </div>
-          <div v-if="error"  class="absolute shadow top-20 right-2 flex items-center p-4 mb-4 text-sm text-symph-100 border border-symph-400 rounded-lg bg-symph-600" role="alert">
-            <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-            </svg>
-            <span class="sr-only">Info</span>
-            <div>
-              <span class="font-medium">{{error}}</span>
-            </div>
-          </div>
+          <Alerts type="error" :show="error">{{ error }}</Alerts>
         </div>
         <div class="flex flex-col gap-3 justify-center items-center aspect-square p-5 h-full bg-symph-700 rounded-r-md">
           <div class="relative bg-secondary p-4 rounded-lg hover:scale-110 shadow-secondary shadow-2xl hover:transition">
@@ -117,9 +115,14 @@ const togglePlayPause = () => {
           </div>
           <div class="">
             <div class="flex flex-row items-center gap-4">
-              <div v-if="audioSubmit">
-                <div class="rounded-full p-0.5 bg-green-500 w-max flex justify-center items-center">
-                  <Icon icon="material-symbols:check" width="20" class="text-white"></Icon>
+              <div v-if="audioPreview">
+                <div class="flex flex-row gap-4">
+                  <div class="rounded-full p-0.5 bg-green-500 w-max flex justify-center items-center">
+                    <Icon icon="material-symbols:check" width="20" class="text-white"></Icon>
+                  </div>
+                  <button type="reset" @click.prevent="resetSong">
+                    <Icon icon="system-uicons:reset" width="20" class="text-white transition hover:scale-110 ease-in-out hover:-rotate-90"></Icon>
+                  </button>
                 </div>
               </div>
               <div v-else>
@@ -127,10 +130,7 @@ const togglePlayPause = () => {
                   <Icon icon="ic:round-close" width="20" class="text-white"></Icon>
                 </div>
               </div>
-              <button type="reset" @click.prevent="resetSong">
-                <Icon icon="system-uicons:reset" width="20" class="text-white"></Icon>
-              </button>
-              <div v-if="audioPreview && audioSubmit" class="h-full flex justify-center">
+              <div v-if="audioPreview" class="h-full flex justify-center">
                 <audio :src="audioPreview" class="h-20 rounded-lg" ref="audioPlayer"></audio>
                 <button @click="togglePlayPause" type="button" class="text-white">
                   <svg v-if="!isPlaying" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">

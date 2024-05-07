@@ -91,8 +91,9 @@
                     Ajouter un commentaire
                   </template>
                   <template #content>
-                    <div class="flex flex-col gap-3 px-4 justify-end">
-                      <textarea required v-model="formComment.content" placeholder="Ecrit ton commentaire" class="w-full text-symph-200 h-48 rounded-lg bg-symph-800 border-symph-500 resize-none"></textarea>
+                    <div class="flex flex-col gap-3 px-4">
+                      <textarea required v-model="formComment.content" maxlength="255" placeholder="Ecrit ton commentaire" class="w-full text-symph-200 h-48 rounded-lg bg-symph-800 border-symph-500 resize-none"></textarea>
+                      <CounterMessage class="text-symph-100 w-full text-end" :message="formComment.content" :max-characters="255" />
                       <button class="bg-secondary-500 text-white rounded-lg px-4 py-2">Envoyer</button>
                     </div>
                   </template>
@@ -102,15 +103,7 @@
               <!-- Share button -->
               <div class="flex flex-row gap-2 items-center">
                 <button @click="copy(route('posts.show', {id: post.id}))" class="text-gray-300">
-                  <div v-if="copied"  class="absolute shadow top-20 right-2 flex items-center p-4 mb-4 text-sm text-symph-100 border border-symph-400 rounded-lg bg-symph-600" role="alert">
-                    <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-                    </svg>
-                    <span class="sr-only">Info</span>
-                    <div>
-                      <span class="font-medium">Eh oh !</span> Le lien est copié dans le presse-papier
-                    </div>
-                  </div>
+                  <Alerts type="info" :show="copied">Eh oh ! Le liens est copié dans le presse-papier</Alerts>
                   <Icon icon="solar:share-line-duotone" class="w-6 h-6" />
                 </button>
               </div>
@@ -133,6 +126,8 @@ import InputLabel from "@/Components/Symphony/Input/InputLabel.vue";
 import PostForm from "@/Components/Symphony/Post/PostForm.vue";
 import PlayerAudio from "@/Components/Symphony/PlayerAudio.vue";
 import {useClipboard} from "@vueuse/core";
+import CounterMessage from "@/Components/Symphony/CounterMessage.vue";
+import Alerts from "@/Components/Symphony/Alerts.vue";
 
 defineProps({
     canLogin: Boolean,
@@ -152,11 +147,6 @@ const formComment = useForm({
     post_id: null,
 });
 
-const formReply = useForm({
-    content: "",
-    parent_id: null,
-    post_id: null,
-});
 const source = ref('')
 const { text, copy, copied, isSupported } = useClipboard({ source })
 
@@ -166,6 +156,9 @@ const submitComment = (postId) => {
         preserveScroll: true,
         onSuccess: () => {
             formComment.reset('content');
+        },
+        onError: (e) => {
+            console.log(e)
         }
     });
 };
