@@ -77,9 +77,8 @@ const ManageShowFilter = (filter) => {
               </div>
             </div>
             <div class="pt-6 w-full">
-              <p class="text-sm text-ellipsis overflow-hidden w-80">Lorem ipsumzeff
-                zefzfdfvdfvdfvvdfvdfvdfvdfvdfvdfvdfvdfvdfvfdvdfvdfvdfvdfvdfefzfdfvdfvdfvvdfvdfvdfvdfvdfvdfvdfvdfvdfvfdvdfvdfvdfvdfvdfefzfdfvdfvdfvvdfvdfvdfvdfvdfvdfvdfvdfvdfvfdvdfvdfvdfvdfvdfefzfdfvdfvdfvvdfvdfvdfvdfvdfvdfvdfvdfvdfvfdvdfvdfvdfvdfvdfefzfdfvdfvdfvvdfvdfvdfvdfvdfvdfvdfvdfvdfvfdvdfvdfvdfvdfvdfefzfdfvdfvdfvvdfvdfvdfvdfvdfvdfvdfvdfvdfvfdvdfvdfvdfvdfvdfvfdvdvdvz
-                fzfzfz fffeferfegre egerergergerger egergerge</p>
+              <p class="text-sm text-ellipsis overflow-hidden w-80">{{ user.description
+                }}</p>
             </div>
             <div class="flex flex-row gap-10 items-center-5 pt-6">
               <div class="flex flex-row items-center gap-2">
@@ -182,7 +181,7 @@ const ManageShowFilter = (filter) => {
       </div>
     </div>
     <div v-else-if="showFilter === 'like'">
-      <div v-for="post in likedPosts" v-if="nbPosts !== 0" :key="post.id" class="pb-5">
+      <div v-for="post in likedPosts" v-if="likedPosts.length !== 0" :key="post.id" class="pb-5">
         <Post
             :createdAt="post.created_at"
             :src="post.user.profile_photo_url"
@@ -254,6 +253,12 @@ const ManageShowFilter = (filter) => {
             </div>
           </template>
         </Post>
+      </div>
+      <div v-else>
+        <div class="flex flex-col text-symph-300 items-center justify-center pt-20">
+          <Icon class="w-48 h-48" icon="line-md:person-off-twotone-loop"/>
+          <h1 class="text-3xl font-bold">Aucun post liké pour le moment</h1>
+        </div>
       </div>
     </div>
   </SymphonyLayout>

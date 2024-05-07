@@ -7,6 +7,7 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import Logo from '/public/Logo.png'
 
 defineProps({
     canResetPassword: Boolean,
@@ -34,7 +35,7 @@ const submit = () => {
 
     <AuthenticationCard>
         <template #logo>
-            <AuthenticationCardLogo />
+          <img :src="Logo" alt="Logo" class="w-24" />
         </template>
 
         <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
@@ -77,12 +78,12 @@ const submit = () => {
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <div class="flex flex-col items-end">
-                    <Link :href="route('register')" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <div class="flex flex-col gap-1 items-end">
+                    <Link :href="route('register')" class="underline text-sm text-gray-600 hover:text-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         No account ? Register !
                     </Link>
 
-                    <Link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <Link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         Forgot your password?
                     </Link>
                 </div>

@@ -30,6 +30,10 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'content' => 'required',
+            'file' => 'required|mimes:mp3'
+        ]);
         if ($request->file('file')->isValid()) {
             $file = $request->file('file');
             $path = $file->store('songs');

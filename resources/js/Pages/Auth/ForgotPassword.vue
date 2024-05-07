@@ -6,6 +6,7 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import Logo from "../../../../public/Logo.png";
 
 defineProps({
     status: String,
@@ -25,7 +26,7 @@ const submit = () => {
 
     <AuthenticationCard>
         <template #logo>
-            <AuthenticationCardLogo />
+          <img :src="Logo" alt="Logo" class="w-24" />
         </template>
 
         <div class="mb-4 text-sm text-gray-600">

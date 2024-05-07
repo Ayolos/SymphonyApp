@@ -17,12 +17,20 @@ const formPost = useForm({
 });
 
 const nbrCharacters = ref(0);
+const error = ref(null);
 
 const submitPost = () => {
   formPost.post(route('posts.store'), {
     forceFormData: true,
     onSuccess: () => {
       formPost.reset('content');
+      resetSong();
+    },
+    onError: () => {
+      error.value = 'Erreur ! Veuillez réessayer en ajoutant une musique.';
+      setTimeout(() => {
+        error.value = null
+      }, 2000);
     }
   });
 };
@@ -92,6 +100,15 @@ const togglePlayPause = () => {
               <button type="submit" class="bg-symph-500 text-white rounded-lg px-4 py-2">Publier</button>
             </div>
           </div>
+          <div v-if="error"  class="absolute shadow top-20 right-2 flex items-center p-4 mb-4 text-sm text-symph-100 border border-symph-400 rounded-lg bg-symph-600" role="alert">
+            <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+            </svg>
+            <span class="sr-only">Info</span>
+            <div>
+              <span class="font-medium">{{error}}</span>
+            </div>
+          </div>
         </div>
         <div class="flex flex-col gap-3 justify-center items-center aspect-square p-5 h-full bg-symph-700 rounded-r-md">
           <div class="relative bg-secondary p-4 rounded-lg hover:scale-110 shadow-secondary shadow-2xl hover:transition">
@@ -110,7 +127,7 @@ const togglePlayPause = () => {
                   <Icon icon="ic:round-close" width="20" class="text-white"></Icon>
                 </div>
               </div>
-              <button type="reset" @click="resetSong">
+              <button type="reset" @click.prevent="resetSong">
                 <Icon icon="system-uicons:reset" width="20" class="text-white"></Icon>
               </button>
               <div v-if="audioPreview && audioSubmit" class="h-full flex justify-center">
