@@ -71,11 +71,14 @@ const ManageShowFilter = (filter) => {
         <div class="w-full flex border-b pb-8 border-gray-900 flex-row bg-symph-900 rounded-t-lg pl-8 pt-8">
           <img :src="user.profile_photo_url" class="shadow-symph-500 shadow-2xl aspect-square h-48 rounded">
           <div class="w-full h-max flex flex-col text-gray-500 pt-8 px-8">
-            <div class="flex flex-row gap-5">
+            <div class="flex flex-row gap-5 items-center justify-between">
               <div class="">
                 <p class="font-bold text-lg">{{ user.name }}</p>
                 <p class="text-sm">@{{ user.username }}</p>
               </div>
+              <button type="button" class="bg-secondary-900/70 hover:bg-secondary-900/60 text-symph-100 border border-secondary rounded-lg p-2">
+                <Icon icon="line-md:person-add-twotone" class="text-2xl"></Icon>
+              </button>
             </div>
             <div class="pt-6 w-full">
               <p class="text-sm text-ellipsis overflow-hidden w-80">{{ user.description
