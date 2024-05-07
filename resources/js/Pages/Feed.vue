@@ -102,10 +102,7 @@
               </div>
               <!-- Share button -->
               <div class="flex flex-row gap-2 items-center">
-                <button @click="copy(route('posts.show', {id: post.id}))" class="text-gray-300">
-                  <Alerts type="info" :show="copied">Eh oh ! Le liens est copié dans le presse-papier</Alerts>
-                  <Icon icon="solar:share-line-duotone" class="w-6 h-6" />
-                </button>
+                <ShareButton :copy-text="route('posts.show', {id: post.id})"></ShareButton>
               </div>
             </template>
           </Post>
@@ -128,6 +125,7 @@ import PlayerAudio from "@/Components/Symphony/PlayerAudio.vue";
 import {useClipboard} from "@vueuse/core";
 import CounterMessage from "@/Components/Symphony/CounterMessage.vue";
 import Alerts from "@/Components/Symphony/Alerts.vue";
+import ShareButton from "@/Components/Symphony/Button/ShareButton.vue";
 
 defineProps({
     canLogin: Boolean,

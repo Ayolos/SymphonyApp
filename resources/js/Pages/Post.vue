@@ -9,6 +9,7 @@ import Modal from "@/Components/Symphony/Modal/Modal.vue";
 import PlayerAudio from "@/Components/Symphony/PlayerAudio.vue";
 import MainModal from "@/Components/Symphony/Modal/MainModal.vue";
 import { useClipboard } from '@vueuse/core'
+import ShareButton from "@/Components/Symphony/Button/ShareButton.vue";
 
 defineProps({
     post: Object,
@@ -95,18 +96,7 @@ const submitComment = (postId) => {
                       <h1 class="text-md text-symph-200 font-bold">{{ post.nbComments }}</h1>
                     </div>
                     <div class="flex flex-row gap-2 items-center">
-                      <button @click="copy(route('posts.show', {id: post.id}))" class="text-gray-300">
-                        <div v-if="copied"  class="absolute shadow top-20 right-2 flex items-center p-4 mb-4 text-sm text-symph-100 border border-symph-400 rounded-lg bg-symph-600" role="alert">
-                          <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-                          </svg>
-                          <span class="sr-only">Info</span>
-                          <div>
-                            <span class="font-medium">Eh oh !</span> Le lien est copié dans le presse-papier
-                          </div>
-                        </div>
-                        <Icon icon="solar:share-line-duotone" class="w-6 h-6" />
-                      </button>
+                      <ShareButton :copy-text="route('posts.show', {id: post.id})"></ShareButton>
                     </div>
                 </template>
             </Post>
