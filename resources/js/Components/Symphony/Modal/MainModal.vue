@@ -49,7 +49,7 @@ const handleSubmit = () => {
                         </svg>
                     </button>
                 </div>
-                    <div class="py-4">
+                    <div class="py-8">
                         <form @submit.prevent="handleSubmit">
                             <slot name="content"></slot>
                         </form>

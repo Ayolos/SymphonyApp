@@ -50,7 +50,7 @@ const formatDateString = (date) => {
 </script>
 
 <template>
-    <div class="bg-symph-900 rounded-lg z-0 h-full shadow-xl">
+    <div class="bg-symph-900 rounded-lg z-0 h-full w-full shadow-xl">
             <!-- Contenu du post -->
             <PostInfo :src="src" :userId="userId" :connect-line="connectLine" :date="formatDateDifference(createdAt)">
                 <template #name>
@@ -61,7 +61,7 @@ const formatDateString = (date) => {
                 </template>
             </PostInfo>
             <div class="pt-5 px-10 flex flex-row justify-between items-start">
-                <p class="text-md text-gray-500 pt-8">
+                <p class="text-md text-gray-500 pt-8 break-words w-full">
                     <slot name="content"></slot>
                 </p>
                 <div class="z-50 pr-10">

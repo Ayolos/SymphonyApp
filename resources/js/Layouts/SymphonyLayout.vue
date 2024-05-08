@@ -5,10 +5,10 @@ import {Link} from "@inertiajs/vue3";
 </script>
 
 <template>
-  <div class="max-h-screen h-screen min-h-screen bg-symph-500">
+  <div class="max-h-screen h-screen min-h-screen w-screen bg-symph-500">
     <Header class="mb-5"></Header>
-    <div class="flex flex-row pr-10">
-      <div class="h-full min-w-80 px-10">
+    <div class="flex flex-row pr-10 w-full">
+      <div class="h-full px-10 flex-none w-1/4">
         <div class="w-full h-full flex flex-col gap-4">
           <div v-if="$page.props.auth.user" class="flex flex-col items-center bg-symph-800 rounded-lg justify-center">
             <Link :href="route('profileUser.show', {id: $page.props.auth.user.id })"
@@ -39,7 +39,7 @@ import {Link} from "@inertiajs/vue3";
           </div>
         </div>
       </div>
-      <div v-if="$page.props.auth.user" class="w-full flex flex-col gap-5 h-[85vh]">
+      <div v-if="$page.props.auth.user" class="flex w-3/4 flex-col gap-5 h-[85vh]">
         <slot name="postForm"></slot>
         <slot name="profileButtons"></slot>
         <div class="w-full rounded overflow-y-scroll">

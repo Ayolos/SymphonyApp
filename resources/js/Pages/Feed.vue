@@ -91,10 +91,18 @@
                     Ajouter un commentaire
                   </template>
                   <template #content>
-                    <div class="flex flex-col gap-3 px-4">
-                      <textarea required v-model="formComment.content" maxlength="255" placeholder="Ecrit ton commentaire" class="w-full text-symph-200 h-48 rounded-lg bg-symph-800 border-symph-500 resize-none"></textarea>
-                      <CounterMessage class="text-symph-100 w-full text-end" :message="formComment.content" :max-characters="255" />
-                      <button class="bg-secondary-500 text-white rounded-lg px-4 py-2">Envoyer</button>
+                    <div class="flex flex-col gap-2 px-8">
+                      <div class="flex flex-col gap-2">
+                        <UserInfo :created_at="post.created_at" :name="post.user.name" :content="post.content" :username="post.user.username" :profile_src="post.user.profile_photo_url" />
+                      </div>
+                      <div class="flex flex-row items-start gap-4 mt-8">
+                        <img :src="$page.props.auth.user.profile_photo_url" class="w-12 h-12 rounded">
+                        <div class="w-full">
+                          <textarea required v-model="formComment.content" maxlength="255" placeholder="Ecrit ton commentaire" class="w-full text-symph-200 h-48 rounded-lg bg-symph-800 border-symph-500 resize-none"></textarea>
+                          <CounterMessage class="text-symph-100 w-full text-end" :message="formComment.content" :max-characters="255" />
+                        </div>
+                      </div>
+                      <button class="bg-secondary-500 text-white rounded-lg px-4 py-2 mt-3">Envoyer</button>
                     </div>
                   </template>
                 </MainModal>
@@ -126,6 +134,7 @@ import {useClipboard} from "@vueuse/core";
 import CounterMessage from "@/Components/Symphony/CounterMessage.vue";
 import Alerts from "@/Components/Symphony/Alerts.vue";
 import ShareButton from "@/Components/Symphony/Button/ShareButton.vue";
+import UserInfo from "@/Components/Symphony/UserInfo.vue";
 
 defineProps({
     canLogin: Boolean,
