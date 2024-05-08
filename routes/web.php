@@ -53,7 +53,7 @@ Route::middleware([
 
     //Route::post('/follower', [UserController::class, 'following'])->name('user.follow');
     Route::post('/user/follow', [FollowerController::class, 'follow'])->name('user.follow');
-    Route::post('/user/unfollow', [FollowerController::class, 'unfollow'])->name('user.unfollow');
+    Route::delete('/user/unfollow', [FollowerController::class, 'unfollow'])->name('user.unfollow');
     // Route pour vérifier si un utilisateur suit un autre utilisateur
     Route::get('/user/is-following/{id}', [FollowerController::class, 'isFollowing'])->name('user.isFollowing');
 

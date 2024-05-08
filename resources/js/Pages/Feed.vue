@@ -2,28 +2,9 @@
 <template>
     <Head title="Feed" />
     <SymphonyLayout :isLogin="canLogin">
-        <!--<template #trendingUsers>
-            <h1 class="text-white font-bold text-xl pb-5">Vous aimeriez aussi...</h1>
-            <div v-for="trendingUser in trendingUsers" class="flex flex-row gap-4 justify-between">
-                <div class="flex flex-row items-center pb-4 gap-4">
-                    <img :src=trendingUsers.profile_photo_url class="w-12 h-12 rounded">
-                    <div class="flex-col flex">
-                        <span class="text-gray-400 truncate text-nowrap">{{trendingUser.name}}</span>
-                        <span class="text-gray-500 text-sm">@{{trendingUser.username}}</span>
-                    </div>
-                </div>
-                <div class="flex flex-row items-center gap-4 pr-4">
-                    <form @submit.prevent="toggleFollowing(trendingUser)">
-                        <button class="bg-symph-500 text-white rounded-lg px-4 py-2">
-                            {{ isFollowing(trendingUser.id) ? 'Ne plus Suivre' : 'Suivre' }}
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </template>-->
         <template #trendingUsers>
             <h1 class="text-white font-bold text-xl pb-5">Vous aimeriez aussi...</h1>
-            <div v-if="followingIds.length >= 0">
+            <div>
                 <!-- Afficher les utilisateurs tendance -->
                 <div v-for="trendingUser in trendingUsers" :key="trendingUser.id" class="flex flex-row gap-4 justify-between">
                     <div class="flex flex-row items-center pb-4 gap-4">
@@ -35,17 +16,13 @@
                     </div>
                     <div class="flex flex-row items-center gap-4 pr-4">
                         <!-- Bouton qui change en fonction de l'état de suivi -->
-                        <form @submit.prevent="toggleFollowing(trendingUser)">
+                        <form @submit.prevent="trendingUser.isFollowed ? toggleUnFollow(trendingUser) : toggleFollowing(trendingUser)">
                             <button class="bg-symph-500 text-white rounded-lg px-4 py-2">
-                                {{ isFollowing(trendingUser.id) ? 'Unfollow' : 'Follow' }}
+                              {{ trendingUser.isFollowed ? 'unfollow' : 'follow' }}
                             </button>
                         </form>
                     </div>
                 </div>
-            </div>
-            <div v-else>
-                <!-- Si les données n'ont pas encore été chargées -->
-                <p>Loading...</p>
             </div>
         </template>
         <template #postForm>
@@ -154,6 +131,10 @@ const formComment = useForm({
     post_id: null,
 });
 
+const formFollow = useForm({
+  following_id: null,
+});
+
 const source = ref('')
 const { text, copy, copied, isSupported } = useClipboard({ source })
 
@@ -170,41 +151,27 @@ const submitComment = (postId) => {
     });
 };
 
-const followingIds = ref([]);
-
-onMounted(async () => {
-    try {
-        const response = await router.get(route('user.isFollowing', { id: auth().id() }));
-        followingIds.value = response.data.followingIds || []; // Récupérer la liste des suivis
-    } catch (error) {
-        console.error("Erreur lors du chargement des utilisateurs suivis:", error);
-        followingIds.value = []; // Éviter les erreurs d'accès
-    }
-});
-
-// Fonction pour vérifier si un utilisateur est suivi
-const isFollowing = (trendingUserId) => {
-    return followingIds.value.includes(trendingUserId); // Retourne `true` si l'utilisateur est suivi
-};
-
 // Fonction pour suivre/désabonner avec formulaire
 const toggleFollowing = async (trendingUser) => {
-    const form = useForm({ trendingUser: trendingUser.id });
-
-    if (isFollowing(trendingUser.id)) {
-        form.post(route('user.unfollow'), {
-            onSuccess: () => {
-                followingIds.value = followingIds.value.filter((id) => id !== trendingUser.id);
-            },
-        });
-    } else {
-        form.post(route('user.follow'), {
-            onSuccess: () => {
-                followingIds.value.push(trendingUser.id);
-            },
-        });
+  formFollow.following_id = trendingUser.id;
+  formFollow.post(route('user.follow'), {
+    preserveScroll: true,
+    onSuccess: () => {
+      console.log('user ajouté')
     }
+  })
 };
+
+const toggleUnFollow = async (trendingUser) => {
+  formFollow.following_id = trendingUser.id;
+  formFollow.delete(route('user.unfollow', {user: trendingUser.id}), {
+    preserveScroll: true,
+    onSuccess: () => {
+      console.log('user retiré')
+    }
+  })
+};
+
 </script>
 
 

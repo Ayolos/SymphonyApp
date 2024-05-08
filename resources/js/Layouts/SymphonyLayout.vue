@@ -23,13 +23,13 @@ import {Link} from "@inertiajs/vue3";
               <div class="border-e border-t border-symph-500 py-4 px-6">
                 <h1 class="text-white text-sm">Followers</h1>
                 <span class="text-white text-xl font-bold">{{
-                    $page.props.auth.user.followers ? $page.props.auth.user.followings : 0
+                    $page.props.nbFollowers
                   }}</span>
               </div>
               <div class="py-4 px-6 border-t border-symph-500">
                 <h1 class="text-white text-sm ">Followings</h1>
                 <span class="text-white text-xl font-bold">{{
-                    $page.props.auth.user.followings ? $page.props.auth.user.followings : 0
+                    $page.props.nbFollowings
                   }}</span>
               </div>
             </div>

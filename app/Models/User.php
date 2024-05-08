@@ -58,7 +58,13 @@ class User extends Authenticatable
      */
     protected $appends = [
         'profile_photo_url',
+        'isFollowed',
     ];
+
+    public function getIsFollowedAttribute()
+    {
+        return auth()->user()->followings()->where('user_id', $this->id)->exists();
+    }
 
     public function posts()
     {
@@ -75,20 +81,18 @@ class User extends Authenticatable
         return $this->morphedByMany(Like::class, 'likeable');
     }
 
-    // users that are followed by this user
-    public function isFollowing() {
-        return $this->belongsToMany(Follower::class, 'followers', 'follower_id', 'following_id');
-    }
-
-    // users that follow this user
-    public function isFollowed() {
-        return $this->belongsToMany(Follower::class, 'followers', 'following_id', 'follower_id');
-    }
-
     public function likedPosts()
     {
         return $this->hasManyThrough(Post::class, Like::class, 'user_id', 'id', 'id', 'likeable_id')
             ->where('likeable_type', Post::class)->orderBy('created_at', 'desc');
+    }
+
+    public function followers() {
+        return $this->belongsToMany(User::class, 'followers', 'user_id', 'follower_id');
+    }
+
+    public function followings() {
+        return $this->belongsToMany(User::class, 'followers', 'follower_id', 'user_id');
     }
 
     //public function countFollowers() {
