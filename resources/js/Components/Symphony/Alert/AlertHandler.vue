@@ -6,16 +6,7 @@ import useAlerts from "../../../store/useAlerts.js";
 const alert = computed(() => usePage().props.flash.alert);
 const {addAlert, alerts} = useAlerts();
 
-const alertClass = computed(() => {
-  return {
-    'border-red-800 bg-red-900': alert.value.type === 'error',
-    'border-green-800 bg-green-900': alert.value.type === 'success',
-    'border-blue-800 bg-blue-900': alert.value.type === 'info',
-  }
-});
-
 watch(alert, (newVal) => {
-  console.log(usePage().props.flash);
   if (newVal) {
     addAlert(newVal);
   }
@@ -23,17 +14,23 @@ watch(alert, (newVal) => {
 </script>
 
 <template>
-    <div class="fixed top-10 right-2">
+    <div class="fixed z-50 top-10 right-2">
       <transition-group
           name="fade"
           enter-active-class="transition ease-out duration-400"
           enter-from-class="transform translate-x-full scale-95"
           enter-to-class="transform translate-x-0	 scale-100"
-          leave-active-class="transition ease-in duration-75"
+          leave-active-class="transition ease-in duration-800"
           leave-from-class="transform opacity-100 scale-100"
           leave-to-class="transform opacity-0 scale-95"
       >
-        <div v-for="(alert, key) in alerts" :key="key" :class="alertClass" class="flex flex-col shadow items-center p-4 mb-4 text-sm text-symph-100 border rounded-lg">
+        <div v-for="(alert, key) in alerts" :key="key"
+             :class="{
+                'border-red-800 bg-red-900': alert.type === 'error',
+                'border-green-800 bg-green-900': alert.type === 'success',
+                'border-blue-800 bg-blue-900': alert.type === 'info',
+             }"
+             class="flex flex-col shadow items-start p-4 mb-4 text-sm text-symph-100 border rounded-lg">
           <div class="flex flex-row items-center">
             <svg aria-hidden="true" class="flex-shrink-0 inline w-4 h-4 me-3" fill="currentColor"
                  viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">

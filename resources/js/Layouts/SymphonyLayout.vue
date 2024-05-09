@@ -24,13 +24,13 @@ import AlertHandler from "@/Components/Symphony/Alert/AlertHandler.vue";
               </div>
             </Link>
             <div class="grid grid-cols-2 w-full justify-center">
-              <div class="border-e border-t border-symph-500 py-4 px-6">
+              <div class="flex flex-col items-center border-e border-t border-symph-500 py-4 px-6">
                 <h1 class="text-white text-sm">Followers</h1>
                 <span class="text-white text-xl font-bold">{{
                     $page.props.nbFollowers
                   }}</span>
               </div>
-              <div class="py-4 px-6 border-t border-symph-500">
+              <div class="flex flex-col items-center py-4 px-6 border-t border-symph-500">
                 <h1 class="text-white text-sm ">Followings</h1>
                 <span class="text-white text-xl font-bold">{{
                     $page.props.nbFollowings
@@ -38,12 +38,15 @@ import AlertHandler from "@/Components/Symphony/Alert/AlertHandler.vue";
               </div>
             </div>
           </div>
-          <div class="bg-symph-800 rounded-lg px-4 h-[53vh] overflow-y-scroll py-5 w-full">
-            <slot name="trendingUsers"/>
+          <div class="bg-symph-800 rounded-lg px-4 pt-5 w-full">
+            <h1 class="text-white font-bold text-xl pb-5 truncate">Vous aimeriez aussi...</h1>
+            <div class="overflow-y-scroll h-[50vh]">
+              <slot name="trendingUsers"/>
+            </div>
           </div>
         </div>
       </div>
-      <div v-if="$page.props.auth.user" class="flex w-3/4 flex-col gap-5 h-[85vh]">
+      <div v-if="$page.props.auth.user" class="flex w-3/4 flex-col gap-5 h-[87vh]">
         <slot name="postForm"></slot>
         <slot name="profileButtons"></slot>
         <div class="w-full rounded overflow-y-scroll">

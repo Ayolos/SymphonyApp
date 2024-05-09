@@ -3,7 +3,6 @@
     <Head title="Feed" />
     <SymphonyLayout :isLogin="canLogin">
         <template #trendingUsers>
-            <h1 class="text-white font-bold text-xl pb-5">Vous aimeriez aussi...</h1>
             <div>
                 <!-- Afficher les utilisateurs tendance -->
                 <div v-for="trendingUser in trendingUsers" :key="trendingUser.id" class="flex flex-row gap-4 justify-between">
@@ -14,11 +13,12 @@
                             <span class="text-gray-500 text-sm">@{{ trendingUser.username }}</span>
                         </div>
                     </div>
-                    <div class="flex flex-row items-center gap-4 pr-4">
+                    <div class="flex flex-row items-center gap-4">
                         <!-- Bouton qui change en fonction de l'état de suivi -->
                         <form @submit.prevent="trendingUser.isFollowed ? toggleUnFollow(trendingUser) : toggleFollowing(trendingUser)">
-                            <button class="bg-symph-500 text-white rounded-lg px-4 py-2">
-                              {{ trendingUser.isFollowed ? 'unfollow' : 'follow' }}
+                            <button class="bg-symph-500 text-white rounded p-1 aspect-square">
+                              <Icon v-if="trendingUser.isFollowed" icon="material-symbols:check-indeterminate-small-rounded" class="w-6 h-6" />
+                              <Icon v-else icon="jam:plus" class="w-6 h-6" />
                             </button>
                         </form>
                     </div>
@@ -28,7 +28,7 @@
         <template #postForm>
             <PostForm></PostForm>
         </template>
-        <div v-for="post in posts" :key="post.id" class="pb-10">
+        <div v-for="post in posts" :key="post.id" class="pb-4">
             <!--:href="route('posts.show', {id: post.id})"-->
           <Post
               :createdAt="post.created_at"
@@ -157,7 +157,6 @@ const toggleFollowing = async (trendingUser) => {
   formFollow.post(route('user.follow'), {
     preserveScroll: true,
     onSuccess: () => {
-      console.log('user ajouté')
     }
   })
 };
@@ -167,7 +166,6 @@ const toggleUnFollow = async (trendingUser) => {
   formFollow.delete(route('user.unfollow', {user: trendingUser.id}), {
     preserveScroll: true,
     onSuccess: () => {
-      console.log('user retiré')
     }
   })
 };
