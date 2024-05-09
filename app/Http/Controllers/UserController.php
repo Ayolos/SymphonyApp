@@ -19,11 +19,4 @@ class UserController extends Controller
 //
 //    }
 
-    public function following(Request $request)
-    {
-        $follower = new Follower;
-        $follower->follower_id = auth()->id();
-        $follower->following_id = $request->trendingUser;
-        $follower->save();
-    }
 }

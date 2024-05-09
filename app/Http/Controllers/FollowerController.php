@@ -17,6 +17,10 @@ class FollowerController extends Controller
         $follower->user_id = $request->following_id;
         $follower->follower_id = auth()->id();
         $follower->save();
+        request()->session()->flash('alert', [
+            'type' => 'success',
+            'message' => 'Vous suivez cet utilisateur.',
+        ]);
     }
 
     public function unfollow(Request $request){
@@ -27,5 +31,9 @@ class FollowerController extends Controller
             ->where('follower_id', auth()->id())
             ->first();
         $follower->delete();
+        request()->session()->flash('alert', [
+            'type' => 'success',
+            'message' => 'Vous ne suivez plus cet utilisateur.',
+        ]);
     }
 }

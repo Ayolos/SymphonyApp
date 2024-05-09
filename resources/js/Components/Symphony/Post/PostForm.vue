@@ -103,10 +103,8 @@ const togglePlayPause = () => {
             <div class="flex flex-row gap-4 items-center">
               <CounterMessage class="text-symph-900" :message="formPost.content" :maxCharacters="120"></CounterMessage>
               <button type="submit" class="bg-symph-500 text-white rounded-lg px-4 py-2">Publier</button>
-              <Alerts type="info" :show="isPosting">Super ! Publication effectué</Alerts>
             </div>
           </div>
-          <Alerts type="error" :show="error">{{ error }}</Alerts>
         </div>
         <div class="flex flex-col gap-3 justify-center items-center aspect-square p-5 h-full bg-symph-700 rounded-r-md">
           <div class="relative bg-secondary p-4 rounded-lg hover:scale-110 shadow-secondary shadow-2xl hover:transition">

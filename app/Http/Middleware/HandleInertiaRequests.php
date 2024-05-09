@@ -42,6 +42,9 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             'nbFollowers' => $user ? $user->followers->count() : 0,
             'nbFollowings' => $user ? $user->followings->count() : 0,
+            'flash' => [
+                'alert' => $request->session()->get('alert'),
+            ],
         ]);
     }
 }

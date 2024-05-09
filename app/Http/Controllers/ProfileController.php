@@ -33,12 +33,13 @@ class ProfileController extends Controller
             ->get();
 
         $user = User::find($id);
-
         return Inertia::render('Profile/ProfileApp', [
             'user' => $user,
             'posts' => $userPost,
             'nbPosts' => $userPost->count(),
             'likedPosts' => $user->likedPosts,
+            'followers' => $user->followers,
+            'followings' => $user->followings,
         ]);
     }
 }

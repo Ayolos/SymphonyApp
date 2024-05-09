@@ -1,4 +1,4 @@
-<script setup>
+<script setup xmlns="http://www.w3.org/1999/html">
 
 import SymphonyLayout from "@/Layouts/SymphonyLayout.vue";
 import {Link, useForm} from "@inertiajs/vue3";
@@ -11,12 +11,15 @@ import {useClipboard} from "@vueuse/core";
 import ShareButton from "@/Components/Symphony/Button/ShareButton.vue";
 import CounterMessage from "@/Components/Symphony/CounterMessage.vue";
 import UserInfo from "@/Components/Symphony/UserInfo.vue";
+import Alerts from "@/Components/Symphony/Alerts.vue";
 
 defineProps({
   posts: Object,
   user: Object,
   nbPosts: Number,
   likedPosts: Object,
+  followers: Object,
+  followings: Object,
 });
 
 const source = ref('')
@@ -27,27 +30,16 @@ const formComment = useForm({
   post_id: null,
 });
 
-const isModalOpen = ref(false);
-const selectedPost = ref(null);
-
-const openModal = (post) => {
-  selectedPost.value = post;
-  isModalOpen.value = true;
-  formComment.post_id = post.id;
-};
-
+const formFollow = useForm({
+  following_id: null,
+});
 const submitComment = () => {
-  closeModal();
   formComment.post(route('comments.store'), {
     preserveScroll: true,
     onSuccess: () => {
       formComment.reset('content');
     }
   });
-};
-
-const closeModal = () => {
-  isModalOpen.value = false;
 };
 
 const dateFormater = (date) => {
@@ -64,6 +56,37 @@ const ManageShowFilter = (filter) => {
   showFilter.value = filter;
 };
 
+const alertFollow = ref(false);
+const alertUnFollow = ref(false);
+
+// Fonction pour suivre/désabonner avec formulaire
+const toggleFollowing = (trendingUser) => {
+  formFollow.following_id = trendingUser.id;
+  formFollow.post(route('user.follow'), {
+    preserveScroll: true,
+    onSuccess: () => {
+      alertFollow.value = true;
+      setTimeout(() => {
+        alertFollow.value = false;
+      }, 2000);
+    }
+  })
+};
+
+const toggleUnFollow = (trendingUser) => {
+  formFollow.following_id = trendingUser.id;
+  formFollow.delete(route('user.unfollow', {user: trendingUser.id}), {
+    preserveScroll: true,
+    onSuccess: () => {
+      console.log('user retiré')
+      alertUnFollow.value = true;
+      setTimeout(() => {
+        alertUnFollow.value = false;
+      }, 2000);
+    }
+  })
+};
+
 </script>
 
 <template>
@@ -78,9 +101,16 @@ const ManageShowFilter = (filter) => {
                 <p class="font-bold text-lg">{{ user.name }}</p>
                 <p class="text-sm">@{{ user.username }}</p>
               </div>
-              <button type="button" class="bg-secondary-900/70 hover:bg-secondary-900/40 text-symph-100 border border-secondary rounded-lg p-2">
-                <Icon icon="line-md:person-add-twotone" class="text-2xl"></Icon>
-              </button>
+              <form v-if="user.isFollowed" @submit.prevent="toggleUnFollow(user)">
+                <button type="submit" class="bg-red-900/70 hover:bg-red-900/40 text-symph-100 border border-red-500 rounded-lg p-2">
+                  <Icon icon="line-md:person-off-twotone" class="text-2xl"></Icon>
+                </button>
+              </form>
+              <form v-else @submit.prevent="toggleFollowing(user)">
+                <button type="submit" class="bg-secondary-900/70 hover:bg-secondary-900/40 text-symph-100 border border-secondary rounded-lg p-2">
+                  <Icon icon="line-md:person-add-twotone" class="text-2xl"></Icon>
+                </button>
+              </form>
             </div>
             <div class="pt-6 w-full">
               <p class="text-sm text-ellipsis overflow-hidden w-80">{{ user.description }}</p>
@@ -99,8 +129,30 @@ const ManageShowFilter = (filter) => {
           </div>
         </div>
         <div class="flex text-symph-400 flex-row justify-around items-center rounded-b bg-symph-900">
-          <div @click="ManageShowFilter('post')" :class="showFilter === 'post' ? 'text-secondary' : ''" class="hover:bg-gray-900 font-black border-r border-gray-900 text-center basis-1/2 h-full p-5">Post</div>
-          <div @click="ManageShowFilter('like')" :class="showFilter === 'like' ? 'text-secondary' : ''" class="hover:bg-gray-900 font-black text-center basis-1/2 h-full p-5">J'aime</div>
+          <button @click="ManageShowFilter('post')" :class="showFilter === 'post' ? 'text-secondary' : ''" class="hover:bg-gray-900 font-black border-r border-gray-900 text-center basis-1/2 h-full p-5">
+            <div class="flex flex-row gap-2 items-center justify-center">
+              <Icon class="w-6 h-6" icon="material-symbols-light:post-outline-rounded"/>
+              <h1 class="text-md font-bold">Posts</h1>
+            </div>
+          </button>
+          <button @click="ManageShowFilter('like')" :class="showFilter === 'like' ? 'text-secondary' : ''" class="hover:bg-gray-900 font-black border-r border-gray-900 text-center basis-1/2 h-full p-5">
+            <div class="flex flex-row gap-2 items-center justify-center">
+              <Icon class="w-6 h-6" icon="icon-park-twotone:like"/>
+              <h1 class="text-md font-bold">J'aime</h1>
+            </div>
+          </button>
+          <button @click="ManageShowFilter('followers')" :class="showFilter === 'followers' ? 'text-secondary' : ''" class="hover:bg-gray-900 font-black border-r border-gray-900 text-center basis-1/2 h-full p-5">
+            <div class="flex flex-row gap-2 items-center justify-center">
+              <Icon class="w-6 h-6" icon="solar:user-circle-bold-duotone"/>
+              <h1 class="text-md font-bold">Followers</h1>
+            </div>
+          </button>
+          <button @click="ManageShowFilter('followings')" :class="showFilter === 'followings' ? 'text-secondary' : ''" class="hover:bg-gray-900 font-black text-center basis-1/2 h-full p-5">
+            <div class="flex flex-row gap-2 items-center justify-center">
+              <Icon class="w-6 h-6" icon="solar:user-circle-bold-duotone"/>
+              <h1 class="text-md font-bold">Followings</h1>
+            </div>
+          </button>
         </div>
       </div>
     </template>
@@ -250,6 +302,44 @@ const ManageShowFilter = (filter) => {
           <Icon class="w-48 h-48" icon="line-md:person-off-twotone-loop"/>
           <h1 class="text-3xl font-bold">Aucun post liké pour le moment</h1>
         </div>
+      </div>
+    </div>
+    <div v-else-if="showFilter === 'followers'" class="flex-col flex gap-2 bg-symph-100">
+      <div v-if="followers.length !== 0" class="w-full">
+        <div v-for="user in followers" class="hover:bg-gray-300 py-3 px-8">
+          <Link :href="route('profileUser.show', {id: user.id})">
+            <div class="flex flex-row gap-4 items-center">
+              <img :src="user.profile_photo_url" class="aspect-square rounded h-10">
+              <div class="flex flex-col">
+                <h1 class="text-gray-600 truncate text-nowrap">{{ user.name }}</h1>
+                <p class="text-gray-500 text-sm">@{{ user.username }}</p>
+              </div>
+            </div>
+          </Link>
+        </div>
+      </div>
+      <div v-else class="flex flex-col items-center pt-10">
+        <Icon icon="line-md:alert-circle-twotone-loop" class="w-48 h-48 text-gray-500"/>
+        <h1 class="text-gray-600 text-3xl font-bold truncate text-nowrap">Aucun résultat</h1>
+      </div>
+    </div>
+    <div v-else-if="showFilter === 'followings'" class="flex-col flex gap-2">
+      <div v-if="followings.length !== 0" class="w-full bg-symph-100">
+        <div v-for="user in followings" class="hover:bg-gray-300 py-3 px-8">
+          <Link :href="route('profileUser.show', {id: user.id})">
+            <div class="flex flex-row gap-4 items-center">
+              <img :src="user.profile_photo_url" class="aspect-square rounded h-10">
+              <div class="flex flex-col">
+                <h1 class="text-gray-600 truncate text-nowrap">{{ user.name }}</h1>
+                <p class="text-gray-500 text-sm">@{{ user.username }}</p>
+              </div>
+            </div>
+          </Link>
+        </div>
+      </div>
+      <div v-else class="flex flex-col items-center pt-10">
+        <Icon icon="line-md:alert-circle-twotone-loop" class="w-48 h-48 text-gray-500"/>
+        <h1 class="text-gray-600 text-3xl font-bold truncate text-nowrap">Aucun résultat</h1>
       </div>
     </div>
   </SymphonyLayout>

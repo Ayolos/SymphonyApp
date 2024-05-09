@@ -2,11 +2,15 @@
 
 import Header from "@/Components/Symphony/Header.vue";
 import {Link} from "@inertiajs/vue3";
+import AlertHandler from "@/Components/Symphony/Alert/AlertHandler.vue";
 </script>
 
 <template>
   <div class="max-h-screen h-screen min-h-screen w-screen bg-symph-500">
     <Header class="mb-5"></Header>
+    <div>
+      <AlertHandler/>
+    </div>
     <div class="flex flex-row pr-10 w-full">
       <div class="h-full px-10 flex-none w-1/4">
         <div class="w-full h-full flex flex-col gap-4">

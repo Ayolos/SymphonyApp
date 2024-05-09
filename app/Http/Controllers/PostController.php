@@ -40,7 +40,10 @@ class PostController extends Controller
 
             if (!$path) {
                 // Handle error if file storage fails
-                return redirect()->back()->with('error', 'File upload failed.');
+                request()->session()->flash('alert', [
+                    'type' => 'error',
+                    'message' => 'Fichier non enregistré. Veuillez réessayer.',
+                ]);
             }
 
             $post = new Post;
@@ -53,10 +56,16 @@ class PostController extends Controller
             $song->path = $path;
             $song->save();
 
-            return redirect()->back()->with('success', 'File uploaded successfully.');
+            request()->session()->flash('alert', [
+                'type' => 'success',
+                'message' => 'Post ajouté avec succès',
+            ]);
         } else {
             // Handle invalid file
-            return redirect()->back()->with('error', 'Invalid file.');
+            request()->session()->flash('alert', [
+                'type' => 'error',
+                'message' => 'Fichier invalide. Veuillez réessayer.',
+            ]);
         }
     }
 

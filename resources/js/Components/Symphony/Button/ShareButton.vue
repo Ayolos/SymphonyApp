@@ -16,7 +16,6 @@ const props = defineProps({
 
 <template>
   <button @click="copy(copyText)" class="text-gray-300">
-    <Alerts type="info" :show="copied">Eh oh ! Le liens est copié dans le presse-papier</Alerts>
     <Icon icon="solar:share-line-duotone" class="w-6 h-6" />
   </button>
 </template>
