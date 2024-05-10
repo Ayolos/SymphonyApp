@@ -75,7 +75,7 @@ const submitComment = (postId) => {
               </template>
                 <template #likeButton>
                     <div class="flex flex-row gap-2 items-center">
-                        <Link as="button" method="post" :href="post.isLiked ? route('posts.unlike', { post: post.id }) : route('posts.like', { post: post.id })" >
+                        <Link as="button" method="post" :href="post.isLiked ? route('posts.unlike', { post: post }) : route('posts.like', { post: post })" >
                             <Icon icon="iconamoon:heart-duotone" class="w-6 h-6 transition hover:scale-110 hover:rotate-6 ease-in-out" :class="[ post.isLiked ? 'text-secondary-500' : 'text-gray-300']" />
                         </Link>
                         <h1 class="text-md text-symph-200 font-bold">{{ post.nbLikes }}</h1>

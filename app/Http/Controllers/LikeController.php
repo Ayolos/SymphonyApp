@@ -5,34 +5,40 @@ namespace App\Http\Controllers;
 use App\Models\Comment;
 use App\Models\Like;
 use App\Models\Post;
+use App\Notifications\LikePostNotification;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class LikeController extends Controller
 {
     //
-    public function likePost(Request $request, $id)
+    public function likePost(Post $post)
     {
         //check if the user has already liked the post
         $like = Like::where('user_id', auth()->user()->id)
-            ->where('likeable_id', $id)
+            ->where('likeable_id', $post->id)
             ->where('likeable_type', Post::class)
             ->first();
 
         if (!$like) {
             $like = new Like();
             $like->user_id = auth()->user()->id;
-            $like->likeable_id = $id;
+            $like->likeable_id = $post->id;
             $like->likeable_type = Post::class;
             $like->save();
         }
+
+        if($post->user->id != auth()->user()->id) {
+            $post->user->notify(new LikePostNotification($post, auth()->user()->makeHidden(['followers', 'followings']), 'A aimé votre publication.'));
+        }
+
         return redirect()->back();
     }
 
-    public function unlikePost(Request $request, $id)
+    public function unlikePost(Post $post)
     {
         $like = Like::where('user_id', auth()->user()->id)
-            ->where('likeable_id', $id)
+            ->where('likeable_id', $post->id)
             ->where('likeable_type', Post::class)
             ->first();
         $like->delete();
