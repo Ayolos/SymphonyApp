@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SongController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserNotificationController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -57,10 +58,9 @@ Route::middleware([
     // Route pour vérifier si un utilisateur suit un autre utilisateur
     Route::get('/user/is-following/{id}', [FollowerController::class, 'isFollowing'])->name('user.isFollowing');
 
-
-
-
     Route::get('/search', [SearchController::class, 'index'])->name('search.index');
+
+    Route::get('/notifications', [UserNotificationController::class, 'index'])->name('notifications.index');
 
     Route::get('/song', [SongController::class, 'store'])->name('song.store');
 });

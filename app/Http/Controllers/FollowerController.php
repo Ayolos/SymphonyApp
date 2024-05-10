@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Follower;
 use App\Models\Post;
+use App\Models\User;
+use App\Notifications\FollowNotification;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -17,6 +19,11 @@ class FollowerController extends Controller
         $follower->user_id = $request->following_id;
         $follower->follower_id = auth()->id();
         $follower->save();
+
+        $following = User::find($request->following_id);
+
+        $following->notify(new FollowNotification(auth()->user()->makeHidden(['followers', 'followings']), 'vous suit désormais.'));
+
         request()->session()->flash('alert', [
             'type' => 'success',
             'message' => 'Vous suivez cet utilisateur.',
@@ -31,6 +38,11 @@ class FollowerController extends Controller
             ->where('follower_id', auth()->id())
             ->first();
         $follower->delete();
+
+        $following = User::find($request->following_id);
+
+        $following->notify(new FollowNotification(auth()->user()->makeHidden(['followers', 'followings']), 'ne vous suit plus.'));
+
         request()->session()->flash('alert', [
             'type' => 'success',
             'message' => 'Vous ne suivez plus cet utilisateur.',
