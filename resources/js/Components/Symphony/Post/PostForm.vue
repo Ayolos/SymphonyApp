@@ -10,12 +10,6 @@ import UserInfo from "@/Components/Symphony/Post/UserInfo.vue";
 
 const formPost = useForm({
   content: '',
-  title: '',
-  artist: '',
-  genre: '',
-  album: '',
-  release_date: '',
-  duration: '',
   file: null,
 });
 

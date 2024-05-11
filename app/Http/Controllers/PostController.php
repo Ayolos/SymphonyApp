@@ -37,7 +37,7 @@ class PostController extends Controller
     {
         $request->validate([
             'content' => 'required',
-            'file' => 'required|mimes:mp3'
+            'file' => 'required'
         ]);
         if ($request->file('file')->isValid()) {
             $file = $request->file('file');
