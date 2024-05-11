@@ -8,6 +8,7 @@ use App\Models\Song;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\In;
 use Inertia\Inertia;
 
@@ -35,17 +36,26 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'content' => 'required',
             'file' => 'required|mimes:mp3'
         ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput()->with('alert', [
+                'type' => 'error',
+                'message' => 'Post non enregistré. Veuillez réessayer avec un bon format de fichier (.mp3).',
+            ]);
+        }
+
+
         if ($request->file('file')->isValid()) {
             $file = $request->file('file');
             $path = $file->store('songs');
 
             if (!$path) {
                 // Handle error if file storage fails
-                request()->session()->flash('alert', [
+                return redirect()->back()->withInput()->with('alert', [
                     'type' => 'error',
                     'message' => 'Fichier non enregistré. Veuillez réessayer.',
                 ]);
@@ -67,9 +77,9 @@ class PostController extends Controller
             ]);
         } else {
             // Handle invalid file
-            request()->session()->flash('alert', [
+            return redirect()->back()->withErrors($validator)->withInput()->with('alert', [
                 'type' => 'error',
-                'message' => 'Fichier invalide. Veuillez réessayer.',
+                'message' => 'Post non enregistré. Veuillez réessayer avec un bon format de fichier (.mp3).',
             ]);
         }
     }
