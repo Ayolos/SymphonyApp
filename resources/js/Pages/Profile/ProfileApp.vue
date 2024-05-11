@@ -327,8 +327,8 @@ const toggleUnFollow = (trendingUser) => {
         </div>
       </div>
     </div>
-    <div v-else-if="showFilter === 'followers'" class="flex-col flex gap-2 bg-symph-100">
-      <div v-if="followers.length !== 0" class="w-full">
+    <div v-else-if="showFilter === 'followers'" class="flex-col flex gap-2">
+      <div v-if="followers.length !== 0" class="w-full bg-symph-100">
         <div v-for="user in followers" class="hover:bg-gray-300 py-3 px-8">
           <Link :href="route('profileUser.show', {id: user.id})">
             <div class="flex flex-row gap-4 items-center">

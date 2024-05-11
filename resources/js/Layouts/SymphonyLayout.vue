@@ -7,11 +7,11 @@ import AlertHandler from "@/Components/Symphony/Alert/AlertHandler.vue";
 
 <template>
   <div class="max-h-screen h-screen min-h-screen w-screen bg-symph-500">
-    <Header class="mb-5"></Header>
+    <Header class="h-[10vh]"></Header>
     <div>
       <AlertHandler/>
     </div>
-    <div class="flex flex-row pr-10 w-full">
+    <div class="flex flex-row pr-10 w-full h-[90vh]">
       <div class="h-full px-10 flex-none w-1/4">
         <div class="w-full h-full flex flex-col gap-4">
           <div v-if="$page.props.auth.user" class="flex flex-col items-center bg-symph-800 rounded-lg justify-center">
@@ -38,7 +38,7 @@ import AlertHandler from "@/Components/Symphony/Alert/AlertHandler.vue";
               </div>
             </div>
           </div>
-          <div class="bg-symph-800 rounded-lg px-4 pt-5 w-full">
+          <div class="bg-symph-800 rounded-lg px-4 pt-5 mb-4 h-full w-full">
             <h1 class="text-white font-bold text-xl pb-5 truncate">Vous aimeriez aussi...</h1>
             <div class="overflow-y-scroll h-[50vh]">
               <slot name="trendingUsers"/>
@@ -46,10 +46,10 @@ import AlertHandler from "@/Components/Symphony/Alert/AlertHandler.vue";
           </div>
         </div>
       </div>
-      <div v-if="$page.props.auth.user" class="flex w-3/4 flex-col gap-5 h-[87vh]">
+      <div v-if="$page.props.auth.user" class="flex w-3/4 flex-col gap-5 h-full">
         <slot name="postForm"></slot>
         <slot name="profileButtons"></slot>
-        <div class="w-full rounded overflow-y-scroll">
+        <div class="w-full h-full mb-4 rounded overflow-y-scroll">
           <slot></slot>
         </div>
       </div>
