@@ -80,12 +80,13 @@ watch(search, async (value) => {
             </div>
         </div>
     </template>
-    <div class="flex flex-col w-full px-2">
-      <h1 class="text-3xl flex text-symph-100">Rechercher un utilisateur</h1>
-      <div class="flex flex-col items-center mt-5">
-        <input type="search" id="search" class="bg-symph-800 focus:ring-secondary text-gray-500 p-3 shadow border-0 rounded-lg w-full" v-model="search" placeholder="Rechercher un utilisateur">
-        <div v-if="searchResults !== null" class="bg-symph-100 shadow w-full rounded-xl mt-3 max-h-[70vh] h-max overflow-y-scroll">
-          <div v-for="search in searchResults" class="hover:bg-gray-300 py-3 px-8">
+      <template #postForm>
+          <input type="search" id="search" class="bg-symph-800 rounded-full focus:ring-secondary text-gray-500 py-3 px-6 shadow border border-symph-500 focus:border-0 w-full" v-model="search" placeholder="Rechercher un utilisateur">
+      </template>
+    <div class="flex flex-col w-full">
+      <div class="flex flex-col items-center">
+        <div v-if="searchResults !== null" class=" shadow w-full rounded-xl max-h-[70vh] h-max overflow-y-scroll">
+          <div v-for="search in searchResults" class="hover:bg-symph-600 py-3 px-8">
             <Link :href="route('profileUser.show', {id: search.id})">
               <div class="flex flex-row gap-4 items-center">
                 <img :src="search.profile_photo_url" class="aspect-square rounded h-10">
@@ -97,7 +98,7 @@ watch(search, async (value) => {
             </Link>
           </div>
         </div>
-        <div v-else class="flex flex-col items-center pt-10">
+        <div v-else class="flex flex-col items-center py-20">
             <Icon icon="line-md:alert-circle-twotone-loop" class="w-48 h-48 text-gray-500"/>
             <h1 class="text-gray-600 text-3xl font-bold truncate text-nowrap">Aucun résultat</h1>
         </div>

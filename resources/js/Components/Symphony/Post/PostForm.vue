@@ -6,6 +6,7 @@ import {Icon} from "@iconify/vue";
 import gsap from 'gsap';
 import CounterMessage from "@/Components/Symphony/CounterMessage.vue";
 import Alerts from "@/Components/Symphony/Alerts.vue";
+import UserInfo from "@/Components/Symphony/Post/UserInfo.vue";
 
 const formPost = useForm({
   content: '',
@@ -83,30 +84,26 @@ const togglePlayPause = () => {
 </script>
 
 <template>
-  <form class="w-full" @submit.prevent="submitPost">
-    <div class="bg-symph-100 rounded-lg">
-      <div class="flex flex-row justify-between items-start h-56">
-        <div class="basis-2/3 flex-col items-center gap-4 p-4 w-full h-full">
-          <div class="flex flex-row items-center gap-4 p-4">
+  <form class="w-full rounded-2xl border border-symph-500" @submit.prevent="submitPost">
+      <div class="flex flex-row items-start h-56">
+        <div class="flex-col items-center gap-4 p-4 w-full h-full">
+          <div class="flex flex-row gap-4 p-4">
             <img :src="$page.props.auth.user.profile_photo_url" class="w-12 h-12 rounded">
-            <div class="flex-col flex">
-              <h1 class="text-gray-400 truncate text-nowrap">{{ $page.props.auth.user.name }}</h1>
-              <span class="text-gray-500 text-sm">@{{ $page.props.auth.user.username }}</span>
-            </div>
+            <UserInfo :user-id="$page.props.auth.user.id" :name="$page.props.auth.user.name" :username="$page.props.auth.user.username"></UserInfo>
           </div>
-          <div class="pl-4 flex h-28 flex-row justify-between items-end gap-8">
+          <div class="pl-4 flex h-28 flex-col justify-between items-end gap-2">
             <textarea v-model="formPost.content"
-                      class="w-full h-full focus:ring-0 resize-none border-0 p-0 rounded-lg bg-symph-100"
+                      class="w-full h-full focus:ring-0 resize-none text-symph-100 border-0 p-0 bg-symph-800"
                       placeholder="Exprimez-vous..."
                       maxlength="120"
                       required></textarea>
             <div class="flex flex-row gap-4 items-center">
-              <CounterMessage class="text-symph-900" :message="formPost.content" :maxCharacters="120"></CounterMessage>
-              <button type="submit" class="bg-symph-500 text-white rounded-lg px-4 py-2">Publier</button>
+              <CounterMessage class="text-symph-100" :message="formPost.content" :maxCharacters="120"></CounterMessage>
+              <button type="submit" class="border-secondary border hover:bg-secondary/40 bg-secondary/50 text-white rounded-lg px-4 py-2">Publier</button>
             </div>
           </div>
         </div>
-        <div class="flex flex-col gap-3 justify-center items-center aspect-square p-5 h-full bg-symph-700 rounded-r-md">
+        <div class="flex flex-col gap-3 justify-center items-center aspect-square p-5 h-full bg-symph-700 rounded-r-2xl">
           <div class="relative bg-secondary p-4 rounded-lg hover:scale-110 shadow-secondary shadow-2xl hover:transition">
             <input id="fileInput" class="absolute inset-0 opacity-0 z-10" type="file" accept=".mp3" @change="onFileChange" required>
             <Icon class="text-white" icon="mingcute:music-3-line" width="50"></Icon>
@@ -143,7 +140,6 @@ const togglePlayPause = () => {
           </div>
         </div>
       </div>
-    </div>
   </form>
 </template>
 

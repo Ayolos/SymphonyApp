@@ -2,9 +2,23 @@
 
 import PostInfo from "@/Components/Symphony/PostInfo.vue";
 import {router, useForm, Link} from "@inertiajs/vue3";
-import {watch} from "vue";
+import {computed, watch} from "vue";
+import UserInfo from "@/Components/Symphony/Post/UserInfo.vue";
+import FormatDatePost from "@/Components/Symphony/Post/FormatDatePost.vue";
+import PlayerAudio from "@/Components/Symphony/PlayerAudio.vue";
 
-defineProps({
+const props =defineProps({
+    line: {
+        type: Boolean,
+        required: false,
+        default: false
+    },
+    border: {
+        type: Boolean,
+        required: false,
+        default: true
+    },
+    post: Object,
     connectLine: {
       type: Boolean,
       required: false,
@@ -18,6 +32,9 @@ defineProps({
     }
 });
 
+const borderClass = computed(() => {
+    return props.border ? 'border-b border-symph-500' : ''
+});
 
 const formatDateDifference = (createdAt) => {
   const createdDate = new Date(createdAt);
@@ -50,9 +67,31 @@ const formatDateString = (date) => {
 </script>
 
 <template>
-    <div class="bg-symph-900 rounded-lg z-0 h-full w-full shadow-xl">
+    <div class="z-0 h-full p-5 flex flex-row w-full justify-between gap-4" :class="borderClass">
+        <div class="flex flex-row">
+            <Link :href="userId ? route('profileUser.show', {id: userId}): route().current()" class="mr-3 z-0 flex-none relative">
+                <img :src="src" class="w-max h-12 rounded">
+            </Link>
+            <div class="flex flex-col">
+                <div class="flex flex-row items-start gap-2">
+                    <UserInfo
+                        :userId="post.user.id"
+                        :name="post.user.name"
+                        :username="post.user.username"
+                    />
+                    <FormatDatePost class="" :createdAt="createdAt" />
+                </div>
+                <p class="text-symph-100">{{post.content}}</p>
+                <div class="flex-row flex items-end text-sm gap-8 h-8">
+                    <slot name="likeButton"></slot>
+                </div>
+            </div>
+        </div>
+        <div v-if="post.song" class="md:pr-20 pr-0">
+            <PlayerAudio :song="post.song"></PlayerAudio>
+        </div>
             <!-- Contenu du post -->
-            <PostInfo :src="src" :userId="userId" :connect-line="connectLine" :date="formatDateDifference(createdAt)">
+<!--            <PostInfo :src="src" :userId="userId" :connect-line="connectLine" :date="formatDateDifference(createdAt)">
                 <template #name>
                     <slot name="name"></slot>
                 </template>
@@ -70,7 +109,7 @@ const formatDateString = (date) => {
             </div>
         <div class="flex-row flex gap-8 px-6 pt-5 pb-10">
             <slot name="likeButton"></slot>
-        </div>
+        </div>-->
     </div>
 </template>
 

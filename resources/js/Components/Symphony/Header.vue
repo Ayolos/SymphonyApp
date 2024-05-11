@@ -38,8 +38,8 @@ const logout = () => {
       </div>
       <div class="flex flex-row items-center gap-4">
         <Link :href="route('notifications.index')" class="relative">
-          <Icon class="text-3xl text-gray-500 hover:text-gray-400 hover:transition hover:scale-110 ease-in-out" icon="ic:twotone-notifications"></Icon>
-          <div class="absolute -right-1 text-xs w-max min-w-2 -top-1 bg-secondary px-1 rounded-full">{{ $page.props.unreadNotificationsNumber }}</div>
+          <Icon class="text-3xl text-gray-500 hover:text-gray-400 hover:transition hover:scale-110 ease-in-out" icon="mingcute:notification-line"></Icon>
+          <div class="absolute aspect-square -right-1.5 text-xs w-max min-w-2 flex items-center shadow-secondary shadow-xl -top-2 bg-secondary px-1.5 rounded-full">{{ $page.props.unreadNotificationsNumber }}</div>
         </Link>
         <Link :href="route('search.index')">
           <Icon class="text-2xl text-gray-500 hover:text-gray-400 hover:transition hover:scale-110 ease-in-out" icon="iconamoon:search-duotone"></Icon>

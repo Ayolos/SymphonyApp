@@ -23,7 +23,7 @@ const copyText = (text) => {
 
 <template>
   <button @click="copyText(copyText)" class="text-gray-300">
-    <Icon icon="solar:share-line-duotone" class="w-6 h-6" />
+    <Icon icon="solar:share-line-duotone" class="w-5 h-5" />
   </button>
 </template>
 

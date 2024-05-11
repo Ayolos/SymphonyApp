@@ -5,8 +5,8 @@
     </audio>
     <div>
       <svg
-          width="140"
-          height="140"
+          width="80"
+          height="80"
           viewBox="0 0 160 160"
           style="transform: rotate(-90deg);cursor: pointer;"
       >
@@ -33,8 +33,8 @@
       </svg>
     </div>
     <button class="play-pause-button" @click.prevent="togglePlayback">
-      <Icon v-if="!isPlaying" icon="carbon:play-filled" class="w-8 h-8 text-secondary" />
-      <Icon v-else icon="carbon:pause-filled" class="w-8 h-8" />
+      <Icon v-if="!isPlaying" icon="carbon:play-filled" class="w-6 h-6 text-secondary" />
+      <Icon v-else icon="carbon:pause-filled" class="w-6 h-6" />
     </button>
   </div>
   <div></div>
