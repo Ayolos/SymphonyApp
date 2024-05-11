@@ -33,6 +33,13 @@ class ProfileController extends Controller
             ->get();
 
         $user = User::find($id);
+
+        $trendingUsers = User::withCount('followers')
+            ->where('id', '!=', auth()->id())
+            ->orderByDesc('followers_count') // Trier par le plus grand nombre de followers
+            ->take(10) // Limiter à 10 résultats
+            ->get();
+
         return Inertia::render('Profile/ProfileApp', [
             'user' => $user,
             'posts' => $userPost,
@@ -40,6 +47,7 @@ class ProfileController extends Controller
             'likedPosts' => $user->likedPosts,
             'followers' => $user->followers,
             'followings' => $user->followings,
+            'trendingUsers' => $trendingUsers,
         ]);
     }
 }

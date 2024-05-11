@@ -5,7 +5,7 @@
         <template #trendingUsers>
             <div>
                 <!-- Afficher les utilisateurs tendance -->
-                <div v-for="trendingUser in trendingUsers" :key="trendingUser.id" class="flex flex-row gap-4 justify-between">
+                <div v-for="trendingUser in trendingUsers.slice(0, 10)" :key="trendingUser.id" class="flex flex-row gap-4 justify-between">
                     <div class="flex flex-row items-center pb-4 gap-4">
                         <img :src="trendingUser.profile_photo_url" class="w-12 h-12 rounded">
                         <div class="flex-col flex">

@@ -3,16 +3,42 @@
 import SymphonyLayout from "@/Layouts/SymphonyLayout.vue";
 
 import {ref, watch} from "vue";
-import {router, Link} from "@inertiajs/vue3";
+import {router, Link, useForm} from "@inertiajs/vue3";
 import PostInfo from "@/Components/Symphony/PostInfo.vue";
 import {Icon} from "@iconify/vue";
 
 defineProps({
   searchResults: Object,
+  trendingUsers: Array,
+  follower: Number,
+  following: Number,
 });
 
 const search = ref("");
 const isLoading = ref(false); // Loading state
+
+const formFollow = useForm({
+    following_id: null,
+});
+
+const toggleFollowing = async (trendingUser) => {
+    formFollow.following_id = trendingUser.id;
+    formFollow.post(route('user.follow'), {
+        preserveScroll: true,
+        onSuccess: () => {
+        }
+    })
+};
+
+const toggleUnFollow = async (trendingUser) => {
+    formFollow.following_id = trendingUser.id;
+    formFollow.delete(route('user.unfollow', {user: trendingUser.id}), {
+        preserveScroll: true,
+        onSuccess: () => {
+        }
+    })
+};
+
 
 watch(search, async (value) => {
   isLoading.value = true; // Set loading state to true when fetching starts
@@ -31,6 +57,29 @@ watch(search, async (value) => {
 
 <template>
   <SymphonyLayout>
+    <template #trendingUsers>
+        <div>
+            <!-- Afficher les utilisateurs tendance -->
+            <div v-for="trendingUser in trendingUsers" :key="trendingUser.id" class="flex flex-row gap-4 justify-between">
+                <div class="flex flex-row items-center pb-4 gap-4">
+                    <img :src="trendingUser.profile_photo_url" class="w-12 h-12 rounded">
+                    <div class="flex-col flex">
+                        <span class="text-gray-400">{{ trendingUser.name }}</span>
+                        <span class="text-gray-500 text-sm">@{{ trendingUser.username }}</span>
+                    </div>
+                </div>
+                <div class="flex flex-row items-center gap-4">
+                    <!-- Bouton qui change en fonction de l'état de suivi -->
+                    <form @submit.prevent="trendingUser.isFollowed ? toggleUnFollow(trendingUser) : toggleFollowing(trendingUser)">
+                        <button class="bg-symph-500 text-white rounded p-1 aspect-square">
+                            <Icon v-if="trendingUser.isFollowed" icon="material-symbols:check-indeterminate-small-rounded" class="w-6 h-6" />
+                            <Icon v-else icon="jam:plus" class="w-6 h-6" />
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </template>
     <div class="flex flex-col w-full px-2">
       <h1 class="text-3xl flex text-symph-100">Rechercher un utilisateur</h1>
       <div class="flex flex-col items-center mt-5">

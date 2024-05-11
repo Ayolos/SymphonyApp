@@ -25,9 +25,17 @@ class SearchController extends Controller
                 $searchResults = null;
             }
         }
+
+        $trendingUsers = $trendingUsers = User::withCount('followers')
+            ->where('id', '!=', auth()->id())
+            ->orderByDesc('followers_count') // Trier par le plus grand nombre de followers
+            ->take(10) // Limiter à 10 résultats
+            ->get();
+
         // Passe les résultats de la recherche à la vue
         return Inertia::render('Search', [
-            'searchResults' => $searchResults
+            'searchResults' => $searchResults,
+            'trendingUsers' => $trendingUsers,
         ]);
     }
 }

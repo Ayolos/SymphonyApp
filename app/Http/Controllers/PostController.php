@@ -19,7 +19,12 @@ class PostController extends Controller
         $posts = Post::orderBy('created_at', 'desc')
             ->get();
 
-        $trendingUsers = User::all();
+
+        $trendingUsers = User::withCount('followers')
+            ->where('id', '!=', auth()->id())
+            ->orderByDesc('followers_count') // Trier par le plus grand nombre de followers
+            ->take(10) // Limiter à 10 résultats
+            ->get();
 
         return Inertia::render('Feed', [
             'posts' => $posts,
