@@ -116,37 +116,39 @@ const toggleUnFollow = (trendingUser) => {
     </template>
     <template #postForm>
       <div>
-        <div class="w-full bg-symph-700 flex border-b pb-8 border-symph-500 flex-row rounded-t-2xl border-x border-t pl-8 pt-8">
-          <img :src="user.profile_photo_url" class="shadow-symph-500 shadow-2xl aspect-square h-48 rounded">
-          <div class="w-full h-max flex flex-col text-gray-500 pt-8 px-8">
-            <div class="flex flex-row gap-5 items-center justify-between">
-              <div class="">
-                <p class="font-bold text-lg">{{ user.name }}</p>
-                <p class="text-sm">@{{ user.username }}</p>
+        <div class="w-full bg-symph-700 flex gap-8 border-b pb-8 border-symph-500 sm:flex-row flex-col rounded-t-2xl border-x border-t px-8 pt-8">
+          <img :src="user.profile_photo_url" class="shadow-symph-500 aspect-square self-center sm:min-w-48 min-w-20 h-max rounded">
+          <div class="justify-between w-full flex flex-col text-gray-500 mr-8">
+              <div class="flex flex-col">
+                  <div class="flex flex-row gap-5 items-center justify-center sm:justify-between">
+                      <div class="">
+                          <p class="font-bold text-lg">{{ user.name }}</p>
+                          <p class="text-sm">@{{ user.username }}</p>
+                      </div>
+                      <div v-if="user.id !== $page.props.auth.user.id">
+                          <form v-if="user.isFollowed" @submit.prevent="toggleUnFollow(user)">
+                              <button type="submit" class="bg-red-900/70 hover:bg-red-900/40 text-symph-100 border border-red-500 rounded-lg p-2">
+                                  <Icon icon="line-md:person-off-twotone" class="text-2xl"></Icon>
+                              </button>
+                          </form>
+                          <form v-else @submit.prevent="toggleFollowing(user)">
+                              <button type="submit" class="bg-secondary-900/70 hover:bg-secondary-900/40 text-symph-100 border border-secondary rounded-lg p-2">
+                                  <Icon icon="line-md:person-add-twotone" class="text-2xl"></Icon>
+                              </button>
+                          </form>
+                      </div>
+                  </div>
+                  <div class="pt-6 break-all">
+                      <div class="text-sm">{{ user.description }}</div>
+                  </div>
               </div>
-                <div v-if="user.id !== $page.props.auth.user.id">
-                    <form v-if="user.isFollowed" @submit.prevent="toggleUnFollow(user)">
-                        <button type="submit" class="bg-red-900/70 hover:bg-red-900/40 text-symph-100 border border-red-500 rounded-lg p-2">
-                            <Icon icon="line-md:person-off-twotone" class="text-2xl"></Icon>
-                        </button>
-                    </form>
-                    <form v-else @submit.prevent="toggleFollowing(user)">
-                        <button type="submit" class="bg-secondary-900/70 hover:bg-secondary-900/40 text-symph-100 border border-secondary rounded-lg p-2">
-                            <Icon icon="line-md:person-add-twotone" class="text-2xl"></Icon>
-                        </button>
-                    </form>
-                </div>
-            </div>
-            <div class="pt-6 w-full">
-              <p class="text-sm text-ellipsis overflow-hidden w-80">{{ user.description }}</p>
-            </div>
-            <div class="flex flex-row gap-10 items-center-5 pt-6">
+            <div class="flex sm:flex-row gap-2 flex-col sm:gap-10 gap-2 items-center-5 pt-6">
               <div class="flex flex-row items-center gap-2">
                 <Icon class="w-6 h-6" icon="material-symbols-light:post-add"/>
                 <p class="text-sm font-light text-gray-700">{{ nbPosts }} Posts</p>
               </div>
               <div class="flex flex-row gap-2 items-center">
-                <Icon class="w-5 h-5" icon="iconoir:calendar"/>
+                <Icon class="min-w-5 h-5" icon="iconoir:calendar"/>
                 <p class="text-sm font-light text-gray-700">A rejoint <span
                     class="font-bold text-secondary">Symphony</span> le {{ dateFormater(user.created_at) }}</p>
               </div>
@@ -157,25 +159,25 @@ const toggleUnFollow = (trendingUser) => {
           <button @click="ManageShowFilter('post')" :class="showFilter === 'post' ? 'text-secondary' : ''" class="hover:bg-gray-900 rounded-bl-2xl font-black border-r border-gray-900 text-center basis-1/2 h-full p-5">
             <div class="flex flex-row gap-2 items-center justify-center">
               <Icon class="w-6 h-6" icon="material-symbols-light:post-outline-rounded"/>
-              <h1 class="text-md font-bold">Posts</h1>
+              <h1 class="text-md hidden sm:block font-bold">Posts</h1>
             </div>
           </button>
           <button @click="ManageShowFilter('like')" :class="showFilter === 'like' ? 'text-secondary' : ''" class="hover:bg-gray-900 font-black border-r border-gray-900 text-center basis-1/2 h-full p-5">
             <div class="flex flex-row gap-2 items-center justify-center">
               <Icon class="w-6 h-6" icon="icon-park-twotone:like"/>
-              <h1 class="text-md font-bold">J'aime</h1>
+              <h1 class="text-md hidden sm:block font-bold">J'aime</h1>
             </div>
           </button>
           <button @click="ManageShowFilter('followers')" :class="showFilter === 'followers' ? 'text-secondary' : ''" class="hover:bg-gray-900 font-black border-r border-gray-900 text-center basis-1/2 h-full p-5">
             <div class="flex flex-row gap-2 items-center justify-center">
               <Icon class="w-6 h-6" icon="solar:user-circle-bold-duotone"/>
-              <h1 class="text-md font-bold">Followers</h1>
+              <h1 class="text-md hidden sm:block font-bold">Followers</h1>
             </div>
           </button>
           <button @click="ManageShowFilter('followings')" :class="showFilter === 'followings' ? 'text-secondary' : ''" class="hover:bg-gray-900 rounded-br-2xl font-black text-center basis-1/2 h-full p-5">
             <div class="flex flex-row gap-2 items-center justify-center">
               <Icon class="w-6 h-6" icon="solar:user-circle-bold-duotone"/>
-              <h1 class="text-md font-bold">Followings</h1>
+              <h1 class="text-md hidden sm:block font-bold">Followings</h1>
             </div>
           </button>
         </div>

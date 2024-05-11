@@ -19,7 +19,7 @@ const linkToProfile = computed(() => {
 </script>
 
 <template>
-    <div class="flex flex-row gap-1 flex-wrap">
+    <div class="flex flex-row gap-1">
         <Link :href="linkToProfile">
             <h1 class="text-gray-100 font-bold truncate text-nowrap hover:underline">{{ name }}</h1>
         </Link>

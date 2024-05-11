@@ -7,13 +7,13 @@ import {computed} from "vue";
 </script>
 
 <template>
-    <div class="w-dvh h-dvh bg-symph-800">
+    <div class="w-dvh h-dvh bg-symph-800 overflow-x-auto">
         <Header class="h-[10vh]"></Header>
         <div>
             <AlertHandler/>
         </div>
-        <div class="flex flex-row lg:pr-10 pr-5 w-full h-[90vh]">
-            <div class="lg:px-10 px-5 flex-none flex flex-col gap-4 w-1/4">
+        <div class="flex flex-row lg:px-10 px-5 w-full h-[90vh]">
+            <div class="lg:pr-10 pr-5 flex-none lg:flex hidden flex-col gap-4 w-1/4">
                 <div v-if="$page.props.auth.user"
                      class="flex h-max flex-col items-center border border-symph-500 rounded-2xl justify-center">
                     <Link :href="route('profileUser.show', {id: $page.props.auth.user.id })"
@@ -42,12 +42,12 @@ import {computed} from "vue";
                         </div>
                     </div>
                 </div>
-                <div class="overflow-y-scroll h-full border border-symph-500 rounded-2xl pt-5 px-4 mb-4 w-full">
-                    <h1 class="text-white font-[900] text-xl pb-5 text-clip text-nowrap px-4">Vous aimeriez aussi...</h1>
+                <div class="overflow-y-scroll h-full border border-symph-500 rounded-2xl pt-5 px-4 mb-4 overflow-x-clip">
+                    <h1 class="text-white font-[900] text-xl pb-5 text-clip text-nowrap">Vous aimeriez aussi...</h1>
                     <slot name="trendingUsers"/>
                 </div>
             </div>
-            <div v-if="$page.props.auth.user" class="flex w-3/4 flex-col gap-5 h-full">
+            <div v-if="$page.props.auth.user" class="flex lg:w-3/4 w-full flex-col gap-5 h-full">
                 <slot name="postForm"></slot>
                 <slot name="profileButtons"></slot>
                 <div class="w-full min-h-max mb-4 rounded-2xl border border-symph-500 overflow-y-scroll">

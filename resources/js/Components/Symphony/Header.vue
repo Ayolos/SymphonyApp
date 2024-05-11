@@ -33,7 +33,7 @@ const logout = () => {
       <div class="flex flex-row items-center gap-4">
         <Link :href="route('posts.index')" class="flex flex-row items-center gap-2">
           <img :src="Logo" alt="img" class="h-12 rounded-lg">
-          <h1 class="text-3xl font-bold text-white hover:text-symph-100">SYMPHONY</h1>
+          <h1 class="text-3xl font-bold text-white hover:text-symph-100 hidden sm:block">SYMPHONY</h1>
         </Link>
       </div>
       <div class="flex flex-row items-center gap-4">
@@ -52,8 +52,8 @@ const logout = () => {
           </a>
         </div>
         <div v-else>
-          <div class="hidden sm:flex sm:items-center">
-            <div class="ms-3 relative">
+          <div class="flex sm:items-center">
+            <div class="relative">
               <!-- Teams Dropdown -->
               <Dropdown v-if="$page.props.jetstream.hasTeamFeatures" align="right" width="60">
                 <template #trigger>
@@ -152,6 +152,10 @@ const logout = () => {
                   <DropdownLink :href="route('profile.show')">
                     Profile
                   </DropdownLink>
+
+                    <DropdownLink :href="route('profileUser.show', {id: $page.props.auth.user.id})">
+                        Compte
+                    </DropdownLink>
 
                   <DropdownLink v-if="$page.props.jetstream.hasApiFeatures" :href="route('api-tokens.index')">
                     API Tokens

@@ -97,13 +97,13 @@ const togglePlayPause = () => {
             </div>
           </div>
         </div>
-        <div class="flex flex-col gap-3 justify-center items-center aspect-square p-5 h-full bg-symph-700 rounded-r-2xl">
+        <div class="flex flex-col gap-3 justify-center items-center md:aspect-square md:asp p-5 h-full bg-symph-700 rounded-r-2xl">
           <div class="relative bg-secondary p-4 rounded-lg hover:scale-110 shadow-secondary shadow-2xl hover:transition">
             <input id="fileInput" class="absolute inset-0 opacity-0 z-10" type="file" accept=".mp3" @change="onFileChange" required>
-            <Icon class="text-white" icon="mingcute:music-3-line" width="50"></Icon>
+            <Icon class="text-white md:w-16 w-6 h-full" icon="mingcute:music-3-line"></Icon>
           </div>
           <div class="">
-            <div class="flex flex-row items-center gap-4">
+            <div class="flex flex-row flex-wrap items-center gap-4">
               <div v-if="audioPreview">
                 <div class="flex flex-row gap-4">
                   <div class="rounded-full p-0.5 bg-green-500 w-max flex justify-center items-center">

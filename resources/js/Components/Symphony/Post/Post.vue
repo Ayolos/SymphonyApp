@@ -67,7 +67,7 @@ const formatDateString = (date) => {
 </script>
 
 <template>
-    <div class="z-0 h-full p-5 flex flex-row w-full justify-between gap-4" :class="borderClass">
+    <div class="z-0 h-full p-5 flex sm:flex-row flex-col w-full sm:justify-between justify-center gap-4" :class="borderClass">
         <div class="flex flex-row">
             <Link :href="userId ? route('profileUser.show', {id: userId}): route().current()" class="mr-3 z-0 flex-none relative">
                 <img :src="src" class="w-max h-12 rounded">
@@ -87,7 +87,7 @@ const formatDateString = (date) => {
                 </div>
             </div>
         </div>
-        <div v-if="post.song" class="md:pr-20 pr-0">
+        <div v-if="post.song" class="md:pr-20 w-max pr-0">
             <PlayerAudio :song="post.song"></PlayerAudio>
         </div>
             <!-- Contenu du post -->
