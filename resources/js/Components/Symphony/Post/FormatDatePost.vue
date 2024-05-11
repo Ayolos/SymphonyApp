@@ -18,6 +18,8 @@ const formatDateDiffrence = computed(() => {
 
     if (daysDifference >= 7) {
         return formatDateString(createdDate);
+    } else if (daysDifference >= 1) {
+        return `${daysDifference} j`;
     } else if (hoursDifference > 0) {
         return `${hoursDifference} h`;
     } else if (minutesDifference > 0) {

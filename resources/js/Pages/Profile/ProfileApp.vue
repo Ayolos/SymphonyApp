@@ -10,7 +10,7 @@ import PlayerAudio from "@/Components/Symphony/PlayerAudio.vue";
 import {useClipboard} from "@vueuse/core";
 import ShareButton from "@/Components/Symphony/Button/ShareButton.vue";
 import CounterMessage from "@/Components/Symphony/CounterMessage.vue";
-import UserInfo from "@/Components/Symphony/UserInfo.vue";
+import UserInfo from "@/Components/Symphony/UserCommentInfo.vue";
 import Alerts from "@/Components/Symphony/Alerts.vue";
 
 defineProps({

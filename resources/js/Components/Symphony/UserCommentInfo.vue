@@ -19,6 +19,8 @@ const formatDateDifference = (createdAt) => {
 
   if (daysDifference >= 7) {
     return formatDateString(createdDate);
+  } else if (daysDifference >= 1) {
+      return `${daysDifference} d`;
   } else if (hoursDifference > 0) {
     return `${hoursDifference} h`;
   } else if (minutesDifference > 0) {

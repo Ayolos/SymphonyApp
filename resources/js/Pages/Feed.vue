@@ -8,9 +8,10 @@
                 <div v-for="trendingUser in trendingUsers" :key="trendingUser.id" class="flex flex-row gap-4 justify-between">
                     <div class="flex flex-row items-center pb-4 gap-4">
                         <img :src="trendingUser.profile_photo_url" class="w-12 h-12 rounded">
-                        <div class="flex-col flex">
-                            <span class="text-gray-400">{{ trendingUser.name }}</span>
-                            <span class="text-gray-500 text-sm">@{{ trendingUser.username }}</span>
+                        <div class="flex-col flex truncate">
+                            <UserInfo :name="trendingUser.name"
+                                      :username="trendingUser.username"
+                            />
                         </div>
                     </div>
                     <div class="flex flex-row items-center gap-4">
@@ -60,7 +61,7 @@
                             <template #content>
                                 <div class="flex flex-col gap-2 px-8">
                                     <div class="flex flex-col gap-2">
-                                        <UserInfo :created_at="post.created_at" :name="post.user.name" :content="post.content" :username="post.user.username" :profile_src="post.user.profile_photo_url" />
+                                        <UserCommentInfo :created_at="post.created_at" :name="post.user.name" :content="post.content" :username="post.user.username" :profile_src="post.user.profile_photo_url" />
                                     </div>
                                     <div class="flex flex-row items-start gap-4 mt-8">
                                         <img :src="$page.props.auth.user.profile_photo_url" class="w-12 h-12 rounded">
@@ -101,7 +102,8 @@ import {useClipboard} from "@vueuse/core";
 import CounterMessage from "@/Components/Symphony/CounterMessage.vue";
 import Alerts from "@/Components/Symphony/Alerts.vue";
 import ShareButton from "@/Components/Symphony/Button/ShareButton.vue";
-import UserInfo from "@/Components/Symphony/UserInfo.vue";
+import UserInfo from "@/Components/Symphony/Post/UserInfo.vue";
+import UserCommentInfo from "@/Components/Symphony/UserCommentInfo.vue";
 
 defineProps({
     canLogin: Boolean,

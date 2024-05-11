@@ -9,7 +9,7 @@ import MainModal from "@/Components/Symphony/Modal/MainModal.vue";
 import {useClipboard} from '@vueuse/core'
 import ShareButton from "@/Components/Symphony/Button/ShareButton.vue";
 import CounterMessage from "@/Components/Symphony/CounterMessage.vue";
-import UserInfo from "@/Components/Symphony/UserInfo.vue";
+import UserInfo from "@/Components/Symphony/UserCommentInfo.vue";
 
 defineProps({
     post: Object,
