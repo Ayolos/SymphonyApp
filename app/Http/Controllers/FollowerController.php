@@ -15,19 +15,31 @@ class FollowerController extends Controller
         $request->validate([
             'following_id' => 'required | exists:users,id'
         ]);
-        $follower = new Follower;
-        $follower->user_id = $request->following_id;
-        $follower->follower_id = auth()->id();
-        $follower->save();
 
-        $following = User::find($request->following_id);
+        if(Follower::where('user_id', $request->following_id)
+            ->where('follower_id', auth()->id())
+            ->exists()){
+            request()->session()->flash('alert', [
+                'type' => 'error',
+                'message' => 'Vous suivez déjà cet utilisateur.',
+            ]);
+            return redirect()->back();
+        }else {
+            Follower::create([
+                'user_id' => $request->following_id,
+                'follower_id' => auth()->id()
+            ]);
+            $following = User::find($request->following_id);
 
-        $following->notify(new FollowNotification(auth()->user()->makeHidden(['followers', 'followings']), 'vous suit désormais.'));
+            $following->notify(new FollowNotification(auth()->user()->makeHidden(['followers', 'followings']), 'vous suit désormais.'));
 
-        request()->session()->flash('alert', [
-            'type' => 'success',
-            'message' => 'Vous suivez cet utilisateur.',
-        ]);
+            request()->session()->flash('alert', [
+                'type' => 'success',
+                'message' => 'Vous suivez cet utilisateur.',
+            ]);
+
+            return redirect()->back();
+        }
     }
 
     public function unfollow(Request $request){
@@ -37,15 +49,26 @@ class FollowerController extends Controller
         $follower = Follower::where('user_id', $request->following_id)
             ->where('follower_id', auth()->id())
             ->first();
-        $follower->delete();
 
-        $following = User::find($request->following_id);
+        if(!$follower){
+            request()->session()->flash('alert', [
+                'type' => 'error',
+                'message' => 'Vous ne suivez pas cet utilisateur.',
+            ]);
+            return redirect()->back();
+        }else {
+            $follower->delete();
 
-        $following->notify(new FollowNotification(auth()->user()->makeHidden(['followers', 'followings']), 'ne vous suit plus.'));
+            $following = User::find($request->following_id);
 
-        request()->session()->flash('alert', [
-            'type' => 'success',
-            'message' => 'Vous ne suivez plus cet utilisateur.',
-        ]);
+            $following->notify(new FollowNotification(auth()->user()->makeHidden(['followers', 'followings']), 'ne vous suit plus.'));
+
+            request()->session()->flash('alert', [
+                'type' => 'success',
+                'message' => 'Vous ne suivez plus cet utilisateur.',
+            ]);
+
+            return redirect()->back();
+        }
     }
 }

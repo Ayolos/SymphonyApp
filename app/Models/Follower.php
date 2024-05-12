@@ -9,6 +9,7 @@ class Follower extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['user_id', 'follower_id'];
     protected $appends = ['nbFollower', 'nbFollowing', 'isFollowed'];
 
     public function getIsFollowedAttribute()
