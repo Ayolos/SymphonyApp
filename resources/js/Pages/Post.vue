@@ -86,7 +86,6 @@ const submitComment = (postId) => {
                                 Ajouter un commentaire
                             </template>
                             <template #content>
-                                <div class="flex flex-col gap-2 px-8">
                                     <div class="flex flex-col gap-2">
                                         <UserInfo :created_at="post.created_at" :name="post.user.name" :content="post.content" :username="post.user.username" :profile_src="post.user.profile_photo_url" />
                                     </div>
@@ -97,8 +96,7 @@ const submitComment = (postId) => {
                                             <CounterMessage class="text-symph-100 w-full text-end" :message="formComment.content" :max-characters="255" />
                                         </div>
                                     </div>
-                                    <button class="bg-secondary-500 text-white rounded-lg px-4 py-2 mt-3">Envoyer</button>
-                                </div>
+                                <button class="bg-secondary/20 hover:bg-secondary/40 border border-secondary text-white rounded-md px-4 py-2 mt-3">Envoyer</button>
                             </template>
                         </MainModal>
                         <h1 class="text-md text-symph-200 font-bold">{{ post.nbComments }}</h1>
@@ -135,7 +133,6 @@ const submitComment = (postId) => {
                                         Ajouter un commentaire
                                     </template>
                                     <template #content>
-                                        <div class="flex flex-col gap-2 px-8">
                                             <div class="flex flex-col gap-2">
                                                 <UserInfo :created_at="comment.created_at" :name="comment.user.name" :content="comment.content" :username="comment.user.username" :profile_src="comment.user.profile_photo_url" />
                                             </div>
@@ -146,8 +143,7 @@ const submitComment = (postId) => {
                                                     <CounterMessage class="text-symph-100 w-full text-end" :message="formReply.content" :max-characters="255" />
                                                 </div>
                                             </div>
-                                            <button class="bg-secondary-500 text-white rounded-lg px-4 py-2 mt-3">Envoyer</button>
-                                        </div>
+                                        <button class="bg-secondary/20 hover:bg-secondary/40 border border-secondary text-white rounded-md px-4 py-2 mt-3">Envoyer</button>
                                     </template>
                                 </MainModal>
                                 <h1 class="text-md text-symph-200 font-bold">{{ comment.nbReplies }}</h1>
@@ -185,7 +181,6 @@ const submitComment = (postId) => {
                                             Ajouter un commentaire
                                         </template>
                                         <template #content>
-                                            <div class="flex flex-col gap-2 px-8">
                                                 <div class="flex flex-col gap-2">
                                                     <UserInfo :created_at="reply.created_at" :name="reply.user.name" :content="reply.content" :username="reply.user.username" :profile_src="reply.user.profile_photo_url" />
                                                 </div>
@@ -196,8 +191,7 @@ const submitComment = (postId) => {
                                                         <CounterMessage class="text-symph-100 w-full text-end" :message="formReply.content" :max-characters="255" />
                                                     </div>
                                                 </div>
-                                                <button class="bg-secondary-500 text-white rounded-lg px-4 py-2 mt-3">Envoyer</button>
-                                            </div>
+                                            <button class="bg-secondary/20 hover:bg-secondary/40 border border-secondary text-white rounded-md px-4 py-2 mt-3">Envoyer</button>
                                         </template>
                                     </MainModal>
                                     <h1 class="text-md text-symph-200 font-bold">{{ reply.nbComments }}</h1>

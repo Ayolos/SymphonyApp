@@ -82,7 +82,7 @@ const formatDateString = (date) => {
                     <FormatDatePost class="" :createdAt="createdAt" />
                 </div>
                 <p class="text-symph-100">{{post.content}}</p>
-                <div class="flex-row flex items-end text-sm gap-8 h-8">
+                <div class="flex-row flex items-end text-sm sm:gap-8 gap-4 h-8">
                     <slot name="likeButton"></slot>
                 </div>
             </div>

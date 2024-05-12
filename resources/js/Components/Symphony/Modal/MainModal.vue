@@ -36,7 +36,7 @@ const handleSubmit = () => {
           leave-to-class="opacity-0"
       >
         <div v-if="showModal" class="fixed flex justify-center items-center inset-0 bg-black/50 z-50">
-            <div class="bg-symph-900 w-1/2 h-max rounded-lg">
+            <div class="bg-symph-900 sm:w-1/2 w-full mx-2 h-max rounded-lg">
                 <div class="flex flex-row justify-between px-8 py-6 bg-symph-700 rounded-t-lg text-symph-400 shadow-lg">
                     <div>
                         <h1 class="font-semibold text-lg">
@@ -51,7 +51,9 @@ const handleSubmit = () => {
                 </div>
                     <div class="py-8">
                         <form @submit.prevent="handleSubmit">
-                            <slot name="content"></slot>
+                            <div class="flex flex-col gap-2 px-8">
+                                <slot name="content"></slot>
+                            </div>
                         </form>
                     </div>
             </div>

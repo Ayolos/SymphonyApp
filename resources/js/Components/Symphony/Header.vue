@@ -161,7 +161,7 @@ const logout = () => {
                     API Tokens
                   </DropdownLink>
 
-                  <div class="border-t border-gray-200"/>
+                  <div class="border-t border-symph-500"/>
 
                   <!-- Authentication -->
                   <form @submit.prevent="logout">

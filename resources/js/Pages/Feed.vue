@@ -3,26 +3,28 @@
     <Head title="Feed" />
     <SymphonyLayout :isLogin="canLogin">
         <template #trendingUsers>
-            <div>
-                <!-- Afficher les utilisateurs tendance -->
-                <div v-for="trendingUser in trendingUsers" :key="trendingUser.id" class="flex flex-row gap-4 justify-between">
-                    <div class="flex flex-row items-center pb-4 gap-4">
-                        <img :src="trendingUser.profile_photo_url" class="w-12 h-12 rounded">
-                        <div class="flex-col flex truncate">
-                            <UserInfo :name="trendingUser.name"
-                                      :username="trendingUser.username"
-                            />
-                        </div>
+            <div v-for="trendingUser in trendingUsers" :key="trendingUser.id" class="flex w-full flex-row mb-4 items-center gap-4 justify-between">
+                <div class="flex flex-row items-center gap-4 w-3/4">
+                    <img :src="trendingUser.profile_photo_url" class="w-12 h-12 rounded">
+                    <div class="flex-col flex">
+                        <Tooltip>
+                            <template #button>
+                                <UserInfo class="overflow-hidden w-32" :name="trendingUser.name" :username="trendingUser.username" />
+                            </template>
+                            <template #content>
+                                <UserInfo :name="trendingUser.name" :username="trendingUser.username" />
+                            </template>
+                        </Tooltip>
                     </div>
-                    <div class="flex flex-row items-center gap-4">
-                        <!-- Bouton qui change en fonction de l'état de suivi -->
-                        <form @submit.prevent="trendingUser.isFollowed ? toggleUnFollow(trendingUser) : toggleFollowing(trendingUser)">
-                            <button class="bg-symph-500 text-white rounded p-1 aspect-square">
-                              <Icon v-if="trendingUser.isFollowed" icon="material-symbols:check-indeterminate-small-rounded" class="w-6 h-6" />
-                              <Icon v-else icon="jam:plus" class="w-6 h-6" />
-                            </button>
-                        </form>
-                    </div>
+                </div>
+                <div class="flex flex-row items-center gap-4">
+                    <!-- Bouton qui change en fonction de l'état de suivi -->
+                    <form @submit.prevent="trendingUser.isFollowed ? toggleUnFollow(trendingUser) : toggleFollowing(trendingUser)">
+                        <button class="bg-symph-500 text-white rounded-full p-1 aspect-square">
+                            <Icon v-if="trendingUser.isFollowed" icon="material-symbols:check-indeterminate-small-rounded" class="w-6 h-6" />
+                            <Icon v-else icon="jam:plus" class="w-6 h-6" />
+                        </button>
+                    </form>
                 </div>
             </div>
         </template>
@@ -59,7 +61,6 @@
                                 Ajouter un commentaire
                             </template>
                             <template #content>
-                                <div class="flex flex-col gap-2 px-8">
                                     <div class="flex flex-col gap-2">
                                         <UserCommentInfo :created_at="post.created_at" :name="post.user.name" :content="post.content" :username="post.user.username" :profile_src="post.user.profile_photo_url" />
                                     </div>
@@ -70,8 +71,7 @@
                                             <CounterMessage class="text-symph-100 w-full text-end" :message="formComment.content" :max-characters="255" />
                                         </div>
                                     </div>
-                                    <button class="bg-secondary-500 text-white rounded-lg px-4 py-2 mt-3">Envoyer</button>
-                                </div>
+                                    <button class="bg-secondary/20 hover:bg-secondary/40 border border-secondary text-white rounded-md px-4 py-2 mt-3">Envoyer</button>
                             </template>
                         </MainModal>
                         <h1 class="text-md text-symph-200 font-bold">{{ post.nbComments }}</h1>
@@ -104,6 +104,7 @@ import Alerts from "@/Components/Symphony/Alerts.vue";
 import ShareButton from "@/Components/Symphony/Button/ShareButton.vue";
 import UserInfo from "@/Components/Symphony/Post/UserInfo.vue";
 import UserCommentInfo from "@/Components/Symphony/UserCommentInfo.vue";
+import Tooltip from "@/Components/Symphony/Tooltip.vue";
 
 defineProps({
     canLogin: Boolean,

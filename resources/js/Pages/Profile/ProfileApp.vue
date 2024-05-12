@@ -10,8 +10,10 @@ import PlayerAudio from "@/Components/Symphony/PlayerAudio.vue";
 import {useClipboard} from "@vueuse/core";
 import ShareButton from "@/Components/Symphony/Button/ShareButton.vue";
 import CounterMessage from "@/Components/Symphony/CounterMessage.vue";
-import UserInfo from "@/Components/Symphony/UserCommentInfo.vue";
+import UserInfo from "@/Components/Symphony/Post/UserInfo.vue";
+import UserCommentInfo from "@/Components/Symphony/UserCommentInfo.vue";
 import Alerts from "@/Components/Symphony/Alerts.vue";
+import Tooltip from "@/Components/Symphony/Tooltip.vue";
 
 defineProps({
   posts: Object,
@@ -92,25 +94,28 @@ const toggleUnFollow = (trendingUser) => {
 <template>
   <SymphonyLayout>
     <template #trendingUsers>
-        <div>
-            <!-- Afficher les utilisateurs tendance -->
-            <div v-for="trendingUser in trendingUsers.slice(0, 10)" :key="trendingUser.id" class="flex flex-row gap-4 justify-between">
-                <div class="flex flex-row items-center pb-4 gap-4">
-                    <img :src="trendingUser.profile_photo_url" class="w-12 h-12 rounded">
-                    <div class="flex-col flex">
-                        <span class="text-gray-400">{{ trendingUser.name }}</span>
-                        <span class="text-gray-500 text-sm">@{{ trendingUser.username }}</span>
-                    </div>
+        <div v-for="trendingUser in trendingUsers" :key="trendingUser.id" class="flex w-full flex-row mb-4 items-center gap-4 justify-between">
+            <div class="flex flex-row items-center gap-4 w-3/4">
+                <img :src="trendingUser.profile_photo_url" class="w-12 h-12 rounded">
+                <div class="flex-col flex">
+                    <Tooltip>
+                        <template #button>
+                            <UserInfo class="overflow-hidden w-32" :name="trendingUser.name" :username="trendingUser.username" />
+                        </template>
+                        <template #content>
+                            <UserInfo :name="trendingUser.name" :username="trendingUser.username" />
+                        </template>
+                    </Tooltip>
                 </div>
-                <div class="flex flex-row items-center gap-4">
-                    <!-- Bouton qui change en fonction de l'état de suivi -->
-                    <form @submit.prevent="trendingUser.isFollowed ? toggleUnFollow(trendingUser) : toggleFollowing(trendingUser)">
-                        <button class="bg-symph-500 text-white rounded p-1 aspect-square">
-                            <Icon v-if="trendingUser.isFollowed" icon="material-symbols:check-indeterminate-small-rounded" class="w-6 h-6" />
-                            <Icon v-else icon="jam:plus" class="w-6 h-6" />
-                        </button>
-                    </form>
-                </div>
+            </div>
+            <div class="flex flex-row items-center gap-4">
+                <!-- Bouton qui change en fonction de l'état de suivi -->
+                <form @submit.prevent="trendingUser.isFollowed ? toggleUnFollow(trendingUser) : toggleFollowing(trendingUser)">
+                    <button class="bg-symph-500 text-white rounded-full p-1 aspect-square">
+                        <Icon v-if="trendingUser.isFollowed" icon="material-symbols:check-indeterminate-small-rounded" class="w-6 h-6" />
+                        <Icon v-else icon="jam:plus" class="w-6 h-6" />
+                    </button>
+                </form>
             </div>
         </div>
     </template>
@@ -120,7 +125,7 @@ const toggleUnFollow = (trendingUser) => {
           <img :src="user.profile_photo_url" class="shadow-symph-500 aspect-square self-center sm:min-w-48 min-w-20 h-max rounded">
           <div class="justify-between w-full flex flex-col text-gray-500 mr-8">
               <div class="flex flex-col">
-                  <div class="flex flex-row gap-5 items-center justify-center sm:justify-between">
+                  <div class="flex flex-row gap-5 items-center justify-between">
                       <div class="">
                           <p class="font-bold text-lg">{{ user.name }}</p>
                           <p class="text-sm">@{{ user.username }}</p>
@@ -138,7 +143,7 @@ const toggleUnFollow = (trendingUser) => {
                           </form>
                       </div>
                   </div>
-                  <div class="pt-6 break-all">
+                  <div class="pt-6 break-all ">
                       <div class="text-sm">{{ user.description }}</div>
                   </div>
               </div>
@@ -148,7 +153,7 @@ const toggleUnFollow = (trendingUser) => {
                 <p class="text-sm font-light text-gray-700">{{ nbPosts }} Posts</p>
               </div>
               <div class="flex flex-row gap-2 items-center">
-                <Icon class="min-w-5 h-5" icon="iconoir:calendar"/>
+                <Icon class="min-w-6 h-6" icon="iconoir:calendar"/>
                 <p class="text-sm font-light text-gray-700">A rejoint <span
                     class="font-bold text-secondary">Symphony</span> le {{ dateFormater(user.created_at) }}</p>
               </div>
@@ -213,9 +218,8 @@ const toggleUnFollow = (trendingUser) => {
                               Ajouter un commentaire
                           </template>
                           <template #content>
-                              <div class="flex flex-col gap-2 px-8">
                                   <div class="flex flex-col gap-2">
-                                      <UserInfo :created_at="post.created_at" :name="post.user.name" :content="post.content" :username="post.user.username" :profile_src="post.user.profile_photo_url" />
+                                      <UserCommentInfo :created_at="post.created_at" :name="post.user.name" :content="post.content" :username="post.user.username" :profile_src="post.user.profile_photo_url" />
                                   </div>
                                   <div class="flex flex-row items-start gap-4 mt-8">
                                       <img :src="$page.props.auth.user.profile_photo_url" class="w-12 h-12 rounded">
@@ -224,8 +228,7 @@ const toggleUnFollow = (trendingUser) => {
                                           <CounterMessage class="text-symph-100 w-full text-end" :message="formComment.content" :max-characters="255" />
                                       </div>
                                   </div>
-                                  <button class="bg-secondary-500 text-white rounded-lg px-4 py-2 mt-3">Envoyer</button>
-                              </div>
+                                  <button class="bg-secondary/20 hover:bg-secondary/40 border border-secondary text-white rounded-md px-4 py-2 mt-3">Envoyer</button>
                           </template>
                       </MainModal>
                       <h1 class="text-md text-symph-200 font-bold">{{ post.nbComments }}</h1>
@@ -240,7 +243,7 @@ const toggleUnFollow = (trendingUser) => {
       <div v-else>
         <div class="flex flex-col text-symph-300 items-center justify-center py-20">
           <Icon class="w-48 h-48" icon="line-md:cancel-twotone"/>
-          <h1 class="text-3xl font-bold">Aucun post pour le moment</h1>
+          <h1 class="text-3xl text-center font-bold">Aucun post pour le moment</h1>
         </div>
       </div>
     </div>
@@ -274,9 +277,8 @@ const toggleUnFollow = (trendingUser) => {
                               Ajouter un commentaire
                           </template>
                           <template #content>
-                              <div class="flex flex-col gap-2 px-8">
                                   <div class="flex flex-col gap-2">
-                                      <UserInfo :created_at="post.created_at" :name="post.user.name" :content="post.content" :username="post.user.username" :profile_src="post.user.profile_photo_url" />
+                                      <UserCommentInfo :created_at="post.created_at" :name="post.user.name" :content="post.content" :username="post.user.username" :profile_src="post.user.profile_photo_url" />
                                   </div>
                                   <div class="flex flex-row items-start gap-4 mt-8">
                                       <img :src="$page.props.auth.user.profile_photo_url" class="w-12 h-12 rounded">
@@ -285,8 +287,7 @@ const toggleUnFollow = (trendingUser) => {
                                           <CounterMessage class="text-symph-100 w-full text-end" :message="formComment.content" :max-characters="255" />
                                       </div>
                                   </div>
-                                  <button class="bg-secondary-500 text-white rounded-lg px-4 py-2 mt-3">Envoyer</button>
-                              </div>
+                                  <button class="bg-secondary/20 hover:bg-secondary/40 border border-secondary text-white rounded-md px-4 py-2 mt-3">Envoyer</button>
                           </template>
                       </MainModal>
                       <h1 class="text-md text-symph-200 font-bold">{{ post.nbComments }}</h1>
@@ -301,7 +302,7 @@ const toggleUnFollow = (trendingUser) => {
       <div v-else>
         <div class="flex flex-col text-symph-300 items-center justify-center py-20">
           <Icon class="w-48 h-48" icon="line-md:person-off-twotone-loop"/>
-          <h1 class="text-3xl font-bold">Aucun post liké pour le moment</h1>
+          <h1 class="text-3xl text-center font-bold">Aucun post liké pour le moment</h1>
         </div>
       </div>
     </div>
@@ -321,7 +322,7 @@ const toggleUnFollow = (trendingUser) => {
       </div>
       <div v-else class="flex flex-col items-center py-20">
         <Icon icon="line-md:alert-circle-twotone-loop" class="w-48 h-48 text-gray-500"/>
-        <h1 class="text-gray-600 text-3xl font-bold truncate text-nowrap">Aucun résultat</h1>
+        <h1 class="text-gray-600 text-3xl text-center font-bold truncate text-nowrap">Aucun résultat</h1>
       </div>
     </div>
     <div v-else-if="showFilter === 'followings'" class="flex-col flex gap-2">
@@ -340,7 +341,7 @@ const toggleUnFollow = (trendingUser) => {
       </div>
       <div v-else class="flex flex-col items-center py-20">
         <Icon icon="line-md:alert-circle-twotone-loop" class="w-48 h-48 text-gray-500"/>
-        <h1 class="text-gray-600 text-3xl font-bold truncate text-nowrap">Aucun résultat</h1>
+        <h1 class="text-gray-600 text-3xl text-center font-bold truncate text-nowrap">Aucun résultat</h1>
       </div>
     </div>
   </SymphonyLayout>

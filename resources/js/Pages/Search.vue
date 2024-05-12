@@ -6,6 +6,8 @@ import {ref, watch} from "vue";
 import {router, Link, useForm} from "@inertiajs/vue3";
 import PostInfo from "@/Components/Symphony/PostInfo.vue";
 import {Icon} from "@iconify/vue";
+import Tooltip from "@/Components/Symphony/Tooltip.vue";
+import UserInfo from "@/Components/Symphony/Post/UserInfo.vue";
 
 defineProps({
   searchResults: Object,
@@ -58,25 +60,28 @@ watch(search, async (value) => {
 <template>
   <SymphonyLayout>
     <template #trendingUsers>
-        <div>
-            <!-- Afficher les utilisateurs tendance -->
-            <div v-for="trendingUser in trendingUsers" :key="trendingUser.id" class="flex flex-row gap-4 justify-between">
-                <div class="flex flex-row items-center pb-4 gap-4">
-                    <img :src="trendingUser.profile_photo_url" class="w-12 h-12 rounded">
-                    <div class="flex-col flex">
-                        <span class="text-gray-400">{{ trendingUser.name }}</span>
-                        <span class="text-gray-500 text-sm">@{{ trendingUser.username }}</span>
-                    </div>
+        <div v-for="trendingUser in trendingUsers" :key="trendingUser.id" class="flex w-full flex-row mb-4 items-center gap-4 justify-between">
+            <div class="flex flex-row items-center gap-4 w-3/4">
+                <img :src="trendingUser.profile_photo_url" class="w-12 h-12 rounded">
+                <div class="flex-col flex">
+                    <Tooltip>
+                        <template #button>
+                            <UserInfo class="overflow-hidden w-32" :name="trendingUser.name" :username="trendingUser.username" />
+                        </template>
+                        <template #content>
+                            <UserInfo :name="trendingUser.name" :username="trendingUser.username" />
+                        </template>
+                    </Tooltip>
                 </div>
-                <div class="flex flex-row items-center gap-4">
-                    <!-- Bouton qui change en fonction de l'état de suivi -->
-                    <form @submit.prevent="trendingUser.isFollowed ? toggleUnFollow(trendingUser) : toggleFollowing(trendingUser)">
-                        <button class="bg-symph-500 text-white rounded p-1 aspect-square">
-                            <Icon v-if="trendingUser.isFollowed" icon="material-symbols:check-indeterminate-small-rounded" class="w-6 h-6" />
-                            <Icon v-else icon="jam:plus" class="w-6 h-6" />
-                        </button>
-                    </form>
-                </div>
+            </div>
+            <div class="flex flex-row items-center gap-4">
+                <!-- Bouton qui change en fonction de l'état de suivi -->
+                <form @submit.prevent="trendingUser.isFollowed ? toggleUnFollow(trendingUser) : toggleFollowing(trendingUser)">
+                    <button class="bg-symph-500 text-white rounded-full p-1 aspect-square">
+                        <Icon v-if="trendingUser.isFollowed" icon="material-symbols:check-indeterminate-small-rounded" class="w-6 h-6" />
+                        <Icon v-else icon="jam:plus" class="w-6 h-6" />
+                    </button>
+                </form>
             </div>
         </div>
     </template>
