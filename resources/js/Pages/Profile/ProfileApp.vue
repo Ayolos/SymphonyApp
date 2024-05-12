@@ -99,11 +99,11 @@ const toggleUnFollow = (trendingUser) => {
                     <div class="flex-col flex">
                         <Tooltip>
                             <template #button>
-                                <UserInfo :name="trendingUser.name" :username="trendingUser.username"
+                                <UserInfo :name="trendingUser.name" :username="trendingUser.username" :user-id="trendingUser.id"
                                           class="overflow-hidden w-32"/>
                             </template>
                             <template #content>
-                                <UserInfo :name="trendingUser.name" :username="trendingUser.username"/>
+                                <UserInfo :name="trendingUser.name" :username="trendingUser.username" :user-id="trendingUser.id"/>
                             </template>
                         </Tooltip>
                     </div>
@@ -275,7 +275,7 @@ const toggleUnFollow = (trendingUser) => {
             </div>
         </div>
         <div v-else-if="showFilter === 'like'">
-            <div v-for="post in likedPosts" v-if="likedPosts.length !== 0" :key="post.id">
+            <div v-for="post in likedPosts" v-if="likedPosts.length !== 0 && likedPosts" :key="post.id">
                 <Post
                     :connectLine="false"
                     :createdAt="post.created_at"

@@ -10,10 +10,14 @@
                         <Tooltip>
                             <template #button>
                                 <UserInfo :name="trendingUser.name" :username="trendingUser.username"
-                                          class="overflow-hidden w-32"/>
+                                          class="overflow-hidden w-32"
+                                          :userId="trendingUser.id"
+                                />
                             </template>
                             <template #content>
-                                <UserInfo :name="trendingUser.name" :username="trendingUser.username"/>
+                                <UserInfo :name="trendingUser.name" :username="trendingUser.username"
+                                          :userId="trendingUser.id"
+                                />
                             </template>
                         </Tooltip>
                     </div>
@@ -35,7 +39,6 @@
             <PostForm></PostForm>
         </template>
         <div v-for="post in posts" v-if="posts.length > 0" :key="post.id">
-            <!--:href="route('posts.show', {id: post.id})"-->
             <Post
                 :connectLine="false"
                 :createdAt="post.created_at"

@@ -66,11 +66,11 @@ const submitComment = (postId) => {
                     <div class="flex-col flex">
                         <Tooltip>
                             <template #button>
-                                <UserInfo :name="trendingUser.name" :username="trendingUser.username"
+                                <UserInfo :name="trendingUser.name" :username="trendingUser.username" :user-id="trendingUser.id"
                                           class="overflow-hidden w-32"/>
                             </template>
                             <template #content>
-                                <UserInfo :name="trendingUser.name" :username="trendingUser.username"/>
+                                <UserInfo :name="trendingUser.name" :username="trendingUser.username" :user-id="trendingUser.id"/>
                             </template>
                         </Tooltip>
                     </div>
