@@ -7,10 +7,9 @@
                 <div class="flex justify-between items-center pb-3">
                     <p class="text-2xl font-bold">Add comment</p>
                     <div class="modal-close cursor-pointer z-50">
-                        <svg class="fill-current text-black" height="18" viewBox="0 0 18 18"
-                             width="18" xmlns="http://www.w3.org/2000/svg" @click="$emit('close')">
+                        <svg @click="$emit('close')" class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
                             <path
-                                d="M18 1.46L16.54 0 9 7.54 1.46 0 0 1.46 7.54 9 0 16.54 1.46 18 9 10.46 16.54 18 18 16.54 10.46 9 18 1.46z"/>
+                                d="M18 1.46L16.54 0 9 7.54 1.46 0 0 1.46 7.54 9 0 16.54 1.46 18 9 10.46 16.54 18 18 16.54 10.46 9 18 1.46z" />
                         </svg>
                     </div>
                 </div>

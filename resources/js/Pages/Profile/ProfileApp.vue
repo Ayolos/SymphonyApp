@@ -116,7 +116,7 @@ const toggleUnFollow = (trendingUser) => {
                 <div
                     class="w-full bg-symph-700 flex gap-8 border-b pb-8 border-symph-500 sm:flex-row flex-col rounded-t-2xl border-x border-t px-8 pt-8">
                     <img alt="user profile image" :src="user.profile_photo_url"
-                         class="shadow-symph-500 aspect-square self-center sm:min-w-48 min-w-20 h-max rounded">
+                         class="shadow-symph-500 aspect-square self-center sm:min-w-48 min-w-20 max-w-48 h-max rounded">
                     <div class="justify-between w-full flex flex-col text-gray-500 mr-8">
                         <div class="flex flex-col">
                             <div class="flex flex-row gap-5 items-center justify-between">
