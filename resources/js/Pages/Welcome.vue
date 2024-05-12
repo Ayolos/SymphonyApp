@@ -1,12 +1,13 @@
 <script setup>
 import {Head, router, useForm, Link} from '@inertiajs/vue3';
+import Logo from '/public/Logo.png'
 
 </script>
 
 <template>
     <div class="flex flex-col items-center justify-center min-h-screen bg-symph-900">
         <div class="max-w-md w-full p-6 bg-symph-700 shadow rounded-lg shadow-md">
-            <img src="logo.png" alt="Logo" class="mx-auto mb-8" style="width: 100px;">
+            <img :src="Logo" alt="Logo" class="mx-auto mb-8" style="width: 100px;">
             <Link :href="route('login')">
                 <p class="text-center w-full border-2 border-secondary-400 rounded-md hover:bg-symph-900 text-secondary-500 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-4">
                     Se connecter
