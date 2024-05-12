@@ -87,8 +87,16 @@ class PostController extends Controller
     public function show($id)
     {
         $post = Post::find($id);
+
+        $trendingUsers = User::withCount('followers')
+            ->where('id', '!=', auth()->id())
+            ->orderByDesc('followers_count') // Trier par le plus grand nombre de followers
+            ->take(10) // Limiter à 10 résultats
+            ->get();
+
         return Inertia::render('Post', [
-            'post' => $post
+            'post' => $post,
+            'trendingUsers' => $trendingUsers
         ]);
     }
 

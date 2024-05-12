@@ -26,7 +26,7 @@ const submit = () => {
 
     <AuthenticationCard>
         <template #logo>
-          <img :src="Logo" alt="Logo" class="w-24" />
+          <AuthenticationCardLogo />
         </template>
 
         <div class="mb-4 text-sm text-gray-600">

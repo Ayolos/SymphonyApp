@@ -31,7 +31,7 @@
         <template #postForm>
             <PostForm></PostForm>
         </template>
-        <div v-for="post in posts" :key="post.id">
+        <div v-if="posts.length > 0" v-for="post in posts" :key="post.id">
             <!--:href="route('posts.show', {id: post.id})"-->
             <Post
                 :post="post"
@@ -82,6 +82,12 @@
                     </div>
                 </template>
             </Post>
+        </div>
+        <div v-else>
+            <div class="flex flex-col items-center justify-center w-full h-full py-20">
+                <Icon icon="line-md:alert-circle-twotone-loop" class="w-48 h-48 text-gray-500"/>
+                <h1 class="text-2xl text-symph-200 font-bold">Aucun post trouvé</h1>
+            </div>
         </div>
     </SymphonyLayout>
 </template>
