@@ -20,7 +20,7 @@ const copyText = (text) => {
 </script>
 
 <template>
-    <button class="text-gray-300" @click="copyText(copyText)">
+    <button class="text-gray-300" @click="copyText(props.copyText)">
         <Icon class="w-5 h-5" icon="solar:share-line-duotone"/>
     </button>
 </template>

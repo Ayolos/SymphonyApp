@@ -34,7 +34,8 @@ const formComment = useForm({
 const formFollow = useForm({
     following_id: null,
 });
-const submitComment = () => {
+const submitComment = (postId) => {
+    formComment.post_id = postId;
     formComment.post(route('comments.store'), {
         preserveScroll: true,
         onSuccess: () => {
