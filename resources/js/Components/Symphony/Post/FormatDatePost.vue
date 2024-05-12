@@ -41,7 +41,7 @@ const formatDateString = (date) => {
 <template>
     <div class="text-symph-400 flex flex-row gap-2">
         <span>⸱</span>
-        <span>{{ formatDateDiffrence }}</span>
+        <span class="text-nowrap">{{ formatDateDiffrence }}</span>
     </div>
 </template>
 
