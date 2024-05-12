@@ -1,23 +1,23 @@
 <script setup>
-import { ref, watch, defineProps } from "vue";
+import {defineProps, ref, watch} from "vue";
 
 const props = defineProps({
-  message: {
-    type: String,
-    default: ''
-  },
-  maxCharacters: Number,
+    message: {
+        type: String,
+        default: ''
+    },
+    maxCharacters: Number,
 });
 
 const nbrCharacters = ref(0);
 
 watch(() => props.message, () => {
-  nbrCharacters.value = props.message.length;
+    nbrCharacters.value = props.message.length;
 });
 </script>
 
 <template>
-  <p class="text-sm text-nowrap">{{nbrCharacters}} / {{ maxCharacters }}</p>
+    <p class="text-sm text-nowrap">{{ nbrCharacters }} / {{ maxCharacters }}</p>
 </template>
 
 <style scoped>

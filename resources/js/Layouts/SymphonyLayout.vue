@@ -3,7 +3,6 @@
 import Header from "@/Components/Symphony/Header.vue";
 import {Link} from "@inertiajs/vue3";
 import AlertHandler from "@/Components/Symphony/Alert/AlertHandler.vue";
-import {computed} from "vue";
 </script>
 
 <template>
@@ -42,7 +41,8 @@ import {computed} from "vue";
                         </div>
                     </div>
                 </div>
-                <div class="overflow-y-scroll h-full border border-symph-500 rounded-2xl pt-5 px-4 mb-4 overflow-x-clip">
+                <div
+                    class="overflow-y-scroll h-full border border-symph-500 rounded-2xl pt-5 px-4 mb-4 overflow-x-clip">
                     <h1 class="text-white text-center font-[900] text-xl pb-5 text-clip text-nowrap">Vous aimeriez</h1>
                     <slot name="trendingUsers"/>
                 </div>

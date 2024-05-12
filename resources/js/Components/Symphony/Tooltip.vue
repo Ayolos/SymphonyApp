@@ -26,7 +26,8 @@ const close = () => {
             leave-from-class="opacity-100 translate-x-0"
             leave-to-class="opacity-0 -translate-x-4"
         >
-            <div v-if="showTooltip" class="bg-symph-600 shadow-xl border border-symph-500 rounded-lg px-4 py-2 absolute -bottom-20 -left-4 z-50">
+            <div v-if="showTooltip"
+                 class="bg-symph-600 shadow-xl border border-symph-500 rounded-lg px-4 py-2 absolute -bottom-20 -left-4 z-50">
                 <slot name="content"></slot>
             </div>
         </transition>

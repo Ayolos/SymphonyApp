@@ -13,7 +13,7 @@ const props = defineProps({
 })
 
 const linkToProfile = computed(() => {
-    return props.userId ? route('profileUser.show', {id: props.userId}): route().current();
+    return props.userId ? route('profileUser.show', {id: props.userId}) : route().current();
 })
 
 </script>

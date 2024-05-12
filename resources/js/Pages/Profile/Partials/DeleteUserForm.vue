@@ -1,6 +1,6 @@
 <script setup>
-import { ref } from 'vue';
-import { useForm } from '@inertiajs/vue3';
+import {ref} from 'vue';
+import {useForm} from '@inertiajs/vue3';
 import ActionSection from '@/Components/ActionSection.vue';
 import DangerButton from '@/Components/DangerButton.vue';
 import DialogModal from '@/Components/DialogModal.vue';
@@ -49,7 +49,8 @@ const closeModal = () => {
 
         <template #content>
             <div class="max-w-xl text-sm text-gray-600">
-                Une fois votre compte supprimé, toutes ses ressources et données seront définitivement supprimées. Avant de supprimer votre compte, veuillez télécharger
+                Une fois votre compte supprimé, toutes ses ressources et données seront définitivement supprimées. Avant
+                de supprimer votre compte, veuillez télécharger
             </div>
 
             <div class="mt-5">
@@ -65,19 +66,21 @@ const closeModal = () => {
                 </template>
 
                 <template #content>
-                    Etes vous sûr de vouloir supprimer votre compte? Une fois votre compte supprimé, toutes ses ressources et données seront définitivement supprimées. Veuillez entrer votre mot de passe pour confirmer que vous souhaitez supprimer définitivement votre compte.
+                    Etes vous sûr de vouloir supprimer votre compte? Une fois votre compte supprimé, toutes ses
+                    ressources et données seront définitivement supprimées. Veuillez entrer votre mot de passe pour
+                    confirmer que vous souhaitez supprimer définitivement votre compte.
                     <div class="mt-4">
                         <TextInput
                             ref="passwordInput"
                             v-model="form.password"
-                            type="password"
+                            autocomplete="current-password"
                             class="mt-1 block w-3/4"
                             placeholder="Password"
-                            autocomplete="current-password"
+                            type="password"
                             @keyup.enter="deleteUser"
                         />
 
-                        <InputError :message="form.errors.password" class="mt-2" />
+                        <InputError :message="form.errors.password" class="mt-2"/>
                     </div>
                 </template>
 
@@ -87,12 +90,12 @@ const closeModal = () => {
                     </SecondaryButton>
 
                     <DangerButton
-                        class="ms-3"
                         :class="{ 'opacity-25': form.processing }"
                         :disabled="form.processing"
+                        class="ms-3"
                         @click="deleteUser"
                     >
-                      Supprimer le compte
+                        Supprimer le compte
                     </DangerButton>
                 </template>
             </DialogModal>

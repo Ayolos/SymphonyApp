@@ -1,6 +1,6 @@
 <script setup>
-import { ref, computed, watch } from 'vue';
-import { router, useForm, usePage } from '@inertiajs/vue3';
+import {computed, ref, watch} from 'vue';
+import {router, useForm, usePage} from '@inertiajs/vue3';
 import ActionSection from '@/Components/ActionSection.vue';
 import ConfirmsPassword from '@/Components/ConfirmsPassword.vue';
 import DangerButton from '@/Components/DangerButton.vue';
@@ -27,11 +27,11 @@ const confirmationForm = useForm({
 });
 
 const twoFactorEnabled = computed(
-    () => ! enabling.value && page.props.auth.user?.two_factor_enabled,
+    () => !enabling.value && page.props.auth.user?.two_factor_enabled,
 );
 
 watch(twoFactorEnabled, () => {
-    if (! twoFactorEnabled.value) {
+    if (!twoFactorEnabled.value) {
         confirmationForm.reset();
         confirmationForm.clearErrors();
     }
@@ -129,7 +129,9 @@ const disableTwoFactorAuthentication = () => {
 
             <div class="mt-3 max-w-xl text-sm text-gray-600">
                 <p>
-                    Quand l'authentification à deux facteurs est activée, vous serez invité à saisir un jeton sécurisé et aléatoire lors de l'authentification. Vous pouvez récupérer ce jeton à partir de l'application Google Authenticator de votre téléphone.
+                    Quand l'authentification à deux facteurs est activée, vous serez invité à saisir un jeton sécurisé
+                    et aléatoire lors de l'authentification. Vous pouvez récupérer ce jeton à partir de l'application
+                    Google Authenticator de votre téléphone.
                 </p>
             </div>
 
@@ -137,15 +139,18 @@ const disableTwoFactorAuthentication = () => {
                 <div v-if="qrCode">
                     <div class="mt-4 max-w-xl text-sm text-gray-600">
                         <p v-if="confirming" class="font-semibold">
-                            Pour terminer l'activation de l'authentification à deux facteurs, scannez le code QR suivant à l'aide de l'application d'authentification de votre téléphone ou entrez la clé de configuration et fournissez le code OTP généré.
+                            Pour terminer l'activation de l'authentification à deux facteurs, scannez le code QR suivant
+                            à l'aide de l'application d'authentification de votre téléphone ou entrez la clé de
+                            configuration et fournissez le code OTP généré.
                         </p>
 
                         <p v-else>
-                            Deux facteurs d'authentification est maintenant activé. Scannez le code QR suivant à l'aide de l'application d'authentification de votre téléphone ou entrez la clé de configuration.
+                            Deux facteurs d'authentification est maintenant activé. Scannez le code QR suivant à l'aide
+                            de l'application d'authentification de votre téléphone ou entrez la clé de configuration.
                         </p>
                     </div>
 
-                    <div class="mt-4 p-2 inline-block bg-white" v-html="qrCode" />
+                    <div class="mt-4 p-2 inline-block bg-white" v-html="qrCode"/>
 
                     <div v-if="setupKey" class="mt-4 max-w-xl text-sm text-gray-600">
                         <p class="font-semibold">
@@ -154,28 +159,30 @@ const disableTwoFactorAuthentication = () => {
                     </div>
 
                     <div v-if="confirming" class="mt-4">
-                        <InputLabel for="code" value="Code" />
+                        <InputLabel for="code" value="Code"/>
 
                         <TextInput
                             id="code"
                             v-model="confirmationForm.code"
-                            type="text"
-                            name="code"
+                            autocomplete="one-time-code"
+                            autofocus
                             class="block mt-1 w-1/2"
                             inputmode="numeric"
-                            autofocus
-                            autocomplete="one-time-code"
+                            name="code"
+                            type="text"
                             @keyup.enter="confirmTwoFactorAuthentication"
                         />
 
-                        <InputError :message="confirmationForm.errors.code" class="mt-2" />
+                        <InputError :message="confirmationForm.errors.code" class="mt-2"/>
                     </div>
                 </div>
 
                 <div v-if="recoveryCodes.length > 0 && ! confirming">
                     <div class="mt-4 max-w-xl text-sm text-gray-600">
                         <p class="font-semibold">
-                            Enregistrez ces codes de récupération dans un gestionnaire de mots de passe sécurisé. Ils peuvent être utilisés pour récupérer l'accès à votre compte si votre appareil d'authentification à deux facteurs est perdu.
+                            Enregistrez ces codes de récupération dans un gestionnaire de mots de passe sécurisé. Ils
+                            peuvent être utilisés pour récupérer l'accès à votre compte si votre appareil
+                            d'authentification à deux facteurs est perdu.
                         </p>
                     </div>
 
@@ -190,7 +197,7 @@ const disableTwoFactorAuthentication = () => {
             <div class="mt-5">
                 <div v-if="! twoFactorEnabled">
                     <ConfirmsPassword @confirmed="enableTwoFactorAuthentication">
-                        <PrimaryButton type="button" :class="{ 'opacity-25': enabling }" :disabled="enabling">
+                        <PrimaryButton :class="{ 'opacity-25': enabling }" :disabled="enabling" type="button">
                             Activé
                         </PrimaryButton>
                     </ConfirmsPassword>
@@ -200,10 +207,10 @@ const disableTwoFactorAuthentication = () => {
                     <ConfirmsPassword @confirmed="confirmTwoFactorAuthentication">
                         <PrimaryButton
                             v-if="confirming"
-                            type="button"
-                            class="me-3"
                             :class="{ 'opacity-25': enabling }"
                             :disabled="enabling"
+                            class="me-3"
+                            type="button"
                         >
                             Confirmer
                         </PrimaryButton>
@@ -223,7 +230,7 @@ const disableTwoFactorAuthentication = () => {
                             v-if="recoveryCodes.length === 0 && ! confirming"
                             class="me-3"
                         >
-                          Montrer les codes de récupération
+                            Montrer les codes de récupération
                         </SecondaryButton>
                     </ConfirmsPassword>
 

@@ -1,28 +1,31 @@
-
 <template>
-    <Head title="Feed" />
+    <Head title="Feed"/>
     <SymphonyLayout :isLogin="canLogin">
         <template #trendingUsers>
-            <div v-for="trendingUser in trendingUsers" :key="trendingUser.id" class="flex w-full flex-row mb-4 items-center gap-4 justify-between">
+            <div v-for="trendingUser in trendingUsers" :key="trendingUser.id"
+                 class="flex w-full flex-row mb-4 items-center gap-4 justify-between">
                 <div class="flex flex-row items-center gap-4 w-3/4">
                     <img :src="trendingUser.profile_photo_url" class="w-12 h-12 rounded">
                     <div class="flex-col flex">
                         <Tooltip>
                             <template #button>
-                                <UserInfo class="overflow-hidden w-32" :name="trendingUser.name" :username="trendingUser.username" />
+                                <UserInfo :name="trendingUser.name" :username="trendingUser.username"
+                                          class="overflow-hidden w-32"/>
                             </template>
                             <template #content>
-                                <UserInfo :name="trendingUser.name" :username="trendingUser.username" />
+                                <UserInfo :name="trendingUser.name" :username="trendingUser.username"/>
                             </template>
                         </Tooltip>
                     </div>
                 </div>
                 <div class="flex flex-row items-center gap-4">
                     <!-- Bouton qui change en fonction de l'état de suivi -->
-                    <form @submit.prevent="trendingUser.isFollowed ? toggleUnFollow(trendingUser) : toggleFollowing(trendingUser)">
+                    <form
+                        @submit.prevent="trendingUser.isFollowed ? toggleUnFollow(trendingUser) : toggleFollowing(trendingUser)">
                         <button class="bg-symph-500 text-white rounded-full p-1 aspect-square">
-                            <Icon v-if="trendingUser.isFollowed" icon="material-symbols:check-indeterminate-small-rounded" class="w-6 h-6" />
-                            <Icon v-else icon="jam:plus" class="w-6 h-6" />
+                            <Icon v-if="trendingUser.isFollowed"
+                                  class="w-6 h-6" icon="material-symbols:check-indeterminate-small-rounded"/>
+                            <Icon v-else class="w-6 h-6" icon="jam:plus"/>
                         </button>
                     </form>
                 </div>
@@ -31,47 +34,58 @@
         <template #postForm>
             <PostForm></PostForm>
         </template>
-        <div v-if="posts.length > 0" v-for="post in posts" :key="post.id">
+        <div v-for="post in posts" v-if="posts.length > 0" :key="post.id">
             <!--:href="route('posts.show', {id: post.id})"-->
             <Post
-                :post="post"
                 :connectLine="false"
                 :createdAt="post.created_at"
-                :user-id="post.user.id"
-                :src="post.user.profile_photo_url">
+                :post="post"
+                :src="post.user.profile_photo_url"
+                :user-id="post.user.id">
                 <template #likeButton>
                     <Link :href="route('posts.show', {id: post.id})">
                         <div class="flex flex-row gap-2 items-center text-gray-300 hover:text-secondary">
-                            <Icon icon="icon-park-twotone:more-three" class="w-5 h-5" />
+                            <Icon class="w-5 h-5" icon="icon-park-twotone:more-three"/>
                             <h1 class="text-md font-bold w-max">voir plus</h1>
                         </div>
                     </Link>
                     <div class="flex flex-row gap-2 items-center">
-                        <Link as="button" method="post" :href="post.isLiked ? route('posts.unlike', { post: post }) : route('posts.like', { post: post })" >
-                            <Icon icon="uil:heart" class="w-5 h-5 transition hover:scale-110 hover:rotate-6 ease-in-out" :class="[ post.isLiked ? 'text-secondary-500' : 'text-gray-300']" />
+                        <Link :href="post.isLiked ? route('posts.unlike', { post: post }) : route('posts.like', { post: post })" as="button"
+                              method="post">
+                            <Icon :class="[ post.isLiked ? 'text-secondary-500' : 'text-gray-300']" class="w-5 h-5 transition hover:scale-110 hover:rotate-6 ease-in-out"
+                                  icon="uil:heart"/>
                         </Link>
                         <h1 class="text-md text-symph-200 font-bold">{{ post.nbLikes }}</h1>
                     </div>
                     <div class="flex flex-row gap-2 items-center">
                         <MainModal @submit="submitComment(post.id)">
                             <template #button>
-                                <Icon icon="uil:comment" class="w-5 h-5 transition hover:scale-110 ease-in-out text-gray-300" />
+                                <Icon class="w-5 h-5 transition hover:scale-110 ease-in-out text-gray-300"
+                                      icon="uil:comment"/>
                             </template>
                             <template #modalTitle>
                                 Ajouter un commentaire
                             </template>
                             <template #content>
-                                    <div class="flex flex-col gap-2">
-                                        <UserCommentInfo :created_at="post.created_at" :name="post.user.name" :content="post.content" :username="post.user.username" :profile_src="post.user.profile_photo_url" />
+                                <div class="flex flex-col gap-2">
+                                    <UserCommentInfo :content="post.content" :created_at="post.created_at"
+                                                     :name="post.user.name" :profile_src="post.user.profile_photo_url"
+                                                     :username="post.user.username"/>
+                                </div>
+                                <div class="flex flex-row items-start gap-4 mt-8">
+                                    <img :src="$page.props.auth.user.profile_photo_url" class="w-12 h-12 rounded">
+                                    <div class="w-full">
+                                        <textarea v-model="formComment.content" class="w-full text-symph-200 h-48 rounded-lg bg-symph-800 border-symph-500 resize-none" maxlength="255"
+                                                  placeholder="Ecrit ton commentaire"
+                                                  required></textarea>
+                                        <CounterMessage :max-characters="255"
+                                                        :message="formComment.content" class="text-symph-100 w-full text-end"/>
                                     </div>
-                                    <div class="flex flex-row items-start gap-4 mt-8">
-                                        <img :src="$page.props.auth.user.profile_photo_url" class="w-12 h-12 rounded">
-                                        <div class="w-full">
-                                            <textarea required v-model="formComment.content" maxlength="255" placeholder="Ecrit ton commentaire" class="w-full text-symph-200 h-48 rounded-lg bg-symph-800 border-symph-500 resize-none"></textarea>
-                                            <CounterMessage class="text-symph-100 w-full text-end" :message="formComment.content" :max-characters="255" />
-                                        </div>
-                                    </div>
-                                    <button class="bg-secondary/20 hover:bg-secondary/40 border border-secondary text-white rounded-md px-4 py-2 mt-3">Envoyer</button>
+                                </div>
+                                <button
+                                    class="bg-secondary/20 hover:bg-secondary/40 border border-secondary text-white rounded-md px-4 py-2 mt-3">
+                                    Envoyer
+                                </button>
                             </template>
                         </MainModal>
                         <h1 class="text-md text-symph-200 font-bold">{{ post.nbComments }}</h1>
@@ -85,7 +99,7 @@
         </div>
         <div v-else>
             <div class="flex flex-col items-center justify-center w-full h-full py-20">
-                <Icon icon="line-md:alert-circle-twotone-loop" class="w-48 h-48 text-gray-500"/>
+                <Icon class="w-48 h-48 text-gray-500" icon="line-md:alert-circle-twotone-loop"/>
                 <h1 class="text-2xl text-symph-200 font-bold">Aucun post trouvé</h1>
             </div>
         </div>
@@ -96,7 +110,7 @@
 import {Head, router, useForm, Link} from '@inertiajs/vue3';
 import SymphonyLayout from "@/Layouts/SymphonyLayout.vue";
 import {computed, onMounted, reactive, ref} from "vue";
-import { Icon } from "@iconify/vue";
+import {Icon} from "@iconify/vue";
 import Modal from "@/Components/Symphony/Modal/Modal.vue";
 import PostInfo from "@/Components/Symphony/PostInfo.vue";
 import Post from "@/Components/Symphony/Post/Post.vue";
@@ -131,11 +145,11 @@ const formComment = useForm({
 });
 
 const formFollow = useForm({
-  following_id: null,
+    following_id: null,
 });
 
 const source = ref('')
-const { text, copy, copied, isSupported } = useClipboard({ source })
+const {text, copy, copied, isSupported} = useClipboard({source})
 
 const submitComment = (postId) => {
     formComment.post_id = postId;
@@ -152,21 +166,21 @@ const submitComment = (postId) => {
 
 // Fonction pour suivre/désabonner avec formulaire
 const toggleFollowing = async (trendingUser) => {
-  formFollow.following_id = trendingUser.id;
-  formFollow.post(route('user.follow'), {
-    preserveScroll: true,
-    onSuccess: () => {
-    }
-  })
+    formFollow.following_id = trendingUser.id;
+    formFollow.post(route('user.follow'), {
+        preserveScroll: true,
+        onSuccess: () => {
+        }
+    })
 };
 
 const toggleUnFollow = async (trendingUser) => {
-  formFollow.following_id = trendingUser.id;
-  formFollow.delete(route('user.unfollow', {user: trendingUser.id}), {
-    preserveScroll: true,
-    onSuccess: () => {
-    }
-  })
+    formFollow.following_id = trendingUser.id;
+    formFollow.delete(route('user.unfollow', {user: trendingUser.id}), {
+        preserveScroll: true,
+        onSuccess: () => {
+        }
+    })
 };
 
 </script>

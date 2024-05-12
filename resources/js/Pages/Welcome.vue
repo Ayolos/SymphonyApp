@@ -1,7 +1,6 @@
 <script setup>
-import {Head, router, useForm, Link} from '@inertiajs/vue3';
+import {Link} from '@inertiajs/vue3';
 import Logo from '/public/Logo.png'
-
 </script>
 
 <template>
@@ -14,7 +13,8 @@ import Logo from '/public/Logo.png'
                 </p>
             </Link>
             <Link :href="route('register')">
-                <p class="w-full bg-secondary-500 text-md border border-secondary-400 rounded-md hover:bg-secondary-400 text-white font-bold py-2 px-4 text-center">Créer un compte</p>
+                <p class="w-full bg-secondary-500 text-md border border-secondary-400 rounded-md hover:bg-secondary-400 text-white font-bold py-2 px-4 text-center">
+                    Créer un compte</p>
             </Link>
         </div>
     </div>
