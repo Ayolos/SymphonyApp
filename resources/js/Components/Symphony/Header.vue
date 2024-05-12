@@ -150,7 +150,7 @@ const logout = () => {
                   </div>
 
                   <DropdownLink :href="route('profile.show')">
-                    Profile
+                    Editez le profil
                   </DropdownLink>
 
                     <DropdownLink :href="route('profileUser.show', {id: $page.props.auth.user.id})">
