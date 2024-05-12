@@ -158,7 +158,6 @@ const submitComment = (postId) => {
             formComment.reset('content');
         },
         onError: (e) => {
-            console.log(e)
         }
     });
 };
