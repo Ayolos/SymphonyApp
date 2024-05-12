@@ -39,14 +39,16 @@ class LikeController extends Controller
     {
         $like = Like::where('user_id', auth()->user()->id)
             ->where('likeable_id', $post->id)
-            ->where('likeable_type', Post::class)
-            ->first();
-        $like->delete();
+            ->where('likeable_type', Post::class);
+
+        if ($like->exists()) {
+            $like->delete();
+        }
 
         return redirect()->back();
     }
 
-    public function likeComment(Request $request, $id)
+    public function likeComment($id)
     {
         //check if the user has already liked the post
         $like = Like::where('user_id', auth()->user()->id)
@@ -64,15 +66,16 @@ class LikeController extends Controller
         return redirect()->back();
     }
 
-    public function unlikeComment(Request $request, $id)
+    public function unlikeComment($id)
     {
         $like = Like::where('user_id', auth()->user()->id)
             ->where('likeable_id', $id)
             ->where('likeable_type', Comment::class)
             ->first();
-        //dd($like);
-        $like->delete();
 
+        if ($like->exists()) {
+            $like->delete();
+        }
         return redirect()->back();
     }
 }

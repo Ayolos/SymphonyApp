@@ -47,8 +47,7 @@ class FollowerController extends Controller
             'following_id' => 'required | exists:users,id'
         ]);
         $follower = Follower::where('user_id', $request->following_id)
-            ->where('follower_id', auth()->id())
-            ->first();
+            ->where('follower_id', auth()->id());
 
         if(!$follower){
             request()->session()->flash('alert', [
