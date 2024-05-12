@@ -28,11 +28,16 @@ const props = defineProps({
     userId: {
         type: Number,
         required: false
+    },
+    isLast: {
+        type: Boolean,
+        required: false,
+        default: false
     }
 });
 
 const borderClass = computed(() => {
-    return props.border ? 'border-b border-symph-500' : ''
+    return (props.border && !props.isLast) ? 'border-b border-symph-500' : ''
 });
 
 const formatDateDifference = (createdAt) => {
@@ -71,7 +76,7 @@ const formatDateString = (date) => {
         <div class="flex flex-row">
             <Link :href="userId ? route('profileUser.show', {id: userId}): route().current()"
                   class="mr-3 z-0 flex-none relative">
-                <img :src="src" class="w-max h-12 rounded">
+                <img alt="user profile image" :src="src" class="w-max h-12 rounded">
             </Link>
             <div class="flex flex-col">
                 <div class="flex flex-row items-start gap-2">

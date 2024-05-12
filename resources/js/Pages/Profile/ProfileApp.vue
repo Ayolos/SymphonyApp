@@ -58,8 +58,6 @@ const ManageShowFilter = (filter) => {
     showFilter.value = filter;
 };
 
-const alertFollow = ref(false);
-const alertUnFollow = ref(false);
 
 // Fonction pour suivre/désabonner avec formulaire
 const toggleFollowing = (trendingUser) => {
@@ -67,10 +65,6 @@ const toggleFollowing = (trendingUser) => {
     formFollow.post(route('user.follow'), {
         preserveScroll: true,
         onSuccess: () => {
-            alertFollow.value = true;
-            setTimeout(() => {
-                alertFollow.value = false;
-            }, 2000);
         }
     })
 };
@@ -80,11 +74,6 @@ const toggleUnFollow = (trendingUser) => {
     formFollow.delete(route('user.unfollow', {user: trendingUser.id}), {
         preserveScroll: true,
         onSuccess: () => {
-            console.log('user retiré')
-            alertUnFollow.value = true;
-            setTimeout(() => {
-                alertUnFollow.value = false;
-            }, 2000);
         }
     })
 };
@@ -96,7 +85,7 @@ const toggleUnFollow = (trendingUser) => {
             <div v-for="trendingUser in trendingUsers" :key="trendingUser.id"
                  class="flex w-full flex-row mb-4 items-center gap-4 justify-between">
                 <div class="flex flex-row items-center gap-4 w-3/4">
-                    <img :src="trendingUser.profile_photo_url" class="w-12 h-12 rounded">
+                    <img alt="user profile image" :src="trendingUser.profile_photo_url" class="w-12 h-12 rounded">
                     <div class="flex-col flex">
                         <Tooltip>
                             <template #button>
@@ -126,7 +115,7 @@ const toggleUnFollow = (trendingUser) => {
             <div>
                 <div
                     class="w-full bg-symph-700 flex gap-8 border-b pb-8 border-symph-500 sm:flex-row flex-col rounded-t-2xl border-x border-t px-8 pt-8">
-                    <img :src="user.profile_photo_url"
+                    <img alt="user profile image" :src="user.profile_photo_url"
                          class="shadow-symph-500 aspect-square self-center sm:min-w-48 min-w-20 h-max rounded">
                     <div class="justify-between w-full flex flex-col text-gray-500 mr-8">
                         <div class="flex flex-col">
@@ -205,8 +194,9 @@ const toggleUnFollow = (trendingUser) => {
             </div>
         </template>
         <div v-if="showFilter === 'post'">
-            <div v-for="post in posts" v-if="nbPosts !== 0" :key="post.id">
+            <div v-for="(post, index) in posts" v-if="nbPosts !== 0" :key="post.id">
                 <Post
+                    :is-last="index === posts.length - 1"
                     :connectLine="false"
                     :createdAt="post.created_at"
                     :post="post"
@@ -220,7 +210,7 @@ const toggleUnFollow = (trendingUser) => {
                             </div>
                         </Link>
                         <div class="flex flex-row gap-2 items-center">
-                            <Link :href="post.isLiked ? route('posts.unlike', { post: post }) : route('posts.like', { post: post })" as="button"
+                            <Link :href="post.isLiked ? route('posts.unlike', { post: post }) : route('posts.like', { post: post })"
                                   method="post">
                                 <Icon :class="[ post.isLiked ? 'text-secondary-500' : 'text-gray-300']"
                                       class="w-5 h-5 transition hover:scale-110 hover:rotate-6 ease-in-out"
@@ -244,7 +234,7 @@ const toggleUnFollow = (trendingUser) => {
                                                          :username="post.user.username"/>
                                     </div>
                                     <div class="flex flex-row items-start gap-4 mt-8">
-                                        <img :src="$page.props.auth.user.profile_photo_url" class="w-12 h-12 rounded">
+                                        <img alt="user profile image" :src="$page.props.auth.user.profile_photo_url" class="w-12 h-12 rounded">
                                         <div class="w-full">
                                             <textarea v-model="formComment.content" class="w-full text-symph-200 h-48 rounded-lg bg-symph-800 border-symph-500 resize-none" maxlength="255"
                                                       placeholder="Ecrit ton commentaire"
@@ -276,8 +266,9 @@ const toggleUnFollow = (trendingUser) => {
             </div>
         </div>
         <div v-else-if="showFilter === 'like'">
-            <div v-for="post in likedPosts" v-if="likedPosts.length !== 0 && likedPosts" :key="post.id">
+            <div v-for="(post, index) in likedPosts" v-if="likedPosts.length !== 0 && likedPosts" :key="post.id">
                 <Post
+                    :is-last="index === likedPosts.length - 1"
                     :connectLine="false"
                     :createdAt="post.created_at"
                     :post="post"
@@ -291,7 +282,7 @@ const toggleUnFollow = (trendingUser) => {
                             </div>
                         </Link>
                         <div class="flex flex-row gap-2 items-center">
-                            <Link :href="post.isLiked ? route('posts.unlike', { post: post }) : route('posts.like', { post: post })" as="button"
+                            <Link :href="post.isLiked ? route('posts.unlike', { post: post }) : route('posts.like', { post: post })"
                                   method="post">
                                 <Icon :class="[ post.isLiked ? 'text-secondary-500' : 'text-gray-300']"
                                       class="w-5 h-5 transition hover:scale-110 hover:rotate-6 ease-in-out"
@@ -315,7 +306,7 @@ const toggleUnFollow = (trendingUser) => {
                                                          :username="post.user.username"/>
                                     </div>
                                     <div class="flex flex-row items-start gap-4 mt-8">
-                                        <img :src="$page.props.auth.user.profile_photo_url" class="w-12 h-12 rounded">
+                                        <img alt="user profile image" :src="$page.props.auth.user.profile_photo_url" class="w-12 h-12 rounded">
                                         <div class="w-full">
                                             <textarea v-model="formComment.content" class="w-full text-symph-200 h-48 rounded-lg bg-symph-800 border-symph-500 resize-none" maxlength="255"
                                                       placeholder="Ecrit ton commentaire"
@@ -351,7 +342,7 @@ const toggleUnFollow = (trendingUser) => {
                 <div v-for="user in followers" class="hover:bg-symph-600 py-3 px-8">
                     <Link :href="route('profileUser.show', {id: user.id})">
                         <div class="flex flex-row gap-4 items-center">
-                            <img :src="user.profile_photo_url" class="aspect-square rounded h-10">
+                            <img alt="user profile image" :src="user.profile_photo_url" class="aspect-square rounded h-10">
                             <div class="flex flex-col">
                                 <h1 class="text-gray-600 truncate text-nowrap">{{ user.name }}</h1>
                                 <p class="text-gray-500 text-sm">@{{ user.username }}</p>
@@ -370,7 +361,7 @@ const toggleUnFollow = (trendingUser) => {
                 <div v-for="user in followings" class="hover:bg-symph-600 py-3 px-8">
                     <Link :href="route('profileUser.show', {id: user.id})">
                         <div class="flex flex-row gap-4 items-center">
-                            <img :src="user.profile_photo_url" class="aspect-square rounded h-10">
+                            <img alt="user profile image" :src="user.profile_photo_url" class="aspect-square rounded h-10">
                             <div class="flex flex-col">
                                 <h1 class="text-gray-600 truncate text-nowrap">{{ user.name }}</h1>
                                 <p class="text-gray-500 text-sm">@{{ user.username }}</p>

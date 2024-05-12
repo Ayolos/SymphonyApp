@@ -4,11 +4,36 @@ import SymphonyLayout from "@/Layouts/SymphonyLayout.vue";
 import UserInfo from "@/Components/Symphony/Post/UserInfo.vue";
 import {Icon} from "@iconify/vue";
 import Tooltip from "@/Components/Symphony/Tooltip.vue";
+import {useForm} from "@inertiajs/vue3";
 
 defineProps({
     notifications: Array,
     trendingUsers: Array
 })
+
+const formFollow = useForm({
+    following_id: null,
+});
+
+// Fonction pour suivre/désabonner avec formulaire
+const toggleFollowing = (trendingUser) => {
+    formFollow.following_id = trendingUser.id;
+    formFollow.post(route('user.follow'), {
+        preserveScroll: true,
+        onSuccess: () => {
+        }
+    })
+};
+
+const toggleUnFollow = (trendingUser) => {
+    formFollow.following_id = trendingUser.id;
+    formFollow.delete(route('user.unfollow', {user: trendingUser.id}), {
+        preserveScroll: true,
+        onSuccess: () => {
+        }
+    })
+};
+
 </script>
 
 <template>
@@ -17,7 +42,7 @@ defineProps({
             <div v-for="trendingUser in trendingUsers" :key="trendingUser.id"
                  class="flex w-full flex-row mb-4 items-center gap-4 justify-between">
                 <div class="flex flex-row items-center gap-4 w-3/4">
-                    <img :src="trendingUser.profile_photo_url" class="w-12 h-12 rounded">
+                    <img alt="user profile image" :src="trendingUser.profile_photo_url" class="w-12 h-12 rounded">
                     <div class="flex-col flex">
                         <Tooltip>
                             <template #button>
@@ -44,9 +69,9 @@ defineProps({
                 </div>
             </div>
         </template>
-        <div v-for="notification in notifications" v-if="notifications.length > 0"
-             class="flex flex-col gap-4 border-b border-symph-500">
-            <div class="flex flex-row gap-2 p-4">
+        <div v-for="(notification, index) in notifications" v-if="notifications.length > 0"
+             class="flex flex-col gap-4">
+            <div class="flex flex-row gap-2 p-4" :class="index === notifications.length - 1 ? '' : 'border-b border-symph-500'">
                 <img :src="notification.data.user.profile_photo_url" alt="img" class="h-12 rounded-lg">
                 <div class="">
                     <UserInfo :name="notification.data.user.name" :userId="notification.data.user.id"

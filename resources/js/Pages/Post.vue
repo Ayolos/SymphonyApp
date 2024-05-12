@@ -34,6 +34,30 @@ const formReply = useForm({
     post_id: null,
 });
 
+const formFollow = useForm({
+    following_id: null,
+});
+
+// Fonction pour suivre/désabonner avec formulaire
+const toggleFollowing = (trendingUser) => {
+    formFollow.following_id = trendingUser.id;
+    formFollow.post(route('user.follow'), {
+        preserveScroll: true,
+        onSuccess: () => {
+        }
+    })
+};
+
+const toggleUnFollow = (trendingUser) => {
+    formFollow.following_id = trendingUser.id;
+    formFollow.delete(route('user.unfollow', {user: trendingUser.id}), {
+        preserveScroll: true,
+        onSuccess: () => {
+        }
+    })
+};
+
+
 const submitCommentReply = (commentId, postId) => {
     formReply.parent_id = commentId;
     formReply.post_id = postId;
@@ -62,7 +86,7 @@ const submitComment = (postId) => {
             <div v-for="trendingUser in trendingUsers" :key="trendingUser.id"
                  class="flex w-full flex-row mb-4 items-center gap-4 justify-between">
                 <div class="flex flex-row items-center gap-4 w-3/4">
-                    <img :src="trendingUser.profile_photo_url" class="w-12 h-12 rounded">
+                    <img :src="trendingUser.profile_photo_url" alt="user profile image" class="w-12 h-12 rounded">
                     <div class="flex-col flex">
                         <Tooltip>
                             <template #button>
@@ -90,6 +114,7 @@ const submitComment = (postId) => {
         </template>
         <div class="">
             <Post
+                :is-last="post.comments.length === 0"
                 :connectLine="false"
                 :createdAt="post.created_at"
                 :post="post"
@@ -104,7 +129,7 @@ const submitComment = (postId) => {
                         </div>
                     </Link>
                     <div class="flex flex-row gap-2 items-center">
-                        <Link :href="post.isLiked ? route('posts.unlike', { post: post }) : route('posts.like', { post: post })" as="button"
+                        <Link :href="post.isLiked ? route('posts.unlike', { post: post }) : route('posts.like', { post: post })"
                               method="post">
                             <Icon :class="[ post.isLiked ? 'text-secondary-500' : 'text-gray-300']" class="w-5 h-5 transition hover:scale-110 hover:rotate-6 ease-in-out"
                                   icon="uil:heart"/>
@@ -127,7 +152,7 @@ const submitComment = (postId) => {
                                                      :username="post.user.username"/>
                                 </div>
                                 <div class="flex flex-row items-start gap-4 mt-8">
-                                    <img :src="$page.props.auth.user.profile_photo_url" class="w-12 h-12 rounded">
+                                    <img :src="$page.props.auth.user.profile_photo_url" alt="user profile image" class="w-12 h-12 rounded">
                                     <div class="w-full">
                                         <textarea v-model="formComment.content" class="w-full text-symph-200 h-48 rounded-lg bg-symph-800 border-symph-500 resize-none" maxlength="255"
                                                   placeholder="Ecrit ton commentaire"
@@ -151,7 +176,8 @@ const submitComment = (postId) => {
                 </template>
             </Post>
             <div v-for="(comment, index) in post.comments" :key="comment.id"
-                 class="flex border-b border-symph-500 flex-col w-full items-center relative">
+                 :class="index === post.comments.length - 1 ? '' : 'border-b border-symph-500'"
+                 class="flex flex-col w-full items-center relative">
                 <div class="w-full">
                     <Post
                         :border="false"
@@ -163,7 +189,7 @@ const submitComment = (postId) => {
                         :user-id="comment.user.id">
                         <template #likeButton>
                             <div class="flex flex-row gap-2 items-center">
-                                <Link :href="comment.isLiked ? route('comments.unlike', { comment: comment }) : route('comments.like', { comment: comment })" as="button"
+                                <Link :href="comment.isLiked ? route('comments.unlike', { comment: comment }) : route('comments.like', { comment: comment })"
                                       method="post">
                                     <Icon :class="[ comment.isLiked ? 'text-secondary-500' : 'text-gray-300']"
                                           class="w-5 h-5 transition hover:scale-110 hover:rotate-6 ease-in-out"
@@ -189,6 +215,7 @@ const submitComment = (postId) => {
                                         </div>
                                         <div class="flex flex-row items-start gap-4 mt-8">
                                             <img :src="$page.props.auth.user.profile_photo_url"
+                                                 alt="user profile image"
                                                  class="w-12 h-12 rounded">
                                             <div class="w-full">
                                                 <textarea v-model="formReply.content" class="w-full text-symph-200 h-48 rounded-lg bg-symph-800 border-symph-500 resize-none" maxlength="255"
@@ -213,7 +240,7 @@ const submitComment = (postId) => {
                         </template>
                     </Post>
                 </div>
-                <div v-for="(reply, index) in comment.reply" :key="reply.id"
+                <div v-for="(reply) in comment.reply" :key="reply.id"
                      class="pl-14  flex w-full items-center relative">
                     <div class="w-full">
                         <Post
@@ -226,7 +253,7 @@ const submitComment = (postId) => {
                             :user-id="reply.user.id">
                             <template #likeButton>
                                 <div class="flex flex-row gap-2 items-center">
-                                    <Link :href="reply.isLiked ? route('comments.unlike', { comment: reply }) : route('comments.like', { comment: reply })" as="button"
+                                    <Link :href="reply.isLiked ? route('comments.unlike', { comment: reply }) : route('comments.like', { comment: reply })"
                                           method="post">
                                         <Icon :class="[ reply.isLiked ? 'text-secondary-500' : 'text-gray-300']"
                                               class="w-5 h-5 transition hover:scale-110 hover:rotate-6 ease-in-out"
@@ -251,7 +278,7 @@ const submitComment = (postId) => {
                                                                  :username="reply.user.username"/>
                                             </div>
                                             <div class="flex flex-row items-start gap-4 mt-8">
-                                                <img :src="$page.props.auth.user.profile_photo_url"
+                                                <img alt="user profile image" :src="$page.props.auth.user.profile_photo_url"
                                                      class="w-12 h-12 rounded">
                                                 <div class="w-full">
                                                     <textarea v-model="formReply.content" class="w-full text-symph-200 h-48 rounded-lg bg-symph-800 border-symph-500 resize-none" maxlength="255"

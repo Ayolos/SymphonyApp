@@ -5,7 +5,7 @@
             <div v-for="trendingUser in trendingUsers" :key="trendingUser.id"
                  class="flex w-full flex-row mb-4 items-center gap-4 justify-between">
                 <div class="flex flex-row items-center gap-4 w-3/4">
-                    <img :src="trendingUser.profile_photo_url" class="w-12 h-12 rounded">
+                    <img :src="trendingUser.profile_photo_url" alt="user profile image" class="w-12 h-12 rounded">
                     <div class="flex-col flex">
                         <Tooltip>
                             <template #button>
@@ -38,11 +38,12 @@
         <template #postForm>
             <PostForm></PostForm>
         </template>
-        <div v-for="post in posts" v-if="posts.length > 0" :key="post.id">
+        <div v-for="(post, index) in posts" v-if="posts.length > 0" :key="post.id">
             <Post
                 :connectLine="false"
                 :createdAt="post.created_at"
                 :post="post"
+                :is-last="index === posts.length - 1"
                 :src="post.user.profile_photo_url"
                 :user-id="post.user.id">
                 <template #likeButton>
@@ -53,7 +54,7 @@
                         </div>
                     </Link>
                     <div class="flex flex-row gap-2 items-center">
-                        <Link :href="post.isLiked ? route('posts.unlike', { post: post }) : route('posts.like', { post: post })" as="button"
+                        <Link :href="post.isLiked ? route('posts.unlike', { post: post }) : route('posts.like', { post: post })"
                               method="post">
                             <Icon :class="[ post.isLiked ? 'text-secondary-500' : 'text-gray-300']" class="w-5 h-5 transition hover:scale-110 hover:rotate-6 ease-in-out"
                                   icon="uil:heart"/>
@@ -76,7 +77,7 @@
                                                      :username="post.user.username"/>
                                 </div>
                                 <div class="flex flex-row items-start gap-4 mt-8">
-                                    <img :src="$page.props.auth.user.profile_photo_url" class="w-12 h-12 rounded">
+                                    <img :src="$page.props.auth.user.profile_photo_url" class="w-12 h-12 rounded" alt="user profile image">
                                     <div class="w-full">
                                         <textarea v-model="formComment.content" class="w-full text-symph-200 h-48 rounded-lg bg-symph-800 border-symph-500 resize-none" maxlength="255"
                                                   placeholder="Ecrit ton commentaire"
@@ -110,20 +111,15 @@
 </template>
 
 <script setup>
-import {Head, router, useForm, Link} from '@inertiajs/vue3';
+import {Head, useForm, Link} from '@inertiajs/vue3';
 import SymphonyLayout from "@/Layouts/SymphonyLayout.vue";
-import {computed, onMounted, reactive, ref} from "vue";
+import {ref} from "vue";
 import {Icon} from "@iconify/vue";
-import Modal from "@/Components/Symphony/Modal/Modal.vue";
-import PostInfo from "@/Components/Symphony/PostInfo.vue";
 import Post from "@/Components/Symphony/Post/Post.vue";
 import MainModal from "@/Components/Symphony/Modal/MainModal.vue";
-import InputLabel from "@/Components/Symphony/Input/InputLabel.vue";
 import PostForm from "@/Components/Symphony/Post/PostForm.vue";
-import PlayerAudio from "@/Components/Symphony/PlayerAudio.vue";
 import {useClipboard} from "@vueuse/core";
 import CounterMessage from "@/Components/Symphony/CounterMessage.vue";
-import Alerts from "@/Components/Symphony/Alerts.vue";
 import ShareButton from "@/Components/Symphony/Button/ShareButton.vue";
 import UserInfo from "@/Components/Symphony/Post/UserInfo.vue";
 import UserCommentInfo from "@/Components/Symphony/UserCommentInfo.vue";
@@ -190,12 +186,4 @@ const toggleUnFollow = async (trendingUser) => {
 
 
 <style>
-/* Styles pour votre modal */
-.progress-bar {
-    @apply w-full h-2 bg-gray-300;
-}
-
-.progress {
-    @apply h-full bg-green-500;
-}
 </style>
