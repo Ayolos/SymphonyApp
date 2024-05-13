@@ -77,7 +77,7 @@ const toggleUnFollow = (trendingUser) => {
                     <UserInfo :name="notification.data.user.name" :userId="notification.data.user.id"
                               :username="notification.data.user.username"/>
                     <p v-if="notification.data.post" class="text-symph-100 py-2">{{
-                            notification.data.post.content
+                            notification.data.post
                         }}</p>
                     <p class="text-gray-500">{{ notification.data.message }}</p>
                 </div>

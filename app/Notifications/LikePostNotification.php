@@ -16,7 +16,7 @@ class LikePostNotification extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct(Post $post, User $user, string $message)
+    public function __construct(string $post, User $user, string $message)
     {
         $this->post = $post;
         $this->user = $user;
