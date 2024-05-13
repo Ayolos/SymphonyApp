@@ -5,6 +5,7 @@ import DropdownLink from "@/Components/DropdownLink.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import {Link, router} from "@inertiajs/vue3";
 import {Icon} from '@iconify/vue';
+import Notification from "@/Components/Symphony/Notification.vue";
 
 defineProps({
     isLogin: Boolean,
@@ -40,10 +41,7 @@ const logout = () => {
                     <Icon
                         class="text-3xl text-gray-500 hover:text-gray-400 hover:transition hover:scale-110 ease-in-out"
                         icon="mingcute:notification-line"></Icon>
-                    <div
-                        class="absolute aspect-square -right-1.5 text-xs w-max min-w-2 flex items-center shadow-secondary shadow-xl -top-2 bg-secondary px-1.5 rounded-full">
-                        {{ $page.props.unreadNotificationsNumber }}
-                    </div>
+                    <Notification :notifications="0"></Notification>
                 </Link>
                 <Link :href="route('search.index')">
                     <Icon
