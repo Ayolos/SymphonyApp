@@ -76,7 +76,7 @@ const formatDateString = (date) => {
         <div class="flex flex-row">
             <Link :href="userId ? route('profileUser.show', {id: userId}): route().current()"
                   class="mr-3 z-0 flex-none relative">
-                <img alt="user profile image" :src="src" class="w-max h-12 rounded">
+                <img alt="user profile image" :src="src" class="w-max aspect-square h-12 rounded">
             </Link>
             <div class="flex flex-col">
                 <div class="flex flex-row items-start gap-2">
@@ -96,26 +96,6 @@ const formatDateString = (date) => {
         <div v-if="post.song" class="md:pr-20 w-max pr-0">
             <PlayerAudio :song="post.song"></PlayerAudio>
         </div>
-        <!-- Contenu du post -->
-        <!--            <PostInfo :src="src" :userId="userId" :connect-line="connectLine" :date="formatDateDifference(createdAt)">
-                        <template #name>
-                            <slot name="name"></slot>
-                        </template>
-                        <template #at>
-                            <slot name="at"></slot>
-                        </template>
-                    </PostInfo>
-                    <div class="pt-5 px-10 flex flex-row justify-between items-start">
-                        <p class="text-md text-gray-500 pt-8 break-words w-full">
-                            <slot name="content"></slot>
-                        </p>
-                        <div class="z-50 pr-10">
-                          <slot name="media"></slot>
-                        </div>
-                    </div>
-                <div class="flex-row flex gap-8 px-6 pt-5 pb-10">
-                    <slot name="likeButton"></slot>
-                </div>-->
     </div>
 </template>
 
