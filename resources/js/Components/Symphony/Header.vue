@@ -41,7 +41,7 @@ const logout = () => {
                     <Icon
                         class="text-3xl text-gray-500 hover:text-gray-400 hover:transition hover:scale-110 ease-in-out"
                         icon="mingcute:notification-line"></Icon>
-                    <Notification :notifications="0"></Notification>
+                    <Notification :notifications="$page.props.unreadNotificationsNumber"></Notification>
                 </Link>
                 <Link :href="route('search.index')">
                     <Icon
