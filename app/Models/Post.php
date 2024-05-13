@@ -17,6 +17,9 @@ class Post extends Model
 
     protected $appends = ['nbLikes', 'nbComments', 'isLiked'];
 
+    protected $hidden = ['comments'];
+
+
     public function getIsLikedAttribute()
     {
         return $this->likes->contains('user_id', auth()->id());

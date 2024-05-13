@@ -29,7 +29,7 @@ class LikeController extends Controller
         }
 
         if($post->user->id != auth()->user()->id) {
-            $post->user->notify(new LikePostNotification($post, auth()->user()->makeHidden(['followers', 'followings']), 'A aimé votre publication.'));
+            $post->user->notify(new LikePostNotification($post->makeHidden(['comments']), auth()->user()->makeHidden(['followers', 'followings', 'comments']), 'A aimé votre publication.'));
         }
 
         return redirect()->back();
