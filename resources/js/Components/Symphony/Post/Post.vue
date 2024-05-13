@@ -75,7 +75,7 @@ const formatDateString = (date) => {
          class="z-0 h-full p-5 flex sm:flex-row flex-col w-full sm:justify-between justify-center gap-4">
         <div class="flex flex-row">
             <Link :href="userId ? route('profileUser.show', {id: userId}): route().current()"
-                  class="mr-3 z-0 flex-none relative">
+                  class="mr-3 z-0 flex-none relative h-max">
                 <img alt="user profile image" :src="src" class="w-max aspect-square h-12 rounded">
             </Link>
             <div class="flex flex-col">
