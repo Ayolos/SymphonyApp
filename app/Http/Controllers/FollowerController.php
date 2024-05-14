@@ -31,7 +31,8 @@ class FollowerController extends Controller
             ]);
             $following = User::find($request->following_id);
 
-            $following->notify(new FollowNotification(auth()->user()->makeHidden(['followers', 'followings', 'comments', 'unreadNotifications']), 'vous suit désormais.'));
+            $user = auth()->user()->select('id', 'name', 'profile_photo_path', 'username')->first();
+            $following->notify(new FollowNotification($user, 'vous suit désormais.'));
 
             request()->session()->flash('alert', [
                 'type' => 'success',
@@ -60,7 +61,8 @@ class FollowerController extends Controller
 
             $following = User::find($request->following_id);
 
-            $following->notify(new FollowNotification(auth()->user()->makeHidden(['followers', 'followings', 'comments', 'unreadNotifications']), 'ne vous suit plus.'));
+            $user = auth()->user()->select('id', 'name', 'profile_photo_path', 'username')->first();
+            $following->notify(new FollowNotification($user, 'ne vous suit plus.'));
 
             request()->session()->flash('alert', [
                 'type' => 'success',

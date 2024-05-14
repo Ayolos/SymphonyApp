@@ -114,7 +114,7 @@ const submitComment = (postId) => {
         </template>
         <div class="">
             <Post
-                :is-last="post.comments.length === 0"
+                :is-last="post.comments === undefined || post.comments.length === 0"
                 :connectLine="false"
                 :createdAt="post.created_at"
                 :post="post"
@@ -176,6 +176,7 @@ const submitComment = (postId) => {
                 </template>
             </Post>
             <div v-for="(comment, index) in post.comments" :key="comment.id"
+                 v-if="post.comments"
                  :class="index === post.comments.length - 1 ? '' : 'border-b border-symph-500'"
                  class="flex flex-col w-full items-center relative">
                 <div class="w-full">
@@ -241,6 +242,7 @@ const submitComment = (postId) => {
                     </Post>
                 </div>
                 <div v-for="(reply) in comment.reply" :key="reply.id"
+                     v-if="comment.reply"
                      class="pl-14  flex w-full items-center relative">
                     <div class="w-full">
                         <Post
