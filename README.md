@@ -158,7 +158,7 @@ npm run dev
 2. Dans un autre terminal, lancez le serveur PHP :
 php artisan serve
 
-3.Cliquez ensuite sur le lien localhost proposé dans le terminal
+3. Cliquez ensuite sur le lien localhost proposé dans le terminal
 
 
 ## Connection à la base de données
